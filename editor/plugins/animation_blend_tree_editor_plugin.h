@@ -160,7 +160,6 @@ public:
 
 	void update_graph();
 
-
 	AnimationNodeBlendTreeEditor();
 };
 

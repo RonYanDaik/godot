@@ -1131,18 +1131,17 @@ AnimationNodeBlendTreeEditor::AnimationNodeBlendTreeEditor() {
 	add_options.push_back(AddOption("TimeScale", "AnimationNodeTimeScale", 1));
 	add_options.push_back(AddOption("Transition", "AnimationNodeTransition"));
 	
-	{
-		List<StringName> classes;
-		classes.sort_custom<StringName::AlphCompare>();
-		ClassDB::get_inheriters_from_class("AnimationRootNode", &classes);
+	//add all inheriters of AnimationRootNodes types to options
+	List<StringName> classes;
+	classes.sort_custom<StringName::AlphCompare>();
+	ClassDB::get_inheriters_from_class("AnimationRootNode", &classes);
 
-		for (List<StringName>::Element *E = classes.front(); E; E = E->next()) {
-			String name = String(E->get()).replace_first("AnimationNode", "");
-			if (name == "Animation" || name == "StartState" || name == "EndState") {
-				continue; // nope
-			}
-			add_options.push_back(AddOption(vformat(TTR("%s"), name), E->get()));
+	for (List<StringName>::Element *E = classes.front(); E; E = E->next()) {
+		String name = String(E->get()).replace_first("AnimationNode", "");
+		if (name == "Animation" || name == "StartState" || name == "EndState") {
+			continue; // nope
 		}
+		add_options.push_back(AddOption(vformat(TTR("%s"), name), E->get()));
 	}
 
 	_update_options_menu();
