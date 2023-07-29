@@ -320,6 +320,7 @@ void AnimationNodeBlendTreeEditor::_add_node(int p_idx) {
 		}
 		quick_open->popup_dialog("AnimationNode");
 		quick_open->set_title(TTR("Open Animation Node"));
+		return;
 	}
 	else if (p_idx == MENU_LOAD_FILE) {
 		open_file->clear_filters();
