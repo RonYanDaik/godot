@@ -140,8 +140,7 @@ class AnimationNodeBlendTreeEditor : public AnimationTreeNodeEditorPlugin {
 		MENU_LOAD_FILE = 1000,
 		MENU_PASTE = 1001,
 		MENU_LOAD_FILE_CONFIRM = 1002,
-		MENU_QUICK_LOAD_FILE = 1010,
-		MENU_QUICK_LOAD_FILE_CONFIRM = 1002
+		MENU_QUICK_LOAD_FILE = 1003
 	};
 
 protected:

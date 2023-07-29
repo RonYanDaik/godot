@@ -1130,11 +1130,6 @@ AnimationNodeBlendTreeEditor::AnimationNodeBlendTreeEditor() {
 	add_options.push_back(AddOption("TimeSeek", "AnimationNodeTimeSeek", 1));
 	add_options.push_back(AddOption("TimeScale", "AnimationNodeTimeScale", 1));
 	add_options.push_back(AddOption("Transition", "AnimationNodeTransition"));
-	/*add_options.push_back(AddOption("BlendTree", "AnimationNodeBlendTree"));
-	add_options.push_back(AddOption("BlendSpace1D", "AnimationNodeBlendSpace1D"));
-	add_options.push_back(AddOption("BlendSpace2D", "AnimationNodeBlendSpace2D"));
-	add_options.push_back(AddOption("StateMachine", "AnimationNodeStateMachine"));
-	*/
 	
 	{
 		List<StringName> classes;
@@ -1146,9 +1141,6 @@ AnimationNodeBlendTreeEditor::AnimationNodeBlendTreeEditor() {
 			if (name == "Animation" || name == "StartState" || name == "EndState") {
 				continue; // nope
 			}
-			//int idx = add_node->get_popup()->get_item_count();
-			//add_node->get_popup()->add_item(vformat(TTR("Add %s"), name), idx);
-			//add_node->get_popup()->set_item_metadata(idx, E->get());
 			add_options.push_back(AddOption(vformat(TTR("%s"), name), E->get()));
 		}
 	}
