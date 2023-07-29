@@ -40,6 +40,7 @@
 #include "editor/editor_settings.h"
 #include "editor/editor_undo_redo_manager.h"
 #include "editor/gui/editor_file_dialog.h"
+#include "editor/editor_quick_open.h"
 #include "scene/animation/animation_player.h"
 #include "scene/gui/check_box.h"
 #include "scene/gui/menu_button.h"
@@ -90,6 +91,7 @@ void AnimationNodeBlendTreeEditor::_update_options_menu(bool p_has_input_ports) 
 		add_node->get_popup()->add_item(TTR("Paste"), MENU_PASTE);
 	}
 	add_node->get_popup()->add_separator();
+	add_node->get_popup()->add_item(TTR("Quick Load"), MENU_QUICK_LOAD_FILE);
 	add_node->get_popup()->add_item(TTR("Load..."), MENU_LOAD_FILE);
 	use_position_from_popup_menu = false;
 }
@@ -291,6 +293,11 @@ void AnimationNodeBlendTreeEditor::update_graph() {
 	graph->set_connection_lines_curvature(graph_lines_curvature);
 }
 
+void AnimationNodeBlendTreeEditor::_file_quick_selected() {
+	if (quick_open!=0)
+		_file_opened(quick_open->get_selected());
+}
+
 void AnimationNodeBlendTreeEditor::_file_opened(const String &p_file) {
 	file_loaded = ResourceLoader::load(p_file);
 	if (file_loaded.is_valid()) {
@@ -305,7 +312,16 @@ void AnimationNodeBlendTreeEditor::_add_node(int p_idx) {
 
 	String base_name;
 
-	if (p_idx == MENU_LOAD_FILE) {
+	if(p_idx ==  MENU_QUICK_LOAD_FILE ) {
+		if (!quick_open) {
+			quick_open = memnew(EditorQuickOpen);
+			add_child(quick_open);
+			quick_open->connect("quick_open", callable_mp(this, &AnimationNodeBlendTreeEditor::_file_quick_selected));
+		}
+		quick_open->popup_dialog("AnimationNode");
+		quick_open->set_title(TTR("Open Animation Node"));
+	}
+	else if (p_idx == MENU_LOAD_FILE) {
 		open_file->clear_filters();
 		List<String> ext_filters;
 		ResourceLoader::get_recognized_extensions_for_type("AnimationNode", &ext_filters);
@@ -322,7 +338,7 @@ void AnimationNodeBlendTreeEditor::_add_node(int p_idx) {
 		anode = EditorSettings::get_singleton()->get_resource_clipboard();
 		ERR_FAIL_COND(!anode.is_valid());
 		base_name = anode->get_class();
-	} else if (!add_options[p_idx].type.is_empty()) {
+	} else if (p_idx <add_options.size() && !add_options[p_idx].type.is_empty()) {
 		AnimationNode *an = Object::cast_to<AnimationNode>(ClassDB::instantiate(add_options[p_idx].type));
 		ERR_FAIL_COND(!an);
 		anode = Ref<AnimationNode>(an);
@@ -1114,10 +1130,29 @@ AnimationNodeBlendTreeEditor::AnimationNodeBlendTreeEditor() {
 	add_options.push_back(AddOption("TimeSeek", "AnimationNodeTimeSeek", 1));
 	add_options.push_back(AddOption("TimeScale", "AnimationNodeTimeScale", 1));
 	add_options.push_back(AddOption("Transition", "AnimationNodeTransition"));
-	add_options.push_back(AddOption("BlendTree", "AnimationNodeBlendTree"));
+	/*add_options.push_back(AddOption("BlendTree", "AnimationNodeBlendTree"));
 	add_options.push_back(AddOption("BlendSpace1D", "AnimationNodeBlendSpace1D"));
 	add_options.push_back(AddOption("BlendSpace2D", "AnimationNodeBlendSpace2D"));
 	add_options.push_back(AddOption("StateMachine", "AnimationNodeStateMachine"));
+	*/
+	
+	{
+		List<StringName> classes;
+		classes.sort_custom<StringName::AlphCompare>();
+		ClassDB::get_inheriters_from_class("AnimationRootNode", &classes);
+
+		for (List<StringName>::Element *E = classes.front(); E; E = E->next()) {
+			String name = String(E->get()).replace_first("AnimationNode", "");
+			if (name == "Animation" || name == "StartState" || name == "EndState") {
+				continue; // nope
+			}
+			//int idx = add_node->get_popup()->get_item_count();
+			//add_node->get_popup()->add_item(vformat(TTR("Add %s"), name), idx);
+			//add_node->get_popup()->set_item_metadata(idx, E->get());
+			add_options.push_back(AddOption(vformat(TTR("%s"), name), E->get()));
+		}
+	}
+
 	_update_options_menu();
 
 	error_panel = memnew(PanelContainer);
