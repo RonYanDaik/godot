@@ -338,7 +338,7 @@ void AnimationNodeBlendTreeEditor::_add_node(int p_idx) {
 		anode = EditorSettings::get_singleton()->get_resource_clipboard();
 		ERR_FAIL_COND(!anode.is_valid());
 		base_name = anode->get_class();
-	} else if (p_idx <add_options.size() && !add_options[p_idx].type.is_empty()) {
+	} else if (!add_options[p_idx].type.is_empty()) {
 		AnimationNode *an = Object::cast_to<AnimationNode>(ClassDB::instantiate(add_options[p_idx].type));
 		ERR_FAIL_COND(!an);
 		anode = Ref<AnimationNode>(an);
