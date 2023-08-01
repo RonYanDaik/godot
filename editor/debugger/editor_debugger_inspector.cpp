@@ -234,6 +234,8 @@ void EditorDebuggerInspector::add_stack_variable(const Array &p_array) {
 
 	if (var.var_type == Variant::OBJECT) {
 		v = Object::cast_to<EncodedObjectAsID>(v)->get_object_id();
+		//if(auto eoai = Object::cast_to<EncodedObjectAsID>(v))
+		//	v = eoai->get_object_id();
 		h = PROPERTY_HINT_OBJECT_ID;
 		hs = "Object";
 	}
