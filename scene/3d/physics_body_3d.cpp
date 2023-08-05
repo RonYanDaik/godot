@@ -43,6 +43,9 @@ void PhysicsBody3D::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_collision_exceptions"), &PhysicsBody3D::get_collision_exceptions);
 	ClassDB::bind_method(D_METHOD("add_collision_exception_with", "body"), &PhysicsBody3D::add_collision_exception_with);
 	ClassDB::bind_method(D_METHOD("remove_collision_exception_with", "body"), &PhysicsBody3D::remove_collision_exception_with);
+	//yuri
+	ClassDB::bind_method(D_METHOD("add_move_collision_exception_with", "body"), &PhysicsBody3D::add_move_collision_exception_with);
+	ClassDB::bind_method(D_METHOD("remove_move_collision_exception_with", "body"), &PhysicsBody3D::remove_move_collision_exception_with);
 
 	ADD_GROUP("Axis Lock", "axis_lock_");
 	ADD_PROPERTYI(PropertyInfo(Variant::BOOL, "axis_lock_linear_x"), "set_axis_lock", "get_axis_lock", PhysicsServer3D::BODY_AXIS_LINEAR_X);
@@ -76,7 +79,21 @@ TypedArray<PhysicsBody3D> PhysicsBody3D::get_collision_exceptions() {
 	}
 	return ret;
 }
-
+//yuri
+void PhysicsBody3D::add_move_collision_exception_with(Node *p_node) {
+	ERR_FAIL_NULL(p_node);
+	CollisionObject3D *collision_object = Object::cast_to<CollisionObject3D>(p_node);
+	ERR_FAIL_NULL_MSG(collision_object, "Collision exception only works between two nodes that inherit from CollisionObject3D (such as Area3D or PhysicsBody3D).");
+	exclude_bodies_when_move_colide.insert(collision_object->get_rid());
+}
+//yuri
+void PhysicsBody3D::remove_move_collision_exception_with(Node *p_node) {
+	ERR_FAIL_NULL(p_node);
+	CollisionObject3D *collision_object = Object::cast_to<CollisionObject3D>(p_node);
+	ERR_FAIL_NULL_MSG(collision_object, "Collision exception only works between two nodes that inherit from CollisionObject3D (such as Area3D or PhysicsBody3D).");
+	if(exclude_bodies_when_move_colide.has(collision_object->get_rid()))
+		exclude_bodies_when_move_colide.remove(exclude_bodies_when_move_colide.find(collision_object->get_rid()));
+}
 void PhysicsBody3D::add_collision_exception_with(Node *p_node) {
 	ERR_FAIL_NULL(p_node);
 	CollisionObject3D *collision_object = Object::cast_to<CollisionObject3D>(p_node);
@@ -95,6 +112,8 @@ Ref<KinematicCollision3D> PhysicsBody3D::_move(const Vector3 &p_motion, bool p_t
 	PhysicsServer3D::MotionParameters parameters(get_global_transform(), p_motion, p_margin);
 	parameters.max_collisions = p_max_collisions;
 	parameters.recovery_as_collision = p_recovery_as_collision;
+	//yuri
+	parameters.exclude_bodies = exclude_bodies_when_move_colide;
 
 	PhysicsServer3D::MotionResult result;
 
