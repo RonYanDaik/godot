@@ -411,15 +411,13 @@ void SkeletonIK3D::_bind_methods() {
 void SkeletonIK3D::_notification(int p_what) {
 	switch (p_what) {
 		case NOTIFICATION_ENTER_TREE: {
-			if(use_parent){
+			if(use_parent) {
 				skeleton_ref = Object::cast_to<Skeleton3D>(get_parent());
-			}else
-			{
+			} else {
 				find_target_skeleton();
 			}
 			set_process_priority(1);
 			reload_chain();
-			
 		} break;
 
 		case NOTIFICATION_INTERNAL_PROCESS: {
@@ -490,7 +488,7 @@ NodePath SkeletonIK3D::get_target_node() {
 
 void SkeletonIK3D::set_use_parent(bool p_use_parent) {
 
-	use_parent = p_use_parent; 
+	use_parent = p_use_parent;
 
 	skeleton_ref = Variant();
 
@@ -502,7 +500,7 @@ void SkeletonIK3D::set_use_parent(bool p_use_parent) {
 	}
 
 	set_process_priority(1);
-		
+
 	reload_chain();
 }
 
@@ -511,7 +509,7 @@ void SkeletonIK3D::find_target_skeleton() {
 	if (is_inside_tree() && !skeleton_node_path.is_empty()) {
 		skeleton_ref = Variant();
 		skeleton_ref = Object::cast_to<Skeleton3D>(get_node(skeleton_node_path));
-	}else{
+	} else {
 		ERR_FAIL_COND_MSG(false,vformat(R"(Node not is_inside_tree: "%s".)", this));
 	}
 }
@@ -520,8 +518,7 @@ void SkeletonIK3D::set_target_skeleton(const NodePath &p_node) {
 	
 	skeleton_node_path = p_node;
 
-	if(!use_parent){
-
+	if(!use_parent) {
 		find_target_skeleton();
 
 		set_process_priority(1);
