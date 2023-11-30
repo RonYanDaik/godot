@@ -127,6 +127,8 @@ public:
 	virtual void texture_set_path(RID p_texture, const String &p_path) = 0;
 	virtual String texture_get_path(RID p_texture) const = 0;
 
+	virtual Image::Format texture_get_format(RID p_texture) const = 0;
+
 	typedef void (*TextureDetectCallback)(void *);
 
 	virtual void texture_set_detect_3d_callback(RID p_texture, TextureDetectCallback p_callback, void *p_userdata) = 0;
@@ -158,6 +160,7 @@ public:
 
 	virtual void texture_set_force_redraw_if_visible(RID p_texture, bool p_enable) = 0;
 
+	virtual RID texture_rd_create(const RID &p_rd_texture, const RenderingServer::TextureLayeredType p_layer_type = RenderingServer::TEXTURE_LAYERED_2D_ARRAY) = 0;
 	virtual RID texture_get_rd_texture(RID p_texture, bool p_srgb = false) const = 0;
 	virtual uint64_t texture_get_native_handle(RID p_texture, bool p_srgb = false) const = 0;
 
@@ -804,6 +807,7 @@ public:
 	enum ViewportScaling3DMode {
 		VIEWPORT_SCALING_3D_MODE_BILINEAR,
 		VIEWPORT_SCALING_3D_MODE_FSR,
+		VIEWPORT_SCALING_3D_MODE_FSR2,
 		VIEWPORT_SCALING_3D_MODE_MAX,
 		VIEWPORT_SCALING_3D_MODE_OFF = 255, // for internal use only
 	};
@@ -860,6 +864,7 @@ public:
 	virtual void viewport_remove_canvas(RID p_viewport, RID p_canvas) = 0;
 	virtual void viewport_set_canvas_transform(RID p_viewport, RID p_canvas, const Transform2D &p_offset) = 0;
 	virtual void viewport_set_transparent_background(RID p_viewport, bool p_enabled) = 0;
+	virtual void viewport_set_use_hdr_2d(RID p_viewport, bool p_use_hdr) = 0;
 	virtual void viewport_set_snap_2d_transforms_to_pixel(RID p_viewport, bool p_enabled) = 0;
 	virtual void viewport_set_snap_2d_vertices_to_pixel(RID p_viewport, bool p_enabled) = 0;
 
@@ -967,6 +972,7 @@ public:
 		VIEWPORT_DEBUG_DRAW_CLUSTER_REFLECTION_PROBES,
 		VIEWPORT_DEBUG_DRAW_OCCLUDERS,
 		VIEWPORT_DEBUG_DRAW_MOTION_VECTORS,
+		VIEWPORT_DEBUG_DRAW_INTERNAL_BUFFER,
 	};
 
 	virtual void viewport_set_debug_draw(RID p_viewport, ViewportDebugDraw p_draw) = 0;
@@ -1598,6 +1604,8 @@ public:
 
 	bool is_render_loop_enabled() const;
 	void set_render_loop_enabled(bool p_enabled);
+
+	virtual void call_on_render_thread(const Callable &p_callable) = 0;
 
 	RenderingServer();
 	virtual ~RenderingServer();

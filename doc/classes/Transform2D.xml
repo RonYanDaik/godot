@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<class name="Transform2D" version="4.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../class.xsd">
+<class name="Transform2D" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../class.xsd">
 	<brief_description>
 		A 2×3 matrix representing a 2D transformation.
 	</brief_description>
@@ -121,6 +121,12 @@
 			<return type="Transform2D" />
 			<description>
 				Returns the inverse of the transform, under the assumption that the transformation is composed of rotation and translation (no scaling, use [method affine_inverse] for transforms with scaling).
+			</description>
+		</method>
+		<method name="is_conformal" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Returns [code]true[/code] if the transform's basis is conformal, meaning it preserves angles and distance ratios, and may only be composed of rotation and uniform scale. Returns [code]false[/code] if the transform's basis has non-uniform scale or shear/skew. This can be used to validate if the transform is non-distorted, which is important for physics and other use cases.
 			</description>
 		</method>
 		<method name="is_equal_approx" qualifiers="const">

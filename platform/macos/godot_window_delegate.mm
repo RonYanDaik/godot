@@ -67,6 +67,7 @@
 		ds->window_set_transient(window_id, DisplayServerMacOS::INVALID_WINDOW_ID);
 	}
 
+	ds->mouse_exit_window(window_id);
 	ds->window_destroy(window_id);
 }
 
@@ -156,7 +157,7 @@
 
 	DisplayServerMacOS::WindowData &wd = ds->get_window(window_id);
 	if (wd.exclusive_fullscreen) {
-		[NSApp setPresentationOptions:NSApplicationPresentationDefault];
+		ds->update_presentation_mode();
 	}
 
 	wd.fullscreen = false;

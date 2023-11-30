@@ -34,6 +34,7 @@
 #include "core/core_string_names.h"
 #include "core/io/resource_loader.h"
 #include "core/object/message_queue.h"
+#include "core/object/script_language.h"
 #include "core/string/print_string.h"
 #include "instance_placeholder.h"
 #include "scene/animation/tween.h"
@@ -645,7 +646,8 @@ int Node::get_multiplayer_authority() const {
 bool Node::is_multiplayer_authority() const {
 	ERR_FAIL_COND_V(!is_inside_tree(), false);
 
-	return get_multiplayer()->get_unique_id() == data.multiplayer_authority;
+	Ref<MultiplayerAPI> api = get_multiplayer();
+	return api.is_valid() && (api->get_unique_id() == data.multiplayer_authority);
 }
 
 /***** RPC CONFIG ********/
@@ -673,7 +675,7 @@ const Variant Node::get_node_rpc_config() const {
 Error Node::_rpc_bind(const Variant **p_args, int p_argcount, Callable::CallError &r_error) {
 	if (p_argcount < 1) {
 		r_error.error = Callable::CallError::CALL_ERROR_TOO_FEW_ARGUMENTS;
-		r_error.argument = 1;
+		r_error.expected = 1;
 		return ERR_INVALID_PARAMETER;
 	}
 
@@ -695,7 +697,7 @@ Error Node::_rpc_bind(const Variant **p_args, int p_argcount, Callable::CallErro
 Error Node::_rpc_id_bind(const Variant **p_args, int p_argcount, Callable::CallError &r_error) {
 	if (p_argcount < 2) {
 		r_error.error = Callable::CallError::CALL_ERROR_TOO_FEW_ARGUMENTS;
-		r_error.argument = 2;
+		r_error.expected = 2;
 		return ERR_INVALID_PARAMETER;
 	}
 
@@ -724,7 +726,12 @@ Error Node::_rpc_id_bind(const Variant **p_args, int p_argcount, Callable::CallE
 
 Error Node::rpcp(int p_peer_id, const StringName &p_method, const Variant **p_arg, int p_argcount) {
 	ERR_FAIL_COND_V(!is_inside_tree(), ERR_UNCONFIGURED);
-	return get_multiplayer()->rpcp(this, p_peer_id, p_method, p_arg, p_argcount);
+
+	Ref<MultiplayerAPI> api = get_multiplayer();
+	if (api.is_null()) {
+		return ERR_UNCONFIGURED;
+	}
+	return api->rpcp(this, p_peer_id, p_method, p_arg, p_argcount);
 }
 
 Ref<MultiplayerAPI> Node::get_multiplayer() const {
@@ -961,7 +968,11 @@ void Node::set_process_priority(int p_priority) {
 
 	if (_is_any_processing()) {
 		_remove_from_process_thread_group();
-		data.process_priority = p_priority;
+	}
+
+	data.process_priority = p_priority;
+
+	if (_is_any_processing()) {
 		_add_to_process_thread_group();
 	}
 }
@@ -983,7 +994,11 @@ void Node::set_physics_process_priority(int p_priority) {
 
 	if (_is_any_processing()) {
 		_remove_from_process_thread_group();
-		data.physics_process_priority = p_priority;
+	}
+
+	data.physics_process_priority = p_priority;
+
+	if (_is_any_processing()) {
 		_add_to_process_thread_group();
 	}
 }
@@ -1139,7 +1154,6 @@ void Node::_set_name_nocheck(const StringName &p_name) {
 
 void Node::set_name(const String &p_name) {
 	ERR_FAIL_COND_MSG(data.inside_tree && !Thread::is_main_thread(), "Changing the name to nodes inside the SceneTree is only allowed from the main thread. Use `set_name.call_deferred(new_name)`.");
-	ERR_FAIL_COND_MSG(data.parent && data.parent->data.blocked > 0, "Parent node is busy setting up children, `set_name(new_name)` failed. Consider using `set_name.call_deferred(new_name)` instead.");
 	String name = p_name.validate_node_name();
 
 	ERR_FAIL_COND(name.is_empty());
@@ -1151,9 +1165,9 @@ void Node::set_name(const String &p_name) {
 	data.name = name;
 
 	if (data.parent) {
-		data.parent->data.children.erase(old_name);
 		data.parent->_validate_child_name(this, true);
-		data.parent->data.children.insert(data.name, this);
+		bool success = data.parent->data.children.replace_key(old_name, data.name);
+		ERR_FAIL_COND_MSG(!success, "Renaming child in hashtable failed, this is a bug.");
 	}
 
 	if (data.unique_name_in_owner && data.owner) {
@@ -1340,6 +1354,10 @@ void Node::_generate_serial_child_name(const Node *p_child, StringName &name) co
 			}
 		}
 	}
+}
+
+Node::InternalMode Node::get_internal_mode() const {
+	return data.internal_mode;
 }
 
 void Node::_add_child_nocheck(Node *p_child, const StringName &p_name, InternalMode p_internal_mode) {
@@ -2713,9 +2731,15 @@ void Node::_duplicate_signals(const Node *p_original, Node *p_copy) const {
 					copytarget = p_copy->get_node(ptarget);
 				}
 
-				if (copy && copytarget) {
-					const Callable copy_callable = Callable(copytarget, E.callable.get_method());
+				if (copy && copytarget && E.callable.get_method() != StringName()) {
+					Callable copy_callable = Callable(copytarget, E.callable.get_method());
 					if (!copy->is_connected(E.signal.get_name(), copy_callable)) {
+						int arg_count = E.callable.get_bound_arguments_count();
+						if (arg_count > 0) {
+							copy_callable = copy_callable.bindv(E.callable.get_bound_arguments());
+						} else if (arg_count < 0) {
+							copy_callable = copy_callable.unbind(-arg_count);
+						}
 						copy->connect(E.signal.get_name(), copy_callable, E.flags);
 					}
 				}
@@ -3138,7 +3162,7 @@ void Node::unhandled_key_input(const Ref<InputEvent> &p_key_event) {
 Variant Node::_call_deferred_thread_group_bind(const Variant **p_args, int p_argcount, Callable::CallError &r_error) {
 	if (p_argcount < 1) {
 		r_error.error = Callable::CallError::CALL_ERROR_TOO_FEW_ARGUMENTS;
-		r_error.argument = 0;
+		r_error.expected = 1;
 		return Variant();
 	}
 
@@ -3161,7 +3185,7 @@ Variant Node::_call_deferred_thread_group_bind(const Variant **p_args, int p_arg
 Variant Node::_call_thread_safe_bind(const Variant **p_args, int p_argcount, Callable::CallError &r_error) {
 	if (p_argcount < 1) {
 		r_error.error = Callable::CallError::CALL_ERROR_TOO_FEW_ARGUMENTS;
-		r_error.argument = 0;
+		r_error.expected = 1;
 		return Variant();
 	}
 

@@ -59,7 +59,7 @@ GDScriptAnalyzer *GDScriptParserRef::get_analyzer() {
 }
 
 Error GDScriptParserRef::raise_status(Status p_new_status) {
-	ERR_FAIL_COND_V(parser == nullptr, ERR_INVALID_DATA);
+	ERR_FAIL_NULL_V(parser, ERR_INVALID_DATA);
 
 	if (result != OK) {
 		return result;
@@ -294,8 +294,12 @@ Ref<GDScript> GDScriptCache::get_full_script(const String &p_path, Error &r_erro
 
 	if (p_update_from_disk) {
 		r_error = script->load_source_code(p_path);
+		if (r_error) {
+			return script;
+		}
 	}
 
+	r_error = script->reload(true);
 	if (r_error) {
 		return script;
 	}
@@ -303,7 +307,6 @@ Ref<GDScript> GDScriptCache::get_full_script(const String &p_path, Error &r_erro
 	singleton->full_gdscript_cache[p_path] = script;
 	singleton->shallow_gdscript_cache.erase(p_path);
 
-	script->reload(true);
 	return script;
 }
 
