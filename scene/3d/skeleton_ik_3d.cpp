@@ -364,7 +364,7 @@ void SkeletonIK3D::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("set_target_node", "node"), &SkeletonIK3D::set_target_node);
 	ClassDB::bind_method(D_METHOD("get_target_node"), &SkeletonIK3D::get_target_node);
-
+	
 	ClassDB::bind_method(D_METHOD("set_override_tip_basis", "override"), &SkeletonIK3D::set_override_tip_basis);
 	ClassDB::bind_method(D_METHOD("is_override_tip_basis"), &SkeletonIK3D::is_override_tip_basis);
 
@@ -386,6 +386,12 @@ void SkeletonIK3D::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("start", "one_time"), &SkeletonIK3D::start, DEFVAL(false));
 	ClassDB::bind_method(D_METHOD("stop"), &SkeletonIK3D::stop);
 
+	ClassDB::bind_method(D_METHOD("set_target_skeleton", "node"), &SkeletonIK3D::set_target_skeleton);
+	ClassDB::bind_method(D_METHOD("get_target_skeleton"), &SkeletonIK3D::get_target_skeleton);
+
+	ClassDB::bind_method(D_METHOD("set_use_parent", "use"), &SkeletonIK3D::set_use_parent);
+	ClassDB::bind_method(D_METHOD("get_use_parent"), &SkeletonIK3D::get_use_parent);
+
 	ADD_PROPERTY(PropertyInfo(Variant::STRING_NAME, "root_bone"), "set_root_bone", "get_root_bone");
 	ADD_PROPERTY(PropertyInfo(Variant::STRING_NAME, "tip_bone"), "set_tip_bone", "get_tip_bone");
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "interpolation", PROPERTY_HINT_RANGE, "0,1,0.001"), "set_interpolation", "get_interpolation");
@@ -396,12 +402,20 @@ void SkeletonIK3D::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::NODE_PATH, "target_node"), "set_target_node", "get_target_node");
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "min_distance", PROPERTY_HINT_NONE, "suffix:m"), "set_min_distance", "get_min_distance");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "max_iterations"), "set_max_iterations", "get_max_iterations");
+	
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "use_parent"), "set_use_parent", "get_use_parent");
+	ADD_PROPERTY(PropertyInfo(Variant::NODE_PATH, "target_skeleton"), "set_target_skeleton", "get_target_skeleton");
+
 }
 
 void SkeletonIK3D::_notification(int p_what) {
 	switch (p_what) {
 		case NOTIFICATION_ENTER_TREE: {
-			skeleton_ref = Object::cast_to<Skeleton3D>(get_parent());
+			if(use_parent) {
+				skeleton_ref = Object::cast_to<Skeleton3D>(get_parent());
+			} else {
+				find_target_skeleton();
+			}
 			set_process_priority(1);
 			reload_chain();
 		} break;
@@ -470,6 +484,51 @@ void SkeletonIK3D::set_target_node(const NodePath &p_node) {
 
 NodePath SkeletonIK3D::get_target_node() {
 	return target_node_path_override;
+}
+
+void SkeletonIK3D::set_use_parent(bool p_use_parent) {
+
+	use_parent = p_use_parent;
+
+	skeleton_ref = Variant();
+
+	if(!use_parent){
+		find_target_skeleton();
+	}
+	else {
+		skeleton_ref = Object::cast_to<Skeleton3D>(get_parent());
+	}
+
+	set_process_priority(1);
+
+	reload_chain();
+}
+
+void SkeletonIK3D::find_target_skeleton() {
+
+	if (is_inside_tree() && !skeleton_node_path.is_empty()) {
+		skeleton_ref = Variant();
+		skeleton_ref = Object::cast_to<Skeleton3D>(get_node(skeleton_node_path));
+	} else {
+		ERR_FAIL_COND_MSG(false,vformat(R"(Node not is_inside_tree: "%s".)", this));
+	}
+}
+
+void SkeletonIK3D::set_target_skeleton(const NodePath &p_node) {
+	
+	skeleton_node_path = p_node;
+
+	if(!use_parent) {
+		find_target_skeleton();
+
+		set_process_priority(1);
+		
+		reload_chain();
+	}
+}
+
+NodePath SkeletonIK3D::get_target_skeleton() {
+	return skeleton_node_path;
 }
 
 void SkeletonIK3D::set_override_tip_basis(bool p_override) {
@@ -564,6 +623,14 @@ void SkeletonIK3D::reload_chain() {
 }
 
 void SkeletonIK3D::reload_goal() {
+	if (!task) {
+		return;
+	}
+
+	FabrikInverseKinematic::set_goal(task, _get_target_transform());
+}
+
+void SkeletonIK3D::reload_skeleton() {
 	if (!task) {
 		return;
 	}

@@ -51,7 +51,9 @@ protected:
 	uint16_t locked_axis = 0;
 
 	Ref<KinematicCollision3D> _move(const Vector3 &p_motion, bool p_test_only = false, real_t p_margin = 0.001, bool p_recovery_as_collision = false, int p_max_collisions = 1);
-
+	HashSet<RID> exclude_bodies_when_move_colide;
+	void add_move_collision_exception_with(Node *p_node); //must be physicsbody
+	void remove_move_collision_exception_with(Node *p_node);
 public:
 	bool move_and_collide(const PhysicsServer3D::MotionParameters &p_parameters, PhysicsServer3D::MotionResult &r_result, bool p_test_only = false, bool p_cancel_sliding = true);
 	bool test_move(const Transform3D &p_from, const Vector3 &p_motion, const Ref<KinematicCollision3D> &r_collision = Ref<KinematicCollision3D>(), real_t p_margin = 0.001, bool p_recovery_as_collision = false, int p_max_collisions = 1);
