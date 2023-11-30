@@ -364,7 +364,7 @@ void SkeletonIK3D::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("set_target_node", "node"), &SkeletonIK3D::set_target_node);
 	ClassDB::bind_method(D_METHOD("get_target_node"), &SkeletonIK3D::get_target_node);
-	
+
 	ClassDB::bind_method(D_METHOD("set_override_tip_basis", "override"), &SkeletonIK3D::set_override_tip_basis);
 	ClassDB::bind_method(D_METHOD("is_override_tip_basis"), &SkeletonIK3D::is_override_tip_basis);
 
@@ -402,7 +402,7 @@ void SkeletonIK3D::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::NODE_PATH, "target_node"), "set_target_node", "get_target_node");
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "min_distance", PROPERTY_HINT_NONE, "suffix:m"), "set_min_distance", "get_min_distance");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "max_iterations"), "set_max_iterations", "get_max_iterations");
-	
+
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "use_parent"), "set_use_parent", "get_use_parent");
 	ADD_PROPERTY(PropertyInfo(Variant::NODE_PATH, "target_skeleton"), "set_target_skeleton", "get_target_skeleton");
 
@@ -411,7 +411,7 @@ void SkeletonIK3D::_bind_methods() {
 void SkeletonIK3D::_notification(int p_what) {
 	switch (p_what) {
 		case NOTIFICATION_ENTER_TREE: {
-			if(use_parent) {
+			if (use_parent) {
 				skeleton_ref = Object::cast_to<Skeleton3D>(get_parent());
 			} else {
 				find_target_skeleton();
@@ -492,10 +492,9 @@ void SkeletonIK3D::set_use_parent(bool p_use_parent) {
 
 	skeleton_ref = Variant();
 
-	if(!use_parent){
+	if (!use_parent) {
 		find_target_skeleton();
-	}
-	else {
+	} else {
 		skeleton_ref = Object::cast_to<Skeleton3D>(get_parent());
 	}
 
@@ -510,19 +509,19 @@ void SkeletonIK3D::find_target_skeleton() {
 		skeleton_ref = Variant();
 		skeleton_ref = Object::cast_to<Skeleton3D>(get_node(skeleton_node_path));
 	} else {
-		ERR_FAIL_COND_MSG(false,vformat(R"(Node not is_inside_tree: "%s".)", this));
+		ERR_FAIL_COND_MSG(false, vformat(R"(Node not is_inside_tree: "%s".)", this));
 	}
 }
 
 void SkeletonIK3D::set_target_skeleton(const NodePath &p_node) {
-	
+
 	skeleton_node_path = p_node;
 
-	if(!use_parent) {
+	if (!use_parent) {
 		find_target_skeleton();
 
 		set_process_priority(1);
-		
+
 		reload_chain();
 	}
 }

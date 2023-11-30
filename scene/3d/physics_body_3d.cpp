@@ -90,7 +90,7 @@ void PhysicsBody3D::remove_move_collision_exception_with(Node *p_node) {
 	ERR_FAIL_NULL(p_node);
 	CollisionObject3D *collision_object = Object::cast_to<CollisionObject3D>(p_node);
 	ERR_FAIL_NULL_MSG(collision_object, "Collision exception only works between two nodes that inherit from CollisionObject3D (such as Area3D or PhysicsBody3D).");
-	if(exclude_bodies_when_move_colide.has(collision_object->get_rid()))
+	if (exclude_bodies_when_move_colide.has(collision_object->get_rid()))
 		exclude_bodies_when_move_colide.remove(exclude_bodies_when_move_colide.find(collision_object->get_rid()));
 }
 void PhysicsBody3D::add_collision_exception_with(Node *p_node) {
