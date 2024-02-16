@@ -515,6 +515,10 @@ bool SceneTree::process(double p_time) {
 
 	_flush_delete_queue();
 
+	if (unlikely(pending_new_scene)) {
+		_flush_scene_change();
+	}
+
 	process_timers(p_time, false); //go through timers
 
 	process_tweens(p_time, false);
@@ -549,10 +553,6 @@ bool SceneTree::process(double p_time) {
 	}
 #endif // _3D_DISABLED
 #endif // TOOLS_ENABLED
-
-	if (unlikely(pending_new_scene)) {
-		_flush_scene_change();
-	}
 
 	return _quit;
 }
@@ -1704,6 +1704,7 @@ void SceneTree::get_argument_options(const StringName &p_function, int p_idx, Li
 			}
 		}
 	}
+	MainLoop::get_argument_options(p_function, p_idx, r_options);
 }
 
 void SceneTree::set_disable_node_threading(bool p_disable) {
@@ -1847,7 +1848,7 @@ SceneTree::SceneTree() {
 					ProjectSettings::get_singleton()->set("rendering/environment/defaults/default_environment", "");
 				} else {
 					// File was erased, notify user.
-					ERR_PRINT(RTR("Default Environment as specified in the project setting \"rendering/environment/defaults/default_environment\" could not be loaded."));
+					ERR_PRINT("Default Environment as specified in the project setting \"rendering/environment/defaults/default_environment\" could not be loaded.");
 				}
 			}
 		}

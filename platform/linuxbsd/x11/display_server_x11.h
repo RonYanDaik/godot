@@ -54,6 +54,7 @@
 
 #if defined(GLES3_ENABLED)
 #include "x11/gl_manager_x11.h"
+#include "x11/gl_manager_x11_egl.h"
 #endif
 
 #if defined(VULKAN_ENABLED)
@@ -138,6 +139,7 @@ class DisplayServerX11 : public DisplayServer {
 
 #if defined(GLES3_ENABLED)
 	GLManager_X11 *gl_manager = nullptr;
+	GLManagerEGL_X11 *gl_manager_egl = nullptr;
 #endif
 #if defined(VULKAN_ENABLED)
 	VulkanContextX11 *context_vulkan = nullptr;
@@ -302,6 +304,7 @@ class DisplayServerX11 : public DisplayServer {
 
 	String _clipboard_get_impl(Atom p_source, Window x11_window, Atom target) const;
 	String _clipboard_get(Atom p_source, Window x11_window) const;
+	Atom _clipboard_get_image_target(Atom p_source, Window x11_window) const;
 	void _clipboard_transfer_ownership(Atom p_source, Window x11_window) const;
 
 	bool do_mouse_warp = false;
@@ -349,6 +352,7 @@ class DisplayServerX11 : public DisplayServer {
 	Context context = CONTEXT_ENGINE;
 
 	WindowID _get_focused_window_or_popup() const;
+	bool _window_focus_check();
 
 	void _send_window_event(const WindowData &wd, WindowEvent p_event);
 	static void _dispatch_input_events(const Ref<InputEvent> &p_event);
@@ -406,6 +410,8 @@ public:
 
 	virtual void clipboard_set(const String &p_text) override;
 	virtual String clipboard_get() const override;
+	virtual Ref<Image> clipboard_get_image() const override;
+	virtual bool clipboard_has_image() const override;
 	virtual void clipboard_set_primary(const String &p_text) override;
 	virtual String clipboard_get_primary() const override;
 

@@ -311,7 +311,10 @@ void SceneImportSettings::_fill_scene(Node *p_node, TreeItem *p_parent_item) {
 			Ref<ImporterMesh> editor_mesh = src_mesh_node->get_mesh();
 			mesh_node->set_mesh(editor_mesh->get_mesh());
 		}
-
+		// Replace the original mesh node in the scene tree with the new one.
+		if (unlikely(p_node == scene)) {
+			scene = mesh_node;
+		}
 		p_node->replace_by(mesh_node);
 		memdelete(p_node);
 		p_node = mesh_node;
@@ -1046,6 +1049,9 @@ void SceneImportSettings::_viewport_input(const Ref<InputEvent> &p_input) {
 		(*rot_x) = CLAMP((*rot_x), -Math_PI / 2, Math_PI / 2);
 		_update_camera();
 	}
+	if (mm.is_valid() && DisplayServer::get_singleton()->has_feature(DisplayServer::FEATURE_CURSOR_SHAPE)) {
+		DisplayServer::get_singleton()->cursor_set_shape(DisplayServer::CursorShape::CURSOR_ARROW);
+	}
 	Ref<InputEventMouseButton> mb = p_input;
 	if (mb.is_valid() && mb->get_button_index() == MouseButton::WHEEL_DOWN) {
 		(*zoom) *= 1.1;
@@ -1141,9 +1147,11 @@ void SceneImportSettings::_notification(int p_what) {
 		} break;
 
 		case NOTIFICATION_THEME_CHANGED: {
+			action_menu->begin_bulk_theme_override();
 			action_menu->add_theme_style_override("normal", get_theme_stylebox("normal", "Button"));
 			action_menu->add_theme_style_override("hover", get_theme_stylebox("hover", "Button"));
 			action_menu->add_theme_style_override("pressed", get_theme_stylebox("pressed", "Button"));
+			action_menu->end_bulk_theme_override();
 
 			if (animation_player != nullptr && animation_player->is_playing()) {
 				animation_play_button->set_icon(get_editor_theme_icon(SNAME("Pause")));

@@ -61,8 +61,6 @@ static const GLenum _cube_side_enum[6] = {
 TextureStorage::TextureStorage() {
 	singleton = this;
 
-	system_fbo = 0;
-
 	{ //create default textures
 		{ // White Textures
 
@@ -713,18 +711,20 @@ void TextureStorage::texture_free(RID p_texture) {
 		memdelete(t->canvas_texture);
 	}
 
-	if (t->tex_id != 0) {
-		if (!t->is_external) {
-			GLES3::Utilities::get_singleton()->texture_free_data(t->tex_id);
+	bool must_free_data = false;
+	if (t->is_proxy) {
+		if (t->proxy_to.is_valid()) {
+			Texture *proxy_to = texture_owner.get_or_null(t->proxy_to);
+			if (proxy_to) {
+				proxy_to->proxies.erase(p_texture);
+			}
 		}
-		t->tex_id = 0;
+	} else {
+		must_free_data = t->tex_id != 0 && !t->is_external;
 	}
-
-	if (t->is_proxy && t->proxy_to.is_valid()) {
-		Texture *proxy_to = texture_owner.get_or_null(t->proxy_to);
-		if (proxy_to) {
-			proxy_to->proxies.erase(p_texture);
-		}
+	if (must_free_data) {
+		GLES3::Utilities::get_singleton()->texture_free_data(t->tex_id);
+		t->tex_id = 0;
 	}
 
 	texture_atlas_remove_texture(p_texture);
@@ -2314,7 +2314,9 @@ Rect2i TextureStorage::_render_target_get_sdf_rect(const RenderTarget *rt) const
 			scale = 200;
 		} break;
 		default: {
-		}
+			ERR_PRINT("Invalid viewport SDF oversize, defaulting to 100%.");
+			scale = 100;
+		} break;
 	}
 
 	margin = (rt->size * scale / 100) - rt->size;
@@ -2391,6 +2393,7 @@ void TextureStorage::_render_target_allocate_sdf(RenderTarget *rt) {
 			scale = 25;
 		} break;
 		default: {
+			ERR_PRINT("Invalid viewport SDF scale, defaulting to 100%.");
 			scale = 100;
 		} break;
 	}
@@ -2594,7 +2597,10 @@ void TextureStorage::render_target_copy_to_back_buffer(RID p_render_target, cons
 	glBindFramebuffer(GL_FRAMEBUFFER, rt->backbuffer_fbo);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, rt->color);
-	GLES3::CopyEffects::get_singleton()->copy_screen();
+	Rect2 normalized_region = region;
+	normalized_region.position = normalized_region.position / Size2(rt->size);
+	normalized_region.size = normalized_region.size / Size2(rt->size);
+	GLES3::CopyEffects::get_singleton()->copy_to_and_from_rect(normalized_region);
 
 	if (p_gen_mipmaps) {
 		GLES3::CopyEffects::get_singleton()->gaussian_blur(rt->backbuffer, rt->mipmap_count, region, rt->size);

@@ -26,13 +26,17 @@
 # Tefa <gassmannstefano@gmail.com>, 2023.
 # Maximiliano Gamón <maximilianogamon@gmail.com>, 2023.
 # Deleted User <noreply+68785@weblate.org>, 2023.
+# Evelyn Salido <evelynsalido2@gmail.com>, 2023.
+# Kann <iancanellas08@gmail.com>, 2023.
+# Diego22rct <diegorafaelcisnerostafur@gmail.com>, 2024.
+# Carlos Mena <menacarlos.asir@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: Godot Engine editor interface\n"
 "Report-Msgid-Bugs-To: https://github.com/godotengine/godot\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-09-19 21:46+0000\n"
-"Last-Translator: Deleted User <noreply+68785@weblate.org>\n"
+"PO-Revision-Date: 2024-01-26 09:47+0000\n"
+"Last-Translator: Carlos Mena <menacarlos.asir@gmail.com>\n"
 "Language-Team: Spanish (Argentina) <https://hosted.weblate.org/projects/godot-"
 "engine/godot/es_AR/>\n"
 "Language: es_AR\n"
@@ -40,7 +44,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.1-dev\n"
+"X-Generator: Weblate 5.4-dev\n"
+
+msgid "Main Thread"
+msgstr "Hilo Principal"
 
 msgid "Unset"
 msgstr "Desactivar"
@@ -102,8 +109,104 @@ msgstr "Eje X del Joystick 2, Gatillo Izquierdo, Sony L2, Xbox LT"
 msgid "Joystick 2 Y-Axis, Right Trigger, Sony R2, Xbox RT"
 msgstr "Eje Y del Joystick 2, Gatillo Derecho, Sony R2, Xbox RT"
 
+msgid "Joystick 3 X-Axis"
+msgstr "Eje-X del Joystick 3"
+
+msgid "Joystick 3 Y-Axis"
+msgstr "Eje-Y del Joystick 3"
+
+msgid "Joystick 4 X-Axis"
+msgstr "Eje-X del Joystick 4"
+
+msgid "Joystick 4 Y-Axis"
+msgstr "Eje-Y del Joystick 4"
+
 msgid "Unknown Joypad Axis"
 msgstr "Eje de Joypad Desconocido"
+
+msgid "Joypad Motion on Axis %d (%s) with Value %.2f"
+msgstr "Movimiento del Joypad en el eje %d (%s) con valor %.2f"
+
+msgid "Bottom Action, Sony Cross, Xbox A, Nintendo B"
+msgstr "Acción Abajo, Cruz en Sony, Xbox A, Nintendo B"
+
+msgid "Right Action, Sony Circle, Xbox B, Nintendo A"
+msgstr "Acción Derecha, Círculo en Sony, Xbox B, Nintendo A"
+
+msgid "Left Action, Sony Square, Xbox X, Nintendo Y"
+msgstr "Acción Izquierda, Cuadrado en Sony, Xbox X, Nintendo Y"
+
+msgid "Top Action, Sony Triangle, Xbox Y, Nintendo X"
+msgstr "Acción Arriba, Triángulo en Sony, Xbox Y, Nintendo X"
+
+msgid "Back, Sony Select, Xbox Back, Nintendo -"
+msgstr "Back, Sony Select, Back de Xbox, Nintendo -"
+
+msgid "Guide, Sony PS, Xbox Home"
+msgstr "Botón Guide, PS en Sony, Home en Xbox"
+
+msgid "Start, Xbox Menu, Nintendo +"
+msgstr "Start, Menu en Xbox, Nintendo +"
+
+msgid "Left Stick, Sony L3, Xbox L/LS"
+msgstr "Stick Izquierdo, L3 de Sony, L/LS en Xbox"
+
+msgid "Right Stick, Sony R3, Xbox R/RS"
+msgstr "Stick Derecho, R3 en Sony, R/RS en Xbox"
+
+msgid "Left Shoulder, Sony L1, Xbox LB"
+msgstr "Botón Izquierdo, L1 en Sony, LB en Xbox"
+
+msgid "Right Shoulder, Sony R1, Xbox RB"
+msgstr "Botón Derecho, R1 en Sony, RB en Xbox"
+
+msgid "D-pad Up"
+msgstr "D-pad Arriba"
+
+msgid "D-pad Down"
+msgstr "D-pad Abajo"
+
+msgid "D-pad Left"
+msgstr "D-pad Izquierda"
+
+msgid "D-pad Right"
+msgstr "D-pad Derecha"
+
+msgid "Xbox Share, PS5 Microphone, Nintendo Capture"
+msgstr "Share en Xbox, Microphone en PS5, Capture en Nintendo"
+
+msgid "Joypad Button %d"
+msgstr "Bottón de Joypad %d"
+
+msgid "touched"
+msgstr "tocado"
+
+msgid "released"
+msgstr "Publicado"
+
+msgid "Screen %s at (%s) with %s touch points"
+msgstr "Pantalla %s en(%s) con %s puntos táctiles"
+
+msgid ""
+"Screen dragged with %s touch points at position (%s) with velocity of (%s)"
+msgstr ""
+"Pantalla arrastrada con %s puntos táctiles en la posición (%s) con velocidad "
+"de (%s)"
+
+msgid "Magnify Gesture at (%s) with factor %s"
+msgstr "Ampliar Gesto en (%s) con factor %s"
+
+msgid "Pan Gesture at (%s) with delta (%s)"
+msgstr "Gesto \"Pan\" en (%s), con delta (%s)"
+
+msgid "MIDI Input on Channel=%s Message=%s"
+msgstr "Entrada de MIDI en el canal=%s Mensaje=%s"
+
+msgid "Input Event with Shortcut=%s"
+msgstr "Evento de entrada con atajo=%s"
+
+msgid "Accept"
+msgstr "Aceptar"
 
 msgid "Select"
 msgstr "Seleccionar"
@@ -116,6 +219,9 @@ msgstr "Arriba"
 
 msgid "Down"
 msgstr "Abajo"
+
+msgid "Page Up"
+msgstr "Subir página"
 
 msgid "End"
 msgstr "Fin"
@@ -135,17 +241,44 @@ msgstr "Deshacer"
 msgid "Redo"
 msgstr "Rehacer"
 
+msgid "New Blank Line"
+msgstr "Nueva línea en blanco"
+
+msgid "Backspace Word"
+msgstr "Retroceder palabra"
+
+msgid "Backspace all to Left"
+msgstr "Retroceder del todo hacia la izquierda"
+
 msgid "Delete"
 msgstr "Eliminar"
 
+msgid "Caret Up"
+msgstr "Interfaz Subir Página"
+
+msgid "Caret Page Up"
+msgstr "Interfaz Subir Página"
+
+msgid "Scroll Up"
+msgstr "Desplazarse hacia arriba"
+
+msgid "Scroll Down"
+msgstr "Desplazarse hacia abajo"
+
 msgid "Select All"
 msgstr "Seleccionar Todo"
+
+msgid "Submit Text"
+msgstr "Enviar Texto"
 
 msgid "Duplicate Nodes"
 msgstr "Duplicar Nodos"
 
 msgid "Delete Nodes"
 msgstr "Eliminar Nodos"
+
+msgid "Go Up One Level"
+msgstr "Subir un nivel"
 
 msgid "Refresh"
 msgstr "Refrescar"
@@ -171,6 +304,12 @@ msgstr "Argumentos inválidos para construir '%s'"
 msgid "On call to '%s':"
 msgstr "En la llamada a '%s':"
 
+msgid "Built-in script"
+msgstr "Script Integrado"
+
+msgid "Built-in"
+msgstr "Integrado"
+
 msgid "B"
 msgstr "B"
 
@@ -192,6 +331,14 @@ msgstr "PiB"
 msgid "EiB"
 msgstr "EiB"
 
+msgid "Example: %s"
+msgstr "Ejemplo: %s"
+
+msgid "%d item"
+msgid_plural "%d items"
+msgstr[0] "artículo %d"
+msgstr[1] "artículos %d"
+
 msgid ""
 "Invalid action name. It cannot be empty nor contain '/', ':', '=', '\\' or "
 "'\"'"
@@ -202,11 +349,20 @@ msgstr ""
 msgid "An action with the name '%s' already exists."
 msgstr "Ya existe una acción con el nombre '%s'."
 
+msgid "Revert Action"
+msgstr "Revertir Acción"
+
 msgid "Add Event"
 msgstr "Agregar Evento"
 
+msgid "Cannot Remove Action"
+msgstr "No se puede eliminar acción"
+
 msgid "Add"
 msgstr "Agregar"
+
+msgid "Show Built-in Actions"
+msgstr "Mostrar acciones integradas"
 
 msgid "Action"
 msgstr "Acción"
@@ -422,6 +578,9 @@ msgstr "Escalar"
 msgid "Methods"
 msgstr "Métodos"
 
+msgid "Bezier"
+msgstr "Bézier"
+
 msgid "Audio"
 msgstr "Audio"
 
@@ -519,6 +678,10 @@ msgstr "Limpiar"
 
 msgid "Scale Ratio:"
 msgstr "Ratio de Escala:"
+
+msgctxt "Transition Type"
+msgid "Sine"
+msgstr "Sinusoide"
 
 msgid "Select Tracks to Copy"
 msgstr "Elegir Pistas a Copiar"
@@ -643,12 +806,6 @@ msgstr "Cerrar"
 
 msgid "Connect"
 msgstr "Conectar"
-
-msgid "Class:"
-msgstr "Clase:"
-
-msgid "Signal:"
-msgstr "Señal:"
 
 msgid "Connect '%s' to '%s'"
 msgstr "Conectar '%s' a '%s'"
@@ -1037,21 +1194,6 @@ msgstr "Sponsors Oro"
 
 msgid "Silver Sponsors"
 msgstr "Sponsors Plata"
-
-msgid "Bronze Sponsors"
-msgstr "Sponsors Bronce"
-
-msgid "Mini Sponsors"
-msgstr "Mini Sponsors"
-
-msgid "Gold Donors"
-msgstr "Donantes Oro"
-
-msgid "Silver Donors"
-msgstr "Donantes Plata"
-
-msgid "Bronze Donors"
-msgstr "Donantes Bronce"
 
 msgid "Donors"
 msgstr "Donantes"
@@ -1485,6 +1627,9 @@ msgstr "(Re)Importando Assets"
 msgid "Top"
 msgstr "Cima"
 
+msgid "Class:"
+msgstr "Clase:"
+
 msgid "Inherits:"
 msgstr "Hereda:"
 
@@ -1543,6 +1688,12 @@ msgstr ""
 msgid "Method Descriptions"
 msgstr "Descripción de Método"
 
+msgid "Property:"
+msgstr "Propiedad:"
+
+msgid "Signal:"
+msgstr "Señal:"
+
 msgid "%d match."
 msgstr "%d coincidencia."
 
@@ -1599,9 +1750,6 @@ msgstr "Propiedad"
 
 msgid "Theme Property"
 msgstr "Propiedades del Tema"
-
-msgid "Property:"
-msgstr "Propiedad:"
 
 msgid "Pinning a value forces it to be saved even if it's equal to the default."
 msgstr ""
@@ -1889,17 +2037,6 @@ msgstr ""
 "No se pudo cargar el script de addon desde la ruta: '%s'. Puede ser por un "
 "error de código en dicho script.\n"
 "Desactivando el addon en '%s' para prevenir nuevos errores."
-
-msgid ""
-"Unable to load addon script from path: '%s' Base type is not EditorPlugin."
-msgstr ""
-"No se pudo cargar el script de addon desde la ruta: El tipo base de '%s' no "
-"es EditorPlugin."
-
-msgid "Unable to load addon script from path: '%s' Script is not in tool mode."
-msgstr ""
-"No se pudo cargar el script de addon desde la ruta: El script '%s' no está en "
-"modo tool."
 
 msgid ""
 "Scene '%s' was automatically imported, so it can't be modified.\n"
@@ -2317,6 +2454,9 @@ msgstr "Carga Rápida"
 msgid "Make Unique"
 msgstr "Convertir en Unico"
 
+msgid "Save As..."
+msgstr "Guardar Como..."
+
 msgid "Show in FileSystem"
 msgstr "Mostrar en Sistema de Archivos"
 
@@ -2596,11 +2736,11 @@ msgstr ""
 msgid "Runnable"
 msgstr "Ejecutable"
 
-msgid "Resources to export:"
-msgstr "Recursos a exportar:"
-
 msgid "Delete preset '%s'?"
 msgstr "Eliminar preset '%s'?"
+
+msgid "Resources to export:"
+msgstr "Recursos a exportar:"
 
 msgid "Release"
 msgstr "Release"
@@ -2751,9 +2891,6 @@ msgstr "Duplicando carpeta:"
 msgid "New Inherited Scene"
 msgstr "Nueva Escena Heredada"
 
-msgid "Set As Main Scene"
-msgstr "Seleccionar Como Escena Principal"
-
 msgid "Open Scenes"
 msgstr "Abrir Escenas"
 
@@ -2816,9 +2953,6 @@ msgstr "Renombrar..."
 
 msgid "Re-Scan Filesystem"
 msgstr "Reexaminar Sistema de Archivos"
-
-msgid "Toggle Split Mode"
-msgstr "Act/Desact. Modo Dividido"
 
 msgid ""
 "Scanning Files,\n"
@@ -3180,9 +3314,6 @@ msgstr "Cargar un recurso existente desde disco y editarlo."
 
 msgid "Save the currently edited resource."
 msgstr "Guardar el recurso editado actualmente."
-
-msgid "Save As..."
-msgstr "Guardar Como..."
 
 msgid "Extra resource options."
 msgstr "Opciones de recursos extra."
@@ -3575,14 +3706,14 @@ msgstr "Fijar AnimationPlayer"
 msgid "Error!"
 msgstr "Error!"
 
+msgid "Cross-Animation Blend Times"
+msgstr "Tiempos de Blending Entre Animaciones"
+
 msgid "Blend Times:"
 msgstr "Tiempos de Blending:"
 
 msgid "Next (Auto Queue):"
 msgstr "Siguiente (Auto Queue):"
-
-msgid "Cross-Animation Blend Times"
-msgstr "Tiempos de Blending Entre Animaciones"
 
 msgid "Move Node"
 msgstr "Mover Nodo"
@@ -6908,14 +7039,6 @@ msgstr ""
 "La interfaz de usuario se actualizara luego de reiniciar el editor o gestor "
 "de proyectos."
 
-msgid ""
-"Are you sure to scan %s folders for existing Godot projects?\n"
-"This could take a while."
-msgstr ""
-"¿Estás seguro de querer examinar %s carpetas en busca de proyectos de Godot "
-"existentes?\n"
-"Podría demorar un rato."
-
 msgid "New Project"
 msgstr "Proyecto Nuevo"
 
@@ -7193,13 +7316,6 @@ msgstr ""
 "Desactivar \"editable_instance\" causara que todas las propiedades del nodo "
 "vuelvan a sus valores por defecto."
 
-msgid ""
-"Enabling \"Load As Placeholder\" will disable \"Editable Children\" and cause "
-"all properties of the node to be reverted to their default."
-msgstr ""
-"Activar \"Cargar como Placeholder\" desactivará \"Hijos Editables\" y causará "
-"que todas las propiedades del nodo se reviertan a sus valores por defecto."
-
 msgid "Make Local"
 msgstr "Crear Local"
 
@@ -7257,9 +7373,6 @@ msgstr "Limpiar Herencia"
 
 msgid "Editable Children"
 msgstr "Hijos Editables"
-
-msgid "Load As Placeholder"
-msgstr "Cargar Como Placeholder"
 
 msgid ""
 "Cannot attach a script: there are no languages registered.\n"
@@ -7715,23 +7828,8 @@ msgstr "¡No se pudo escribir el archivo del paquete de expansión!"
 msgid "Building Android Project (gradle)"
 msgstr "Construir Proyecto Android (gradle)"
 
-msgid ""
-"Building of Android project failed, check output for the error. Alternatively "
-"visit docs.godotengine.org for Android build documentation."
-msgstr ""
-"La construcción del proyecto Android falló, comprueba la salida del error. "
-"También podés visitar docs.godotengine.org para consultar la documentación de "
-"compilación de Android."
-
 msgid "Moving output"
 msgstr "Moviendo salida"
-
-msgid ""
-"Unable to copy and rename export file, check gradle project directory for "
-"outputs."
-msgstr ""
-"No se puede copiar y renombrar el archivo de exportación, comprobá el "
-"directorio del proyecto de gradle para ver los resultados."
 
 msgid "Creating APK..."
 msgstr "Creando APK..."

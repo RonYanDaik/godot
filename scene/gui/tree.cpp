@@ -582,6 +582,8 @@ void TreeItem::set_custom_draw(int p_column, Object *p_object, const StringName 
 
 	cells.write[p_column].custom_draw_obj = p_object->get_instance_id();
 	cells.write[p_column].custom_draw_callback = p_callback;
+
+	_changed_notify(p_column);
 }
 
 void TreeItem::set_collapsed(bool p_collapsed) {
@@ -1298,8 +1300,14 @@ void TreeItem::clear_custom_color(int p_column) {
 void TreeItem::set_custom_font(int p_column, const Ref<Font> &p_font) {
 	ERR_FAIL_INDEX(p_column, cells.size());
 
+	if (cells[p_column].custom_font == p_font) {
+		return;
+	}
+
 	cells.write[p_column].custom_font = p_font;
 	cells.write[p_column].cached_minimum_size_dirty = true;
+
+	_changed_notify(p_column);
 }
 
 Ref<Font> TreeItem::get_custom_font(int p_column) const {
@@ -1310,8 +1318,14 @@ Ref<Font> TreeItem::get_custom_font(int p_column) const {
 void TreeItem::set_custom_font_size(int p_column, int p_font_size) {
 	ERR_FAIL_INDEX(p_column, cells.size());
 
+	if (cells[p_column].custom_font_size == p_font_size) {
+		return;
+	}
+
 	cells.write[p_column].custom_font_size = p_font_size;
 	cells.write[p_column].cached_minimum_size_dirty = true;
+
+	_changed_notify(p_column);
 }
 
 int TreeItem::get_custom_font_size(int p_column) const {
@@ -1360,8 +1374,14 @@ Color TreeItem::get_custom_bg_color(int p_column) const {
 void TreeItem::set_custom_as_button(int p_column, bool p_button) {
 	ERR_FAIL_INDEX(p_column, cells.size());
 
+	if (cells[p_column].custom_button == p_button) {
+		return;
+	}
+
 	cells.write[p_column].custom_button = p_button;
 	cells.write[p_column].cached_minimum_size_dirty = true;
+
+	_changed_notify(p_column);
 }
 
 bool TreeItem::is_custom_set_as_button(int p_column) const {
@@ -2050,7 +2070,7 @@ int Tree::draw_item(const Point2i &p_pos, const Point2 &p_draw_ofs, const Size2 
 
 			int text_width = item_width - theme_cache.inner_item_margin_left - theme_cache.inner_item_margin_right;
 			if (p_item->cells[i].icon.is_valid()) {
-				text_width -= p_item->cells[i].get_icon_size().x + theme_cache.h_separation;
+				text_width -= _get_cell_icon_size(p_item->cells[i]).x + theme_cache.h_separation;
 			}
 
 			p_item->cells.write[i].text_buf->set_width(text_width);
@@ -2770,21 +2790,9 @@ int Tree::propagate_mouse_event(const Point2i &p_pos, int x_ofs, int y_ofs, int 
 			x -= theme_cache.h_separation;
 		}
 
-		if (!p_item->disable_folding && !hide_folding && !p_item->cells[col].editable && !p_item->cells[col].selectable && p_item->get_first_child()) {
-			if (enable_recursive_folding && p_mod->is_shift_pressed()) {
-				p_item->set_collapsed_recursive(!p_item->is_collapsed());
-			} else {
-				p_item->set_collapsed(!p_item->is_collapsed());
-			}
-			return -1; //collapse/uncollapse because nothing can be done with item
-		}
-
 		const TreeItem::Cell &c = p_item->cells[col];
 
-		bool already_selected = c.selected;
-		bool already_cursor = (p_item == selected_item) && col == selected_col;
-
-		if (!cache.rtl && p_item->cells[col].buttons.size()) {
+		if (!cache.rtl && !p_item->cells[col].buttons.is_empty()) {
 			int button_w = 0;
 			for (int j = p_item->cells[col].buttons.size() - 1; j >= 0; j--) {
 				Ref<Texture2D> b = p_item->cells[col].buttons[j].texture;
@@ -2826,6 +2834,18 @@ int Tree::propagate_mouse_event(const Point2i &p_pos, int x_ofs, int y_ofs, int 
 
 			col_width -= w + theme_cache.button_margin;
 		}
+
+		if (!p_item->disable_folding && !hide_folding && !p_item->cells[col].editable && !p_item->cells[col].selectable && p_item->get_first_child()) {
+			if (enable_recursive_folding && p_mod->is_shift_pressed()) {
+				p_item->set_collapsed_recursive(!p_item->is_collapsed());
+			} else {
+				p_item->set_collapsed(!p_item->is_collapsed());
+			}
+			return -1; // Collapse/uncollapse, because nothing can be done with the item.
+		}
+
+		bool already_selected = c.selected;
+		bool already_cursor = (p_item == selected_item) && col == selected_col;
 
 		if (p_button == MouseButton::LEFT || (p_button == MouseButton::RIGHT && allow_rmb_select)) {
 			/* process selection */
@@ -4544,6 +4564,8 @@ TreeItem *Tree::get_selected() const {
 void Tree::set_selected(TreeItem *p_item, int p_column) {
 	ERR_FAIL_INDEX(p_column, columns.size());
 	ERR_FAIL_NULL(p_item);
+	ERR_FAIL_COND_MSG(p_item->get_tree() != this, "The provided TreeItem does not belong to this Tree. Ensure that the TreeItem is a part of the Tree before setting it as selected.");
+
 	select_single_item(p_item, get_root(), p_column);
 }
 

@@ -30,6 +30,7 @@
 
 #include "renderer_canvas_cull.h"
 
+#include "core/config/project_settings.h"
 #include "core/math/geometry_2d.h"
 #include "renderer_viewport.h"
 #include "rendering_server_default.h"
@@ -1557,6 +1558,11 @@ void RendererCanvasCull::canvas_item_clear(RID p_item) {
 	ERR_FAIL_NULL(canvas_item);
 
 	canvas_item->clear();
+#ifdef DEBUG_ENABLED
+	if (debug_redraw) {
+		canvas_item->debug_redraw_time = debug_redraw_time;
+	}
+#endif
 }
 
 void RendererCanvasCull::canvas_item_set_draw_index(RID p_item, int p_index) {
@@ -1610,6 +1616,15 @@ void RendererCanvasCull::canvas_item_set_visibility_notifier(RID p_item, bool p_
 			canvas_item->visibility_notifier = nullptr;
 		}
 	}
+}
+
+void RendererCanvasCull::canvas_item_set_debug_redraw(bool p_enabled) {
+	debug_redraw = p_enabled;
+	RSG::canvas_render->set_debug_redraw(p_enabled, debug_redraw_time, debug_redraw_color);
+}
+
+bool RendererCanvasCull::canvas_item_get_debug_redraw() const {
+	return debug_redraw;
 }
 
 void RendererCanvasCull::canvas_item_set_canvas_group_mode(RID p_item, RS::CanvasGroupMode p_mode, float p_clear_margin, bool p_fit_empty, float p_fit_margin, bool p_blur_mipmaps) {
@@ -2005,9 +2020,7 @@ void RendererCanvasCull::update_visibility_notifiers() {
 				if (RSG::threaded) {
 					visibility_notifier->enter_callable.call_deferred();
 				} else {
-					Callable::CallError ce;
-					Variant ret;
-					visibility_notifier->enter_callable.callp(nullptr, 0, ret, ce);
+					visibility_notifier->enter_callable.call();
 				}
 			}
 		} else {
@@ -2018,9 +2031,7 @@ void RendererCanvasCull::update_visibility_notifiers() {
 					if (RSG::threaded) {
 						visibility_notifier->exit_callable.call_deferred();
 					} else {
-						Callable::CallError ce;
-						Variant ret;
-						visibility_notifier->exit_callable.callp(nullptr, 0, ret, ce);
+						visibility_notifier->exit_callable.call();
 					}
 				}
 			}
@@ -2028,6 +2039,12 @@ void RendererCanvasCull::update_visibility_notifiers() {
 
 		E = N;
 	}
+}
+
+Rect2 RendererCanvasCull::_debug_canvas_item_get_rect(RID p_item) {
+	Item *canvas_item = canvas_item_owner.get_or_null(p_item);
+	ERR_FAIL_NULL_V(canvas_item, Rect2());
+	return canvas_item->get_rect();
 }
 
 bool RendererCanvasCull::free(RID p_rid) {
@@ -2150,11 +2167,38 @@ bool RendererCanvasCull::free(RID p_rid) {
 	return true;
 }
 
+template <class T>
+void RendererCanvasCull::_free_rids(T &p_owner, const char *p_type) {
+	List<RID> owned;
+	p_owner.get_owned_list(&owned);
+	if (owned.size()) {
+		if (owned.size() == 1) {
+			WARN_PRINT(vformat("1 RID of type \"%s\" was leaked.", p_type));
+		} else {
+			WARN_PRINT(vformat("%d RIDs of type \"%s\" were leaked.", owned.size(), p_type));
+		}
+		for (const RID &E : owned) {
+			free(E);
+		}
+	}
+}
+
+void RendererCanvasCull::finalize() {
+	_free_rids(canvas_owner, "Canvas");
+	_free_rids(canvas_item_owner, "CanvasItem");
+	_free_rids(canvas_light_owner, "CanvasLight");
+	_free_rids(canvas_light_occluder_owner, "CanvasLightOccluder");
+	_free_rids(canvas_light_occluder_polygon_owner, "CanvasLightOccluderPolygon");
+}
+
 RendererCanvasCull::RendererCanvasCull() {
 	z_list = (RendererCanvasRender::Item **)memalloc(z_range * sizeof(RendererCanvasRender::Item *));
 	z_last_list = (RendererCanvasRender::Item **)memalloc(z_range * sizeof(RendererCanvasRender::Item *));
 
 	disable_scale = false;
+
+	debug_redraw_time = GLOBAL_DEF("debug/canvas_items/debug_redraw_time", 1.0);
+	debug_redraw_color = GLOBAL_DEF("debug/canvas_items/debug_redraw_color", Color(1.0, 0.2, 0.2, 0.5));
 }
 
 RendererCanvasCull::~RendererCanvasCull() {

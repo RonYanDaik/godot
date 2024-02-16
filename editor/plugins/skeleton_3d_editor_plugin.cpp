@@ -363,7 +363,7 @@ void Skeleton3DEditor::pose_to_rest(const bool p_all_bones) {
 
 void Skeleton3DEditor::create_physical_skeleton() {
 	EditorUndoRedoManager *ur = EditorUndoRedoManager::get_singleton();
-	ERR_FAIL_COND(!get_tree());
+	ERR_FAIL_NULL(get_tree());
 	Node *owner = get_tree()->get_edited_scene_root();
 
 	const int bone_count = skeleton->get_bone_count();
@@ -871,7 +871,9 @@ void Skeleton3DEditor::_notification(int p_what) {
 				skeleton->disconnect("pose_updated", callable_mp(this, &Skeleton3DEditor::_update_properties));
 				skeleton->set_transform_gizmo_visible(true);
 #endif
-				handles_mesh_instance->get_parent()->remove_child(handles_mesh_instance);
+				if (handles_mesh_instance->get_parent()) {
+					handles_mesh_instance->get_parent()->remove_child(handles_mesh_instance);
+				}
 			}
 			edit_mode_toggled(false);
 		} break;
@@ -1217,8 +1219,8 @@ void fragment() {
 	selected_mat->set_shader(selected_sh);
 
 	// Register properties in editor settings.
-	EDITOR_DEF("editors/3d_gizmos/gizmo_colors/skeleton", Color(1, 0.8, 0.4));
-	EDITOR_DEF("editors/3d_gizmos/gizmo_colors/selected_bone", Color(0.8, 0.3, 0.0));
+	EDITOR_DEF_RST("editors/3d_gizmos/gizmo_colors/skeleton", Color(1, 0.8, 0.4));
+	EDITOR_DEF_RST("editors/3d_gizmos/gizmo_colors/selected_bone", Color(0.8, 0.3, 0.0));
 	EDITOR_DEF("editors/3d_gizmos/gizmo_settings/bone_axis_length", (float)0.1);
 	EDITOR_DEF("editors/3d_gizmos/gizmo_settings/bone_shape", 1);
 	EditorSettings::get_singleton()->add_property_hint(PropertyInfo(Variant::INT, "editors/3d_gizmos/gizmo_settings/bone_shape", PROPERTY_HINT_ENUM, "Wire,Octahedron"));

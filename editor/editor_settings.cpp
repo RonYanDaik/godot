@@ -519,6 +519,9 @@ void EditorSettings::_load_defaults(Ref<ConfigFile> p_extra_config) {
 	EDITOR_SETTING_USAGE(Variant::FLOAT, PROPERTY_HINT_RANGE, "filesystem/import/blender/rpc_server_uptime", 5, "0,300,1,or_greater,suffix:s", PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_RESTART_IF_CHANGED)
 	EDITOR_SETTING_USAGE(Variant::STRING, PROPERTY_HINT_GLOBAL_FILE, "filesystem/import/fbx/fbx2gltf_path", "", "", PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_RESTART_IF_CHANGED)
 
+	// Tools (denoise)
+	EDITOR_SETTING_USAGE(Variant::STRING, PROPERTY_HINT_GLOBAL_DIR, "filesystem/tools/oidn/oidn_denoise_path", "", "", PROPERTY_USAGE_DEFAULT)
+
 	/* Docks */
 
 	// SceneTree
@@ -629,9 +632,9 @@ void EditorSettings::_load_defaults(Ref<ConfigFile> p_extra_config) {
 
 	// Use a similar color to the 2D editor selection.
 	EDITOR_SETTING_USAGE(Variant::COLOR, PROPERTY_HINT_NONE, "editors/3d/selection_box_color", Color(1.0, 0.5, 0), "", PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_RESTART_IF_CHANGED)
-	_initial_set("editors/3d_gizmos/gizmo_colors/instantiated", Color(0.7, 0.7, 0.7, 0.6));
-	_initial_set("editors/3d_gizmos/gizmo_colors/joint", Color(0.5, 0.8, 1));
-	_initial_set("editors/3d_gizmos/gizmo_colors/shape", Color(0.5, 0.7, 1));
+	EDITOR_SETTING_USAGE(Variant::COLOR, PROPERTY_HINT_NONE, "editors/3d_gizmos/gizmo_colors/instantiated", Color(0.7, 0.7, 0.7, 0.6), "", PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_RESTART_IF_CHANGED)
+	EDITOR_SETTING_USAGE(Variant::COLOR, PROPERTY_HINT_NONE, "editors/3d_gizmos/gizmo_colors/joint", Color(0.5, 0.8, 1), "", PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_RESTART_IF_CHANGED)
+	EDITOR_SETTING_USAGE(Variant::COLOR, PROPERTY_HINT_NONE, "editors/3d_gizmos/gizmo_colors/shape", Color(0.5, 0.7, 1), "", PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_RESTART_IF_CHANGED)
 
 	// If a line is a multiple of this, it uses the primary grid color.
 	// Use a power of 2 value by default as it's more common to use powers of 2 in level design.
@@ -821,6 +824,7 @@ void EditorSettings::_load_godot2_text_editor_theme() {
 	_initial_set("text_editor/theme/highlighting/engine_type_color", Color(0.51, 0.83, 1.0));
 	_initial_set("text_editor/theme/highlighting/user_type_color", Color(0.42, 0.67, 0.93));
 	_initial_set("text_editor/theme/highlighting/comment_color", Color(0.4, 0.4, 0.4));
+	_initial_set("text_editor/theme/highlighting/doc_comment_color", Color(0.5, 0.6, 0.7));
 	_initial_set("text_editor/theme/highlighting/string_color", Color(0.94, 0.43, 0.75));
 	_initial_set("text_editor/theme/highlighting/background_color", Color(0.13, 0.12, 0.15));
 	_initial_set("text_editor/theme/highlighting/completion_background_color", Color(0.17, 0.16, 0.2));
@@ -878,6 +882,10 @@ bool EditorSettings::_save_text_editor_theme(String p_file) {
 
 bool EditorSettings::_is_default_text_editor_theme(String p_theme_name) {
 	return p_theme_name == "default" || p_theme_name == "godot 2" || p_theme_name == "custom";
+}
+
+const String EditorSettings::_get_project_metadata_path() const {
+	return EditorPaths::get_singleton()->get_project_settings_dir().path_join("project_metadata.cfg");
 }
 
 // PUBLIC METHODS
@@ -1122,8 +1130,8 @@ Variant _EDITOR_DEF(const String &p_setting, const Variant &p_default, bool p_re
 		ret = EDITOR_GET(p_setting);
 	} else {
 		EditorSettings::get_singleton()->set_manually(p_setting, p_default);
-		EditorSettings::get_singleton()->set_restart_if_changed(p_setting, p_restart_if_changed);
 	}
+	EditorSettings::get_singleton()->set_restart_if_changed(p_setting, p_restart_if_changed);
 
 	if (!EditorSettings::get_singleton()->has_default_value(p_setting)) {
 		EditorSettings::get_singleton()->set_initial_value(p_setting, p_default);
@@ -1167,24 +1175,31 @@ void EditorSettings::add_property_hint(const PropertyInfo &p_hint) {
 // Metadata
 
 void EditorSettings::set_project_metadata(const String &p_section, const String &p_key, Variant p_data) {
-	Ref<ConfigFile> cf = memnew(ConfigFile);
-	String path = EditorPaths::get_singleton()->get_project_settings_dir().path_join("project_metadata.cfg");
-	Error err;
-	err = cf->load(path);
-	ERR_FAIL_COND_MSG(err != OK && err != ERR_FILE_NOT_FOUND, "Cannot load editor settings from file '" + path + "'.");
-	cf->set_value(p_section, p_key, p_data);
-	err = cf->save(path);
-	ERR_FAIL_COND_MSG(err != OK, "Cannot save editor settings to file '" + path + "'.");
+	const String path = _get_project_metadata_path();
+
+	if (project_metadata.is_null()) {
+		project_metadata.instantiate();
+
+		Error err = project_metadata->load(path);
+		if (err != OK && err != ERR_FILE_NOT_FOUND) {
+			ERR_PRINT("Cannot load project metadata from file '" + path + "'.");
+		}
+	}
+	project_metadata->set_value(p_section, p_key, p_data);
+
+	Error err = project_metadata->save(path);
+	ERR_FAIL_COND_MSG(err != OK, "Cannot save project metadata to file '" + path + "'.");
 }
 
 Variant EditorSettings::get_project_metadata(const String &p_section, const String &p_key, Variant p_default) const {
-	Ref<ConfigFile> cf = memnew(ConfigFile);
-	String path = EditorPaths::get_singleton()->get_project_settings_dir().path_join("project_metadata.cfg");
-	Error err = cf->load(path);
-	if (err != OK) {
-		return p_default;
+	if (project_metadata.is_null()) {
+		project_metadata.instantiate();
+
+		const String path = _get_project_metadata_path();
+		Error err = project_metadata->load(path);
+		ERR_FAIL_COND_V_MSG(err != OK && err != ERR_FILE_NOT_FOUND, p_default, "Cannot load project metadata from file '" + path + "'.");
 	}
-	return cf->get_value(p_section, p_key, p_default);
+	return project_metadata->get_value(p_section, p_key, p_default);
 }
 
 void EditorSettings::set_favorites(const Vector<String> &p_favorites) {

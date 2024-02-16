@@ -151,6 +151,7 @@ void AnimationPlayer::_notification(int p_what) {
 			if (!Engine::get_singleton()->is_editor_hint() && animation_set.has(autoplay)) {
 				set_active(true);
 				play(autoplay);
+				_check_immediately_after_start();
 			}
 		} break;
 	}
@@ -232,10 +233,22 @@ void AnimationPlayer::_process_playback_data(PlaybackData &cd, double p_delta, f
 		pi.delta = delta;
 		pi.seeked = p_seeked;
 	}
-	pi.is_external_seeking = false;
+	// AnimationPlayer doesn't have internal seeking.
+	// However, immediately after playback, discrete keys should be retrieved with EXACT mode since behind keys must be ignored at that time.
+	pi.is_external_seeking = !p_started;
 	pi.looped_flag = looped_flag;
 	pi.weight = p_blend;
 	make_animation_instance(cd.from->name, pi);
+}
+
+float AnimationPlayer::get_current_blend_amount() {
+	Playback &c = playback;
+	float blend = 1.0;
+	for (List<Blend>::Element *E = c.blend.front(); E; E = E->next()) {
+		Blend &b = E->get();
+		blend = blend - b.blend_left;
+	}
+	return MAX(0, blend);
 }
 
 void AnimationPlayer::_blend_playback_data(double p_delta, bool p_started) {
@@ -247,16 +260,8 @@ void AnimationPlayer::_blend_playback_data(double p_delta, bool p_started) {
 		c.seeked = false;
 	}
 
-	// First, calc all blends weight.
-	float blend = 1.0;
-	for (List<Blend>::Element *E = c.blend.front(); E; E = E->next()) {
-		Blend &b = E->get();
-		blend = MAX(0, blend - b.blend_left);
-		b.blend_left = MAX(0, b.blend_left - Math::absf(speed_scale * p_delta) / b.blend_time);
-	}
-
 	// Second, process current animation to check if the animation end reached.
-	_process_playback_data(c.current, p_delta, blend, seeked, p_started, true);
+	_process_playback_data(c.current, p_delta, get_current_blend_amount(), seeked, p_started, true);
 
 	// Finally, if not end the animation, do blending.
 	if (end_reached) {
@@ -266,6 +271,7 @@ void AnimationPlayer::_blend_playback_data(double p_delta, bool p_started) {
 	List<List<Blend>::Element *> to_erase;
 	for (List<Blend>::Element *E = c.blend.front(); E; E = E->next()) {
 		Blend &b = E->get();
+		b.blend_left = MAX(0, b.blend_left - Math::absf(speed_scale * p_delta) / b.blend_time);
 		if (b.blend_left <= 0) {
 			to_erase.push_back(E);
 			b.blend_left = CMP_EPSILON; // May want to play last frame.
@@ -402,7 +408,7 @@ void AnimationPlayer::play(const StringName &p_name, double p_custom_blend, floa
 		if (blend_time > 0) {
 			Blend b;
 			b.data = c.current;
-			b.blend_left = 1.0;
+			b.blend_left = get_current_blend_amount();
 			b.blend_time = blend_time;
 			c.blend.push_back(b);
 		} else {
@@ -411,13 +417,20 @@ void AnimationPlayer::play(const StringName &p_name, double p_custom_blend, floa
 	}
 
 	if (get_current_animation() != p_name) {
-		_clear_caches();
+		_clear_playing_caches();
 	}
 
 	c.current.from = &animation_set[name];
+	c.current.speed_scale = p_custom_scale;
+
+	if (!end_reached) {
+		playback_queue.clear();
+	}
 
 	if (c.assigned != name) { // Reset.
 		c.current.pos = p_from_end ? c.current.from->animation->get_length() : 0;
+		c.assigned = name;
+		emit_signal(SNAME("current_animation_changed"), c.assigned);
 	} else {
 		if (p_from_end && c.current.pos == 0) {
 			// Animation reset but played backwards, set position to the end.
@@ -425,18 +438,14 @@ void AnimationPlayer::play(const StringName &p_name, double p_custom_blend, floa
 		} else if (!p_from_end && c.current.pos == c.current.from->animation->get_length()) {
 			// Animation resumed but already ended, set position to the beginning.
 			c.current.pos = 0;
+		} else if (playing) {
+			return;
 		}
 	}
 
-	c.current.speed_scale = p_custom_scale;
-	c.assigned = name;
-	emit_signal(SNAME("current_animation_changed"), c.assigned);
 	c.seeked = false;
 	c.started = true;
 
-	if (!end_reached) {
-		playback_queue.clear();
-	}
 	_set_process(true); // Always process when starting an animation.
 	playing = true;
 
@@ -518,8 +527,9 @@ void AnimationPlayer::seek(double p_time, bool p_update, bool p_update_only) {
 		return;
 	}
 
-	playback.current.pos = p_time;
+	_check_immediately_after_start();
 
+	playback.current.pos = p_time;
 	if (!playback.current.from) {
 		if (playback.assigned) {
 			ERR_FAIL_COND_MSG(!animation_set.has(playback.assigned), vformat("Animation not found: %s.", playback.assigned));
@@ -533,6 +543,18 @@ void AnimationPlayer::seek(double p_time, bool p_update, bool p_update_only) {
 	playback.seeked = true;
 	if (p_update) {
 		_process_animation(0, p_update_only);
+		playback.seeked = false; // If animation was proceeded here, no more seek in internal process.
+	}
+}
+
+void AnimationPlayer::advance(double p_time) {
+	_check_immediately_after_start();
+	AnimationMixer::advance(p_time);
+}
+
+void AnimationPlayer::_check_immediately_after_start() {
+	if (playback.started) {
+		_process_animation(0); // Force process current key for Discrete/Method/Audio/AnimationPlayback. Then, started flag is cleared.
 	}
 }
 
@@ -541,12 +563,12 @@ bool AnimationPlayer::is_valid() const {
 }
 
 double AnimationPlayer::get_current_animation_position() const {
-	ERR_FAIL_COND_V_MSG(!playback.current.from, 0, "AnimationPlayer has no current animation");
+	ERR_FAIL_NULL_V_MSG(playback.current.from, 0, "AnimationPlayer has no current animation.");
 	return playback.current.pos;
 }
 
 double AnimationPlayer::get_current_animation_length() const {
-	ERR_FAIL_COND_V_MSG(!playback.current.from, 0, "AnimationPlayer has no current animation");
+	ERR_FAIL_NULL_V_MSG(playback.current.from, 0, "AnimationPlayer has no current animation.");
 	return playback.current.from->animation->get_length();
 }
 
@@ -648,7 +670,7 @@ void AnimationPlayer::get_argument_options(const StringName &p_function, int p_i
 			r_options->push_back(String(name).quote());
 		}
 	}
-	Node::get_argument_options(p_function, p_idx, r_options);
+	AnimationMixer::get_argument_options(p_function, p_idx, r_options);
 }
 
 void AnimationPlayer::_animation_removed(const StringName &p_name, const StringName &p_library) {

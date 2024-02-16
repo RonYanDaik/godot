@@ -577,6 +577,8 @@ Error ResourceLoaderText::load() {
 		if (do_assign) {
 			if (cache_mode != ResourceFormatLoader::CACHE_MODE_IGNORE) {
 				res->set_path(path, cache_mode == ResourceFormatLoader::CACHE_MODE_REPLACE);
+			} else if (!path.is_resource_file()) {
+				res->set_path_cache(path);
 			}
 			res->set_scene_unique_id(id);
 		}
@@ -1789,8 +1791,8 @@ Error ResourceFormatLoaderText::rename_dependencies(const String &p_path, const 
 		err = loader.rename_dependencies(f, p_path, p_map);
 	}
 
-	if (err == OK) {
-		Ref<DirAccess> da = DirAccess::create(DirAccess::ACCESS_RESOURCES);
+	Ref<DirAccess> da = DirAccess::create(DirAccess::ACCESS_RESOURCES);
+	if (err == OK && da->file_exists(p_path + ".depren")) {
 		da->remove(p_path);
 		da->rename(p_path + ".depren", p_path);
 	}

@@ -80,13 +80,16 @@
 # Alessio Gasparini <alessiogasparini02@gmail.com>, 2023.
 # Francesco <martefrinbell@gmail.com>, 2023.
 # E D <th3-crasin3ss@hotmail.com>, 2023.
+# Frankie McEyes <mceyes@protonmail.com>, 2023.
+# Samuele Righi <blackdestinyx145@gmail.com>, 2023.
+# Ott8v <Ott8v@users.noreply.hosted.weblate.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: Godot Engine properties\n"
 "Report-Msgid-Bugs-To: https://github.com/godotengine/godot\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-09-15 12:40+0000\n"
-"Last-Translator: E D <th3-crasin3ss@hotmail.com>\n"
+"PO-Revision-Date: 2024-01-30 03:33+0000\n"
+"Last-Translator: Ott8v <Ott8v@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/godot-engine/"
 "godot-properties/it/>\n"
 "Language: it\n"
@@ -94,7 +97,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.0.1-dev\n"
+"X-Generator: Weblate 5.4-dev\n"
 
 msgid "Application"
 msgstr "Applicazione"
@@ -144,6 +147,9 @@ msgstr "Tipo di Loop Principale"
 msgid "Auto Accept Quit"
 msgstr "Auto-Accetta Uscita"
 
+msgid "Quit on Go Back"
+msgstr "Esci nel \"tornare indietro\""
+
 msgid "Display"
 msgstr "Schermo"
 
@@ -162,6 +168,9 @@ msgstr "Altezza del Viewport"
 msgid "Mode"
 msgstr "Modalità"
 
+msgid "Initial Position Type"
+msgstr "Tipo di posizione iniziale"
+
 msgid "Initial Position"
 msgstr "Posizione Iniziale"
 
@@ -174,8 +183,14 @@ msgstr "Ridimensionabile"
 msgid "Borderless"
 msgstr "Senza contorno"
 
+msgid "Always on Top"
+msgstr "Sempre In primo piano"
+
 msgid "Transparent"
 msgstr "Trasparente"
+
+msgid "Extend to Title"
+msgstr "Estendi a titolo"
 
 msgid "No Focus"
 msgstr "Nessun Focus"
@@ -197,6 +212,12 @@ msgstr "Audio"
 
 msgid "General"
 msgstr "Generale"
+
+msgid "iOS"
+msgstr "iOS"
+
+msgid "Mix With Others"
+msgstr "Mischia Con Altri"
 
 msgid "Editor"
 msgstr "Editor"
@@ -270,6 +291,9 @@ msgstr "Server Multithreading"
 msgid "Internationalization"
 msgstr "Lingue"
 
+msgid "Force Right to Left Layout Direction"
+msgstr "Forza la Direzione del Layout da Destra a Sinistra"
+
 msgid "GUI"
 msgstr "Interfaccia Grafica"
 
@@ -320,6 +344,9 @@ msgstr "Usa Input Accumulati"
 
 msgid "Input Devices"
 msgstr "Dispositivi Input"
+
+msgid "Compatibility"
+msgstr "Compatibilità"
 
 msgid "Device"
 msgstr "Dispositivo"
@@ -399,6 +426,9 @@ msgstr "Numero Controller"
 msgid "Controller Value"
 msgstr "Valore Controller"
 
+msgid "Events"
+msgstr "Eventi"
+
 msgid "Big Endian"
 msgstr "Big Endian"
 
@@ -452,6 +482,12 @@ msgstr "Stato"
 
 msgid "Network"
 msgstr "Reti"
+
+msgid "TCP"
+msgstr "TCP"
+
+msgid "TLS"
+msgstr "TLS"
 
 msgid "Locale"
 msgstr "Locale"
@@ -692,6 +728,9 @@ msgstr "Importa"
 
 msgid "FBX"
 msgstr "FBX"
+
+msgid "Tools"
+msgstr "Strumenti"
 
 msgid "Docks"
 msgstr "Docks"
@@ -1221,6 +1260,12 @@ msgstr "ETC2"
 msgid "Export"
 msgstr "Esporta"
 
+msgid "SSH"
+msgstr "SSH"
+
+msgid "SCP"
+msgstr "SCP"
+
 msgid "Export Path"
 msgstr "Percorso di Esportazione"
 
@@ -1263,6 +1308,9 @@ msgstr "Crea da"
 msgid "Delimiter"
 msgstr "Delimitatore"
 
+msgid "Columns"
+msgstr "Colonne"
+
 msgid "Lossy Quality"
 msgstr "Qualità Lossy"
 
@@ -1304,6 +1352,9 @@ msgstr "Opzioni avanzate"
 
 msgid "Precision"
 msgstr "Precisione"
+
+msgid "Resolution"
+msgstr "Risoluzione"
 
 msgid "Height"
 msgstr "Altezza"
@@ -1584,9 +1635,6 @@ msgstr "stdout Verbose"
 msgid "Low Processor Mode"
 msgstr "Modalità Basso Utilizzo Processore"
 
-msgid "iOS"
-msgstr "iOS"
-
 msgid "Hide Home Indicator"
 msgstr "Nascondi Indicatore Home"
 
@@ -1634,6 +1682,9 @@ msgstr "Emula Tocco Da Mouse"
 
 msgid "Emulate Mouse From Touch"
 msgstr "Emula Mouse Da Tocco"
+
+msgid "Android"
+msgstr "Android"
 
 msgid "Mouse Cursor"
 msgstr "Cursore Mouse"
@@ -2102,9 +2153,6 @@ msgstr "Funzionalità Opzionali"
 
 msgid "Visibility State"
 msgstr "Stato Visibilità"
-
-msgid "Android"
-msgstr "Android"
 
 msgid "Android SDK Path"
 msgstr "Percorso SDK Android"
@@ -2775,12 +2823,6 @@ msgstr "RIghe Max Visibili"
 msgid "Max Length"
 msgstr "Lunghezza Max"
 
-msgid "Secret"
-msgstr "Segreto"
-
-msgid "Secret Character"
-msgstr "Carattere Segreto"
-
 msgid "Context Menu Enabled"
 msgstr "Menù Contestuale Abilitato"
 
@@ -2802,6 +2844,12 @@ msgstr "Selezione Abilitata"
 msgid "Right Icon"
 msgstr "Icona Destra"
 
+msgid "Secret"
+msgstr "Segreto"
+
+msgid "Secret Character"
+msgstr "Carattere Segreto"
+
 msgid "Min Value"
 msgstr "Valore Minimo"
 
@@ -2820,11 +2868,11 @@ msgstr "Scheda Attuale"
 msgid "Tabs Visible"
 msgstr "Schede Visibili"
 
-msgid "Syntax Highlighter"
-msgstr "Evidenziatore di sintassi"
-
 msgid "Draw"
 msgstr "Disegno"
+
+msgid "Syntax Highlighter"
+msgstr "Evidenziatore di sintassi"
 
 msgid "Radial Fill"
 msgstr "Riempimento Radiale"
@@ -2942,9 +2990,6 @@ msgstr "Formato Trasformazione"
 
 msgid "Parsed Geometry Type"
 msgstr "Tipo di Geometria Analizzata"
-
-msgid "Normal Texture"
-msgstr "Normal Texture"
 
 msgid "B"
 msgstr "B"

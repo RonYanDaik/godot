@@ -139,8 +139,8 @@ void InspectorDock::_menu_option_confirm(int p_option, bool p_confirmed) {
 					}
 				}
 
+				unique_resources_list_tree->clear();
 				if (resource_propnames.size()) {
-					unique_resources_list_tree->clear();
 					TreeItem *root = unique_resources_list_tree->create_item();
 
 					for (int i = 0; i < resource_propnames.size(); i++) {
@@ -442,6 +442,9 @@ void InspectorDock::_notification(int p_what) {
 				backward_button->set_icon(get_editor_theme_icon(SNAME("Back")));
 				forward_button->set_icon(get_editor_theme_icon(SNAME("Forward")));
 			}
+
+			const int icon_width = get_theme_constant(SNAME("class_icon_size"), EditorStringName(Editor));
+			history_menu->get_popup()->add_theme_constant_override("icon_max_width", icon_width);
 
 			history_menu->set_icon(get_editor_theme_icon(SNAME("History")));
 			object_menu->set_icon(get_editor_theme_icon(SNAME("Tools")));

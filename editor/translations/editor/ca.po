@@ -20,13 +20,15 @@
 # Jordi Borràs <jborras@centrekepler.com>, 2023.
 # Marc GB <marc.giralt.butjosa@gmail.com>, 2023.
 # Ander Romero <anderromeroaldana@gmail.com>, 2023.
+# Francesc Arpi Roca <francesc.arpi@gmail.com>, 2024.
+# bene toff <benetoffix@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: Godot Engine editor interface\n"
 "Report-Msgid-Bugs-To: https://github.com/godotengine/godot\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2023-09-16 17:47+0000\n"
-"Last-Translator: Ander Romero <anderromeroaldana@gmail.com>\n"
+"PO-Revision-Date: 2024-01-16 18:10+0000\n"
+"Last-Translator: bene toff <benetoffix@gmail.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/godot-engine/"
 "godot/ca/>\n"
 "Language: ca\n"
@@ -34,7 +36,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.0.2\n"
+"X-Generator: Weblate 5.4-dev\n"
+
+msgid "Main Thread"
+msgstr "Fil principal"
 
 msgid "Unset"
 msgstr "Desactiva"
@@ -908,6 +913,9 @@ msgstr ""
 msgid "Animation Add RESET Keys"
 msgstr "Afegeix Claus de RESET a l'animació"
 
+msgid "Bake Animation as Linear Keys"
+msgstr "Precalcula l'animació com a Claus Lineals"
+
 msgid ""
 "This animation belongs to an imported scene, so changes to imported tracks "
 "will not be saved.\n"
@@ -926,6 +934,9 @@ msgstr ""
 "Algunes opcions, com la repetició, poden trobar-s'hi. Per afegir-hi pistes "
 "personalitzades, activeu \"Desa en un fitxer\" i\n"
 "\"Mantingues les pistes personalitzades\"."
+
+msgid "AnimationPlayer is inactive. The playback will not be processed."
+msgstr "AnimationPlayer està inactiu. El playback no serà processat."
 
 msgid "Select an AnimationPlayer node to create and edit animations."
 msgstr "Seleccioneu un node AnimationPlayer per a crear i editar animacions."
@@ -1170,12 +1181,6 @@ msgstr "Tancar"
 
 msgid "Connect"
 msgstr "Connectar"
-
-msgid "Class:"
-msgstr "Classe:"
-
-msgid "Signal:"
-msgstr "Senyal:"
 
 msgid "Connect '%s' to '%s'"
 msgstr "Connectar '%s' amb '%s'"
@@ -1526,21 +1531,6 @@ msgstr "Patrocinadors Gold"
 
 msgid "Silver Sponsors"
 msgstr "Donants Plata"
-
-msgid "Bronze Sponsors"
-msgstr "Donants Bronze"
-
-msgid "Mini Sponsors"
-msgstr "Mini Patrocinadors"
-
-msgid "Gold Donors"
-msgstr "Donants Gold"
-
-msgid "Silver Donors"
-msgstr "Donants Silver"
-
-msgid "Bronze Donors"
-msgstr "Donants Bronze"
 
 msgid "Donors"
 msgstr "Donants"
@@ -1952,6 +1942,9 @@ msgstr "(Re)Important Recursos"
 msgid "Top"
 msgstr "Dalt"
 
+msgid "Class:"
+msgstr "Classe:"
+
 msgid "Inherits:"
 msgstr "Hereta:"
 
@@ -1997,6 +1990,12 @@ msgstr ""
 
 msgid "Method Descriptions"
 msgstr "Descripcions dels Mètodes"
+
+msgid "Property:"
+msgstr "Propietat:"
+
+msgid "Signal:"
+msgstr "Senyal:"
 
 msgid "%d match."
 msgstr "%d coincidència."
@@ -2054,9 +2053,6 @@ msgstr "Propietat"
 
 msgid "Theme Property"
 msgstr "Propietats del tema"
-
-msgid "Property:"
-msgstr "Propietat:"
 
 msgid "Move Up"
 msgstr "Mou Amunt"
@@ -2321,17 +2317,6 @@ msgstr ""
 "No es pot carregar l'script de complement (addon) del camí: '%s'. Això pot "
 "ser degut a un error de codi en aquest script.\n"
 "Es desactivarà el complement (addon) a '% s' per a evitar més errors."
-
-msgid ""
-"Unable to load addon script from path: '%s' Base type is not EditorPlugin."
-msgstr ""
-"No es pot carregar l'Script del complement: El tipus base de '%s' no és pas "
-"EditorPlugin."
-
-msgid "Unable to load addon script from path: '%s' Script is not in tool mode."
-msgstr ""
-"No s'ha carregat l'Script d'addon des del camí: L'Script '%s' no és en el "
-"mode d'Eina."
 
 msgid ""
 "Scene '%s' was automatically imported, so it can't be modified.\n"
@@ -2737,6 +2722,9 @@ msgstr "Carrega Rapida"
 msgid "Make Unique"
 msgstr "Fes-lo Únic"
 
+msgid "Save As..."
+msgstr "Anomena i Desa..."
+
 msgid "Show in FileSystem"
 msgstr "Mostrar en el Sistema de Fitxers"
 
@@ -2962,11 +2950,11 @@ msgstr ""
 msgid "Runnable"
 msgstr "Executable"
 
-msgid "Resources to export:"
-msgstr "Recursos per exportar:"
-
 msgid "Delete preset '%s'?"
 msgstr "Esborrar la configuració '%s' ?"
+
+msgid "Resources to export:"
+msgstr "Recursos per exportar:"
 
 msgid "Presets"
 msgstr "Configuracions prestablertes"
@@ -3143,9 +3131,6 @@ msgstr "Reanomena..."
 
 msgid "Re-Scan Filesystem"
 msgstr "ReAnalitza Sistema de Fitxers"
-
-msgid "Toggle Split Mode"
-msgstr "Commutar Mode Dividit"
 
 msgid ""
 "Scanning Files,\n"
@@ -3443,9 +3428,6 @@ msgstr "Carrega un recurs des del disc i edita'l."
 
 msgid "Save the currently edited resource."
 msgstr "Desa el recurs editat ara."
-
-msgid "Save As..."
-msgstr "Anomena i Desa..."
 
 msgid "Copy Resource"
 msgstr "Copia el Recurs"
@@ -3814,14 +3796,14 @@ msgstr "Fixar AnimationPlayer"
 msgid "Error!"
 msgstr "Error !"
 
+msgid "Cross-Animation Blend Times"
+msgstr "Temps de mescla entre Animacions"
+
 msgid "Blend Times:"
 msgstr "Temps de mescla:"
 
 msgid "Next (Auto Queue):"
 msgstr "Següent (Enviar a la Cua):"
-
-msgid "Cross-Animation Blend Times"
-msgstr "Temps de mescla entre Animacions"
 
 msgid "Move Node"
 msgstr "Moure Node"
@@ -6027,14 +6009,6 @@ msgstr ""
 "La interfície s'actualitzarà després de reiniciar l'editor o el gestor de "
 "projectes."
 
-msgid ""
-"Are you sure to scan %s folders for existing Godot projects?\n"
-"This could take a while."
-msgstr ""
-"Esteu segur que voleu escanejar %s carpetes per als projectes de Godot "
-"existents?\n"
-"Això pot trigar una estona."
-
 msgid "New Project"
 msgstr "Nou Projecte"
 
@@ -6248,9 +6222,6 @@ msgstr "Elimina l'Herència"
 
 msgid "Editable Children"
 msgstr "Fills Editables"
-
-msgid "Load As Placeholder"
-msgstr "Carrega com a Contenidor Temporal"
 
 msgid "Can't paste root node into the same scene."
 msgstr "No es pot enganxar el node arrel a la mateixa escena."
