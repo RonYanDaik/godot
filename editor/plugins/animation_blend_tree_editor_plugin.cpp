@@ -1097,7 +1097,7 @@ AnimationNodeBlendTreeEditor::AnimationNodeBlendTreeEditor() {
 	add_node->set_disabled(read_only);
 
 	add_options.push_back(AddOption("Animation", "AnimationNodeAnimation"));
-	add_options.push_back(AddOption("OneShot", "AnimationNodeOneShot", 2));
+	/*add_options.push_back(AddOption("OneShot", "AnimationNodeOneShot", 2));
 	add_options.push_back(AddOption("Add2", "AnimationNodeAdd2", 2));
 	add_options.push_back(AddOption("Add3", "AnimationNodeAdd3", 3));
 	add_options.push_back(AddOption("Blend2", "AnimationNodeBlend2", 2));
@@ -1105,11 +1105,11 @@ AnimationNodeBlendTreeEditor::AnimationNodeBlendTreeEditor() {
 	add_options.push_back(AddOption("Sub2", "AnimationNodeSub2", 2));
 	add_options.push_back(AddOption("TimeSeek", "AnimationNodeTimeSeek", 1));
 	add_options.push_back(AddOption("TimeScale", "AnimationNodeTimeScale", 1));
-	add_options.push_back(AddOption("Transition", "AnimationNodeTransition"));
+	add_options.push_back(AddOption("Transition", "AnimationNodeTransition"));*/
 
-	// Add all types that inherit from AnimationRootNode to options.
+	// Add all types that inherit from AnimationNode to options.
 	List<StringName> classes;
-	ClassDB::get_inheriters_from_class("AnimationRootNode", &classes);
+	ClassDB::get_inheriters_from_class("AnimationNode", &classes);
 	classes.sort_custom<StringName::AlphCompare>();
 
 	for (List<StringName>::Element *E = classes.front(); E; E = E->next()) {
