@@ -1,2 +1,2 @@
-build_engine_dev.bat
-build_engine.bat
+call build_engine_dev.bat
+call build_engine.bat
