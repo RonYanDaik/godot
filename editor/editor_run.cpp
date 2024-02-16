@@ -315,7 +315,9 @@ Error EditorRun::run(const String &p_scene, const String &p_write_movie) {
 	int instances = EditorSettings::get_singleton()->get_project_metadata("debug_options", "run_debug_instances", 1);
 	for (int i = 0; i < instances; i++) {
 		OS::ProcessID pid = 0;
-		Error err = OS::get_singleton()->create_instance(args, &pid);
+		List<String> temp_instance_args = args;
+		temp_instance_args.push_back(String("--instance ")+itos(i)+","+itos(instances));
+		Error err = OS::get_singleton()->create_instance(temp_instance_args, &pid);
 		ERR_FAIL_COND_V(err, err);
 		if (pid != 0) {
 			pids.push_back(pid);
