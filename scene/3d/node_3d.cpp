@@ -330,7 +330,7 @@ void Node3D::set_global_transform(const Transform3D &p_transform) {
 }
 
 Transform3D Node3D::get_transform() const {
-	ERR_READ_THREAD_GUARD_V(Transform3D());
+	ERR_READ_THREAD_GUARD_V_ASS(Transform3D());
 	if (_test_dirty_bits(DIRTY_LOCAL_TRANSFORM)) {
 		// This update can happen if needed over multiple threads.
 		_update_local_transform();
