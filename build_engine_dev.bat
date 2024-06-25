@@ -1,1 +1,1 @@
-scons platform=windows dev_build=yes
+scons platform=windows dev_build=yes debug_symbols=yes

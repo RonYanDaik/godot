@@ -1485,7 +1485,7 @@ TypedArray<Tween> SceneTree::get_processed_tweens() {
 }
 
 Ref<MultiplayerAPI> SceneTree::get_multiplayer(const NodePath &p_for_path) const {
-	ERR_FAIL_COND_V_MSG(!Thread::is_main_thread(), Ref<MultiplayerAPI>(), "Multiplayer can only be manipulated from the main thread.");
+	ERR_FAIL_COND_V_MSG_ASSERT(!Thread::is_main_thread(), Ref<MultiplayerAPI>(), "Multiplayer can only be manipulated from the main thread.");
 	if (p_for_path.is_empty()) {
 		return multiplayer;
 	}
