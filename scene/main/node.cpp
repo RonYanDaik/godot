@@ -1567,7 +1567,7 @@ Node *Node::_get_child_by_name(const StringName &p_name) const {
 }
 
 Node *Node::get_node_or_null(const NodePath &p_path) const {
-	ERR_THREAD_GUARD_V(nullptr);
+	ERR_THREAD_GUARD_V_MSG_ASS(nullptr,p_path);
 	if (p_path.is_empty()) {
 		return nullptr;
 	}
