@@ -58,6 +58,11 @@
 #include <wbemcli.h>
 #include <wincrypt.h>
 
+#include "modules/godot_tracy_dll/tracy/public/tracy/TracyC.h"
+#ifdef TRACY_ENABLE
+#include "modules/godot_tracy_dll/tracy/public/tracy/Tracy.hpp"
+#endif
+
 #ifdef DEBUG_ENABLED
 #pragma pack(push, before_imagehlp, 8)
 #include <imagehlp.h>
@@ -1470,6 +1475,10 @@ void OS_Windows::run() {
 	main_loop->initialize();
 
 	while (true) {
+		#ifdef TRACY_ENABLE
+		TracyCFrameMark;
+		#endif
+
 		DisplayServer::get_singleton()->process_events(); // get rid of pending events
 		if (Main::iteration()) {
 			break;
