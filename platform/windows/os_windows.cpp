@@ -58,6 +58,11 @@
 #include <wbemcli.h>
 #include <wincrypt.h>
 
+#ifdef TRACY_ENABLE
+#include "modules/godot_tracy_dll/tracy/public/tracy/Tracy.hpp"
+#include "modules/godot_tracy_dll/tracy/public/tracy/TracyC.h"
+#endif
+
 #ifdef DEBUG_ENABLED
 #pragma pack(push, before_imagehlp, 8)
 #include <imagehlp.h>
@@ -1463,17 +1468,35 @@ String OS_Windows::get_processor_name() const {
 }
 
 void OS_Windows::run() {
+	#ifdef TRACY_ENABLE
+	ZoneScoped;
+	#endif
+	
 	if (!main_loop) {
 		return;
 	}
 
 	main_loop->initialize();
+	/*#ifdef TRACY_ENABLE
+	TracyCZone(ctx, true);
+	const CharString c = "MainFrame";
+	TracyCZoneName(ctx, c.ptr(), c.size());;
+	#endif*/
 
 	while (true) {
+		#ifdef TRACY_ENABLE
+		//TracyCFrameMark;
+        ZoneScopedN("Main Frame Loop");
+		#endif
+
 		DisplayServer::get_singleton()->process_events(); // get rid of pending events
 		if (Main::iteration()) {
 			break;
 		}
+		
+		#ifdef TRACY_ENABLE
+		FrameMark;
+		#endif
 	}
 
 	main_loop->finalize();

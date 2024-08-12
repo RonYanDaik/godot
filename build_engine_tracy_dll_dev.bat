@@ -1,0 +1,1 @@
+scons platform=windows dev_build=yes debug_symbols=yes tracy_enable=yes CCFLAGS="-fno-omit-frame-pointer -fno-inline -ggdb3" extra_suffix="tracy_dll"
