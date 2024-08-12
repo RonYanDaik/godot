@@ -58,9 +58,9 @@
 #include <wbemcli.h>
 #include <wincrypt.h>
 
-#include "modules/godot_tracy_dll/tracy/public/tracy/TracyC.h"
 #ifdef TRACY_ENABLE
 #include "modules/godot_tracy_dll/tracy/public/tracy/Tracy.hpp"
+#include "modules/godot_tracy_dll/tracy/public/tracy/TracyC.h"
 #endif
 
 #ifdef DEBUG_ENABLED
@@ -1473,10 +1473,17 @@ void OS_Windows::run() {
 	}
 
 	main_loop->initialize();
+	#ifdef TRACY_ENABLE
+	TracyCZone(ctx, true);
+	const CharString c = "MainFrame";
+	TracyCZoneName(ctx, c.ptr(), c.size());;
+	#endif
 
 	while (true) {
 		#ifdef TRACY_ENABLE
-		TracyCFrameMark;
+		//TracyCFrameMark;
+		FrameMark;
+        ZoneScoped;
 		#endif
 
 		DisplayServer::get_singleton()->process_events(); // get rid of pending events

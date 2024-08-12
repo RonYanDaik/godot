@@ -19,15 +19,18 @@ tracy_src = [
 #else:
 #    env_tracy.Prepend(CPPPATH=[tracy_dir])
 
-env_tracy.Append(LIBS=["TracyProfiler"])
-env_tracy.Append(LIBPATH=["tracy_dll/"])
 
-env_tracy.disable_warnings()
 
-if "tracy_enable" in env and env["tracy_enable"] == "yes":
+#env_tracy.disable_warnings()
+
+
+if "tracy_enable" in env and (env["tracy_enable"] == "yes" or env["tracy_enable"] == "true"):
+
+    print("---------TRACY_ENABLE-------------")
     env_tracy.Append(CPPDEFINES=["TRACY_ENABLE"])
     env_modules.Append(CPPDEFINES=["TRACY_ENABLE"])
     env.Append(CPPDEFINES=["TRACY_ENABLE"])
+    
 
 if "tracy_on_demand" in env and env["tracy_on_demand"]:
     env_tracy.Append(CPPDEFINES=["TRACY_ON_DEMAND"])

@@ -3,7 +3,7 @@
 #include "core/config/engine.h"
 #include "tracy_profiler.h"
 
-//#pragma comment(lib, "tracy_dll\\TracyProfiler.lib")
+#pragma comment(lib, "tracy_dll\\TracyProfiler.lib")
 
 void initialize_godot_tracy_dll_module(ModuleInitializationLevel p_level) {
 	if (p_level == ModuleInitializationLevel::MODULE_INITIALIZATION_LEVEL_CORE) {

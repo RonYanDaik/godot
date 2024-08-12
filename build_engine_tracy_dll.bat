@@ -1,0 +1,1 @@
+scons tracy_enable=true CCFLAGS="-fno-omit-frame-pointer -fno-inline -ggdb3"
