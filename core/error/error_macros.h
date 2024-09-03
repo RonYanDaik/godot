@@ -34,6 +34,7 @@
 #include "core/typedefs.h"
 
 #include <atomic> // We'd normally use safe_refcount.h, but that would cause circular includes.
+#include <assert.h>
 
 class String;
 
@@ -453,6 +454,14 @@ void _err_flush_stdout();
 #define ERR_FAIL_COND_V_MSG(m_cond, m_retval, m_msg)                                                                                     \
 	if (unlikely(m_cond)) {                                                                                                              \
 		_err_print_error(FUNCTION_STR, __FILE__, __LINE__, "Condition \"" _STR(m_cond) "\" is true. Returning: " _STR(m_retval), m_msg); \
+		return m_retval;                                                                                                                 \
+	} else                                                                                                                               \
+		((void)0)
+
+#define ERR_FAIL_COND_V_MSG_ASSERT(m_cond, m_retval, m_msg)                                                                                     \
+	if (unlikely(m_cond)) {                                                                                                              \
+		_err_print_error(FUNCTION_STR, __FILE__, __LINE__, "Condition \"" _STR(m_cond) "\" is true. Returning: " _STR(m_retval), m_msg); \
+		assert(0); 																														 \
 		return m_retval;                                                                                                                 \
 	} else                                                                                                                               \
 		((void)0)

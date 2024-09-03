@@ -67,12 +67,21 @@
 #define DWMWA_USE_IMMERSIVE_DARK_MODE_BEFORE_20H1 19
 #endif
 
+#ifndef DWMWA_USE_IMMERSIVE_DARK_MODE_BEFORE_20H1
+#define DWMWA_USE_IMMERSIVE_DARK_MODE_BEFORE_20H1 19
+#endif
+
 #define WM_INDICATOR_CALLBACK_MESSAGE (WM_USER + 1)
 
 #if defined(__GNUC__)
 // Workaround GCC warning from -Wcast-function-type.
 #define GetProcAddress (void *)GetProcAddress
 #endif
+
+#ifdef KBHOOKDLL_ENABLE
+#include "modules/keyboard_hook_dll/kb_hook.h"
+#endif
+
 
 static String format_error_message(DWORD id) {
 	LPWSTR messageBuffer = nullptr;
@@ -185,6 +194,28 @@ DisplayServer::WindowID DisplayServerWindows::_get_focused_window_or_popup() con
 	}
 
 	return last_focused_window;
+}
+
+void DisplayServerWindows::_register_raw_input_kb_devices(WindowID p_target_window){
+	RAWINPUTDEVICE rid[1] = {};
+	rid[0].usUsagePage = 0x01;
+	rid[0].usUsage = 0x06;
+	rid[0].dwFlags = 0;
+
+	if (p_target_window != INVALID_WINDOW_ID) {
+		// Follow the defined window
+		rid[0].hwndTarget = windows[p_target_window].hWnd;
+		rid[0].dwFlags = RIDEV_INPUTSINK;
+	} else {
+		// Follow the keyboard focus
+		rid[0].hwndTarget = 0;
+	}
+
+
+	if (RegisterRawInputDevices(rid, 1, sizeof(rid[0])) == FALSE) {
+		// Registration failed.
+		ERR_PRINT(vformat("ERROR _register_raw_input_kb_devices"));
+	}
 }
 
 void DisplayServerWindows::_register_raw_input_devices(WindowID p_target_window) {
@@ -3449,6 +3480,17 @@ DisplayServer::VSyncMode DisplayServerWindows::window_get_vsync_mode(WindowID p_
 void DisplayServerWindows::set_context(Context p_context) {
 }
 
+void DisplayServerWindows::set_use_multikeyboards(bool p_use_multypeyboards) {
+	use_multypeyboards = p_use_multypeyboards;
+	//yuri.
+#ifdef KBHOOKDLL_ENABLE
+	if (use_multypeyboards && !Engine::get_singleton()->is_editor_hint()) //todo: add custom enable/disable option
+	{
+		_register_raw_input_kb_devices(MAIN_WINDOW_ID);
+	}
+#endif
+}
+
 bool DisplayServerWindows::is_window_transparency_available() const {
 	BOOL dwm_enabled = true;
 	if (DwmIsCompositionEnabled(&dwm_enabled) == S_OK) { // Note: Always enabled on Windows 8+, this check can be removed after Windows 7 support is dropped.
@@ -4011,12 +4053,9 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 
 		} break;
 		case WM_INPUT: {
-			if (!use_raw_input) {
-				break;
-			}
-
+			
+			#ifdef KBHOOKDLL_ENABLE
 			UINT dwSize;
-
 			GetRawInputData((HRAWINPUT)lParam, RID_INPUT, nullptr, &dwSize, sizeof(RAWINPUTHEADER));
 			LPBYTE lpb = new BYTE[dwSize];
 			if (lpb == nullptr) {
@@ -4028,6 +4067,33 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 			}
 
 			RAWINPUT *raw = (RAWINPUT *)lpb;
+			if (use_multypeyboards && !Engine::get_singleton()->is_editor_hint() && raw->header.dwType == RIM_TYPEKEYBOARD)
+			{
+    			ERR_BREAK(key_event_pos >= KEY_EVENT_BUFFER_SIZE);
+				convert_input_to_keys_msg(raw);
+				
+
+			}
+			#else
+			
+			if (!use_raw_input) {
+				break;
+			}
+
+			UINT dwSize;
+			GetRawInputData((HRAWINPUT)lParam, RID_INPUT, nullptr, &dwSize, sizeof(RAWINPUTHEADER));
+			LPBYTE lpb = new BYTE[dwSize];
+			if (lpb == nullptr) {
+				return 0;
+			}
+
+			if (GetRawInputData((HRAWINPUT)lParam, RID_INPUT, lpb, &dwSize, sizeof(RAWINPUTHEADER)) != dwSize) {
+				OutputDebugString(TEXT("GetRawInputData does not return correct size !\n"));
+			}
+
+			RAWINPUT *raw = (RAWINPUT *)lpb;
+
+			#endif
 
 			const BitField<WinKeyModifierMask> &mods = _get_mods();
 			if (raw->header.dwType == RIM_TYPEKEYBOARD) {
@@ -5147,6 +5213,53 @@ void DisplayServerWindows::_process_activate_event(WindowID p_window_id) {
 	}
 }
 
+#ifdef KBHOOKDLL_ENABLE
+void DisplayServerWindows::convert_input_to_keys_msg(RAWINPUT *raw,const WindowID & window_id) {
+	KeyEvent ke;
+	USHORT tkey = raw->data.keyboard.VKey;
+	
+	if(Multikeyboard::get_singleton()->has_background_key(tkey)) {
+
+		// Get the device name
+		//UINT res1 = GetRawInputDeviceInfo( raw->header.hDevice, RIDI_DEVICENAME, NULL, &dwSize );
+		
+		// Load the device name into the buffer
+		//WCHAR * keyboardNameBuffer = new WCHAR[bufferSize];
+		//GetRawInputDeviceInfo( raw->header.hDevice,  RIDI_DEVICENAME, keyboardNameBuffer, &bufferSize );
+
+		char dev_name[256] = {0};
+		UINT nameSize = sizeof(dev_name);
+		UINT res = GetRawInputDeviceInfoA(raw->header.hDevice, RIDI_DEVICENAME, &dev_name, &nameSize);
+		
+		String s(&dev_name[8],34);
+		
+		//-------	-------------------------------
+		
+		UINT tMsg = raw->data.keyboard.Flags & RI_KEY_BREAK ? WM_KEYUP : WM_KEYDOWN;
+		// Make sure we don't include modifiers for the modifier key itself.
+		ke.shift = (tkey != VK_SHIFT) ? shift_mem : false;
+		ke.alt = (!(tkey == VK_MENU && (tMsg == WM_KEYDOWN || tMsg == WM_SYSKEYDOWN))) ? alt_mem : false;
+		ke.control = (tkey != VK_CONTROL) ? control_mem : false;
+		ke.meta = meta_mem;
+		ke.uMsg = tMsg;
+		ke.window_id = window_id;
+
+		if (ke.uMsg == WM_SYSKEYDOWN) {
+			ke.uMsg = WM_KEYDOWN;
+		}
+		if (ke.uMsg == WM_SYSKEYUP) {
+			ke.uMsg = WM_KEYUP;
+		}
+
+		ke.wParam = tkey;
+		ke.kb_id = s.hash();
+
+		//ke.lParam = lParam;
+		key_event_buffer[key_event_pos++] = ke;
+	}
+}
+#endif
+
 void DisplayServerWindows::_process_key_events() {
 	for (int i = 0; i < key_event_pos; i++) {
 		KeyEvent &ke = key_event_buffer[i];
@@ -5263,7 +5376,9 @@ void DisplayServerWindows::_process_key_events() {
 				k->set_location(location);
 				k->set_key_label(key_label);
 
+				
 				if (i + 1 < key_event_pos && key_event_buffer[i + 1].uMsg == WM_CHAR) {
+					
 					char32_t unicode = key_event_buffer[i + 1].wParam;
 					static char32_t prev_wck = 0;
 					if ((unicode & 0xfffffc00) == 0xd800) {
@@ -5282,12 +5397,19 @@ void DisplayServerWindows::_process_key_events() {
 					} else {
 						prev_wck = 0;
 					}
+
 					k->set_unicode(fix_unicode(unicode));
 				}
 				if (k->get_unicode() && ke.altgr) {
 					k->set_alt_pressed(false);
 					k->set_ctrl_pressed(false);
 				}
+				
+				if(ke.kb_id){
+					k->set_keyboard_id(ke.kb_id);
+					k->set_device(ke.kb_id);
+				}
+						
 
 				k->set_echo((ke.uMsg == WM_KEYDOWN && (ke.lParam & (1 << 30))));
 
@@ -6000,6 +6122,12 @@ DisplayServerWindows::DisplayServerWindows(const String &p_rendering_driver, Win
 // Init context and rendering device
 #if defined(GLES3_ENABLED)
 
+#if defined(__arm__) || defined(__aarch64__) || defined(_M_ARM) || defined(_M_ARM64)
+	// There's no native OpenGL drivers on Windows for ARM, switch to ANGLE over DX.
+	if (rendering_driver == "opengl3") {
+		rendering_driver = "opengl3_angle";
+	}
+#elif defined(EGL_STATIC)
 	bool fallback = GLOBAL_GET("rendering/gl_compatibility/fallback_to_angle");
 	bool show_warning = true;
 
@@ -6057,6 +6185,7 @@ DisplayServerWindows::DisplayServerWindows(const String &p_rendering_driver, Win
 			rendering_driver = "opengl3_angle";
 		}
 	}
+#endif
 
 	if (rendering_driver == "opengl3") {
 		gl_manager_native = memnew(GLManagerNative_Windows);
@@ -6183,6 +6312,17 @@ DisplayServerWindows::DisplayServerWindows(const String &p_rendering_driver, Win
 
 	static_cast<OS_Windows *>(OS::get_singleton())->set_main_window(windows[MAIN_WINDOW_ID].hWnd);
 	Input::get_singleton()->set_event_dispatch_function(_dispatch_input_events);
+
+
+	//yuri.
+	if (use_multypeyboards && !Engine::get_singleton()->is_editor_hint()) //todo: add custom enable/disable option
+	{
+		/*WindowID window_id = _get_focused_window_or_popup();
+		if (!windows.has(window_id)) {
+			window_id = MAIN_WINDOW_ID;
+		}*/
+		_register_raw_input_kb_devices(MAIN_WINDOW_ID);
+	}
 }
 
 Vector<String> DisplayServerWindows::get_rendering_drivers_func() {

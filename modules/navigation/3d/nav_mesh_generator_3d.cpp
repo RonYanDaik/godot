@@ -646,8 +646,13 @@ void NavMeshGenerator3D::generator_parse_navigationobstacle_node(const Ref<Navig
 void NavMeshGenerator3D::generator_parse_source_geometry_data(const Ref<NavigationMesh> &p_navigation_mesh, Ref<NavigationMeshSourceGeometryData3D> p_source_geometry_data, Node *p_root_node) {
 	List<Node *> parse_nodes;
 
+
 	if (p_navigation_mesh->get_source_geometry_mode() == NavigationMesh::SOURCE_GEOMETRY_ROOT_NODE_CHILDREN) {
 		parse_nodes.push_back(p_root_node);
+	} else if(p_navigation_mesh->get_source_geometry_mode() == NavigationMesh::SOURCE_GEOMETRY_PATH_NODE_CHILDREN) {
+		Node* to_parse = p_root_node->get_node_or_null(p_navigation_mesh->get_path_to_source_node());
+		if(to_parse)
+			parse_nodes.push_back(to_parse);
 	} else {
 		p_root_node->get_tree()->get_nodes_in_group(p_navigation_mesh->get_source_group_name(), &parse_nodes);
 	}

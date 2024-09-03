@@ -131,6 +131,7 @@
 #endif // TOOLS_ENABLED && !GDSCRIPT_NO_LSP
 #endif // MODULE_GDSCRIPT_ENABLED
 
+
 /* Static members */
 
 // Singletons
@@ -249,6 +250,9 @@ static bool validate_extension_api = false;
 static String validate_extension_api_file;
 #endif
 bool profile_gpu = false;
+
+//yuri
+static bool multikeyboard = false;
 
 // Constants.
 
@@ -1726,6 +1730,8 @@ Error Main::setup(const char *execpath, int argc, char *argv[], bool p_second_ph
 				goto error;
 			}
 #endif // TOOLS_ENABLED && MODULE_GDSCRIPT_ENABLED && !GDSCRIPT_NO_LSP
+		} else if (arg == "--multykeyboards") {
+			multikeyboard = true;
 #if defined(TOOLS_ENABLED)
 		} else if (arg == "--dap-port") {
 			if (N) {
@@ -3963,6 +3969,10 @@ int Main::start() {
 		}
 	}
 
+	if(multikeyboard) {
+		DisplayServer::get_singleton()->set_use_multikeyboards(multikeyboard);
+	}
+
 	OS::get_singleton()->benchmark_end_measure("Startup", "Main::Start");
 	OS::get_singleton()->benchmark_dump();
 
@@ -3999,6 +4009,10 @@ static uint64_t navigation_process_max = 0;
 // will terminate the program. In case of failure, the OS exit code needs
 // to be set explicitly here (defaults to EXIT_SUCCESS).
 bool Main::iteration() {
+	#ifdef TRACY_ENABLE
+	ZoneScoped;
+	#endif // TRACY_ENABLE
+
 	iterating++;
 
 	const uint64_t ticks = OS::get_singleton()->get_ticks_usec();
@@ -4045,6 +4059,10 @@ bool Main::iteration() {
 	NavigationServer3D::get_singleton()->sync();
 
 	for (int iters = 0; iters < advance.physics_steps; ++iters) {
+		#ifdef TRACY_ENABLE
+			ZoneScopedN("Main::iteration::PhysicsStep");
+		#endif // TRACY_ENABLE
+	
 		if (Input::get_singleton()->is_agile_input_event_flushing()) {
 			Input::get_singleton()->flush_buffered_events();
 		}

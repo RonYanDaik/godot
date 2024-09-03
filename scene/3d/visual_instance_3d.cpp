@@ -369,6 +369,17 @@ Variant GeometryInstance3D::get_instance_shader_parameter(const StringName &p_na
 	return RS::get_singleton()->instance_geometry_get_shader_parameter(get_instance(), p_name);
 }
 
+//yuri 2024-05-24. i've added this function but i dont know if it will compile. lazy to check now. this is problem for yuri of the future.
+Array GeometryInstance3D::get_instance_shader_parameter_list() const {
+	List<PropertyInfo> p_parameters;
+	Array parameter_names;
+	RS::get_singleton()->instance_geometry_get_shader_parameter_list(get_instance(), &p_parameters);
+	for (PropertyInfo &pi : p_parameters) {
+		parameter_names.append( "instance_shader_parameters/" + pi.name);
+	}
+	return parameter_names;
+}
+
 void GeometryInstance3D::set_custom_aabb(AABB p_aabb) {
 	if (p_aabb == custom_aabb) {
 		return;

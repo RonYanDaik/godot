@@ -698,6 +698,10 @@ int mbedtls_rsa_rsaes_oaep_encrypt(mbedtls_rsa_context *ctx,
  *                 mbedtls_rsa_rsaes_pkcs1_v15_decrypt() is called, which is an
  *                 inherently dangerous function (CWE-242).
  *
+ * \warning        When \p ctx->padding is set to #MBEDTLS_RSA_PKCS_V15,
+ *                 mbedtls_rsa_rsaes_pkcs1_v15_decrypt() is called, which is an
+ *                 inherently dangerous function (CWE-242).
+ *
  * \note           The output buffer length \c output_max_len should be
  *                 as large as the size \p ctx->len of \p ctx->N (for example,
  *                 128 Bytes if RSA-1024 is used) to be able to hold an

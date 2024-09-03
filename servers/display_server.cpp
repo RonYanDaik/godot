@@ -1006,6 +1006,9 @@ void DisplayServer::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("tablet_get_current_driver"), &DisplayServer::tablet_get_current_driver);
 	ClassDB::bind_method(D_METHOD("tablet_set_current_driver", "name"), &DisplayServer::tablet_set_current_driver);
 
+	//yuri
+	ClassDB::bind_method(D_METHOD("set_use_multikeyboards", "use"), &DisplayServer::set_use_multikeyboards);
+
 	ClassDB::bind_method(D_METHOD("is_window_transparency_available"), &DisplayServer::is_window_transparency_available);
 
 	ClassDB::bind_method(D_METHOD("register_additional_output", "object"), &DisplayServer::register_additional_output);

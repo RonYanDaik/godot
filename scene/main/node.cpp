@@ -466,7 +466,7 @@ void Node::move_child(Node *p_child, int p_index) {
 }
 
 void Node::_move_child(Node *p_child, int p_index, bool p_ignore_end) {
-	ERR_FAIL_COND_MSG(data.blocked > 0, "Parent node is busy setting up children, `move_child()` failed. Consider using `move_child.call_deferred(child, index)` instead (or `popup.call_deferred()` if this is from a popup).");
+	ERR_FAIL_COND_MSG(data.blocked > 0, vformat("Parent node is busy setting up children, `move_child()` failed. Consider using `move_child.call_deferred(child, index)` instead (or `popup.call_deferred()` if this is from a popup)."));
 
 	// Specifying one place beyond the end
 	// means the same as moving to the last index
@@ -1560,7 +1560,7 @@ void Node::_add_child_nocheck(Node *p_child, const StringName &p_name, InternalM
 }
 
 void Node::add_child(Node *p_child, bool p_force_readable_name, InternalMode p_internal) {
-	ERR_FAIL_COND_MSG(data.inside_tree && !Thread::is_main_thread(), "Adding children to a node inside the SceneTree is only allowed from the main thread. Use call_deferred(\"add_child\",node).");
+	ERR_FAIL_COND_MSG(data.inside_tree && !Thread::is_main_thread(), vformat("Adding children to a node inside the SceneTree is only allowed from the main thread. Use call_deferred(\"add_child\",node). %s",p_child));
 
 	ERR_THREAD_GUARD
 	ERR_FAIL_NULL(p_child);
@@ -1569,7 +1569,7 @@ void Node::add_child(Node *p_child, bool p_force_readable_name, InternalMode p_i
 #ifdef DEBUG_ENABLED
 	ERR_FAIL_COND_MSG(p_child->is_ancestor_of(this), vformat("Can't add child '%s' to '%s' as it would result in a cyclic dependency since '%s' is already a parent of '%s'.", p_child->get_name(), get_name(), p_child->get_name(), get_name()));
 #endif
-	ERR_FAIL_COND_MSG(data.blocked > 0, "Parent node is busy setting up children, `add_child()` failed. Consider using `add_child.call_deferred(child)` instead.");
+	ERR_FAIL_COND_MSG(data.blocked > 0, vformat("Parent node %s is busy setting up children, `add_child()` %s failed. Consider using `add_child.call_deferred(child)` instead.",this, p_child));
 
 	_validate_child_name(p_child, p_force_readable_name);
 
@@ -1698,7 +1698,7 @@ Node *Node::get_child(int p_index, bool p_include_internal) const {
 }
 
 TypedArray<Node> Node::get_children(bool p_include_internal) const {
-	ERR_THREAD_GUARD_V(TypedArray<Node>());
+	ERR_THREAD_GUARD_V_MSG_ASS(TypedArray<Node>(),"");	
 	TypedArray<Node> arr;
 	int cc = get_child_count(p_include_internal);
 	arr.resize(cc);
@@ -1719,7 +1719,7 @@ Node *Node::_get_child_by_name(const StringName &p_name) const {
 }
 
 Node *Node::get_node_or_null(const NodePath &p_path) const {
-	ERR_THREAD_GUARD_V(nullptr);
+	ERR_THREAD_GUARD_V_MSG_ASS(nullptr,p_path);
 	if (p_path.is_empty()) {
 		return nullptr;
 	}
@@ -1786,9 +1786,11 @@ Node *Node::get_node(const NodePath &p_path) const {
 	if (unlikely(!node)) {
 		const String desc = get_description();
 		if (p_path.is_absolute()) {
+			assert(!p_path.is_empty());
 			ERR_FAIL_V_MSG(nullptr,
 					vformat(R"(Node not found: "%s" (absolute path attempted from "%s").)", p_path, desc));
 		} else {
+			assert(!p_path.is_empty());
 			ERR_FAIL_V_MSG(nullptr,
 					vformat(R"(Node not found: "%s" (relative to "%s").)", p_path, desc));
 		}
@@ -1804,7 +1806,7 @@ bool Node::has_node(const NodePath &p_path) const {
 // Finds the first child node (in tree order) whose name matches the given pattern.
 // Can be recursive or not, and limited to owned nodes.
 Node *Node::find_child(const String &p_pattern, bool p_recursive, bool p_owned) const {
-	ERR_THREAD_GUARD_V(nullptr);
+	ERR_THREAD_GUARD_V_MSG_ASS(nullptr,p_pattern);
 	ERR_FAIL_COND_V(p_pattern.is_empty(), nullptr);
 	_update_children_cache();
 	Node *const *cptr = data.children_cache.ptr();
@@ -3808,6 +3810,9 @@ String Node::_get_name_num_separator() {
 Node::Node() {
 	orphan_node_count++;
 
+	//yuri
+	int created_on_thread_with_id = Thread::get_caller_id();
+
 	// Default member initializer for bitfield is a C++20 extension, so:
 
 	data.process_mode = PROCESS_MODE_INHERIT;
@@ -3891,7 +3896,7 @@ void Node::get_meta_list(List<StringName> *p_list) const {
 }
 
 Error Node::emit_signalp(const StringName &p_name, const Variant **p_args, int p_argcount) {
-	ERR_THREAD_GUARD_V(ERR_INVALID_PARAMETER);
+	ERR_THREAD_GUARD_V_MSG_ASS(ERR_INVALID_PARAMETER,p_name);
 	return Object::emit_signalp(p_name, p_args, p_argcount);
 }
 
@@ -3926,7 +3931,7 @@ void Node::get_signals_connected_to_this(List<Connection> *p_connections) const 
 }
 
 Error Node::connect(const StringName &p_signal, const Callable &p_callable, uint32_t p_flags) {
-	ERR_THREAD_GUARD_V(ERR_INVALID_PARAMETER);
+	ERR_THREAD_GUARD_V_MSG(ERR_INVALID_PARAMETER, p_signal);
 	return Object::connect(p_signal, p_callable, p_flags);
 }
 
@@ -3936,7 +3941,7 @@ void Node::disconnect(const StringName &p_signal, const Callable &p_callable) {
 }
 
 bool Node::is_connected(const StringName &p_signal, const Callable &p_callable) const {
-	ERR_THREAD_GUARD_V(false);
+	ERR_THREAD_GUARD_V_MSG(false, p_signal);
 	return Object::is_connected(p_signal, p_callable);
 }
 

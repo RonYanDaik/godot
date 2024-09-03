@@ -76,6 +76,8 @@ public:
 		SOURCE_GEOMETRY_ROOT_NODE_CHILDREN = 0,
 		SOURCE_GEOMETRY_GROUPS_WITH_CHILDREN,
 		SOURCE_GEOMETRY_GROUPS_EXPLICIT,
+		//yuri
+		SOURCE_GEOMETRY_PATH_NODE_CHILDREN,
 		SOURCE_GEOMETRY_MAX
 	};
 
@@ -108,7 +110,14 @@ protected:
 	AABB filter_baking_aabb;
 	Vector3 filter_baking_aabb_offset;
 
+	//yuri
+	NodePath path_to_node;
+
 public:
+	//yuri
+	NodePath get_path_to_source_node() const;
+	void set_path_to_source_node(const NodePath &path);
+
 	// Recast settings
 	void set_sample_partition_type(SamplePartitionType p_value);
 	SamplePartitionType get_sample_partition_type() const;

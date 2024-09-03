@@ -124,6 +124,7 @@ class SkeletonIK3D : public SkeletonModifier3D {
 	StringName tip_bone;
 	Transform3D target;
 	NodePath target_node_path_override;
+	NodePath skeleton_node_path;
 	bool override_tip_basis = true;
 	bool use_magnet = false;
 	Vector3 magnet_position;
@@ -131,7 +132,10 @@ class SkeletonIK3D : public SkeletonModifier3D {
 	real_t min_distance = 0.01;
 	int max_iterations = 10;
 
+	bool use_parent = true;
+	Variant skeleton_ref = Variant();
 	Variant target_node_override_ref = Variant();
+
 	FabrikInverseKinematic::Task *task = nullptr;
 
 #ifndef DISABLE_DEPRECATED
@@ -163,6 +167,14 @@ public:
 	void set_target_node(const NodePath &p_node);
 	NodePath get_target_node();
 
+	bool get_use_parent() const { return use_parent; }
+	void set_use_parent(bool p_use_parent);
+
+	void find_target_skeleton();
+
+	void set_target_skeleton(const NodePath &p_node);
+	NodePath get_target_skeleton();
+
 	void set_override_tip_basis(bool p_override);
 	bool is_override_tip_basis() const;
 
@@ -189,6 +201,7 @@ private:
 	Transform3D _get_target_transform();
 	void reload_chain();
 	void reload_goal();
+	void reload_skeleton();
 	void _solve_chain();
 };
 

@@ -403,6 +403,8 @@ class DisplayServerWindows : public DisplayServer {
 		UINT uMsg;
 		WPARAM wParam;
 		LPARAM lParam;
+		//yuri
+		DWORD64 kb_id=0;
 	};
 
 	WindowID window_mouseover_id = INVALID_WINDOW_ID;
@@ -434,6 +436,9 @@ class DisplayServerWindows : public DisplayServer {
 	HANDLE power_request;
 
 	TTS_Windows *tts = nullptr;
+
+	bool use_multypeyboards = false;
+
 	NativeMenuWindows *native_menu = nullptr;
 
 	struct WindowData {
@@ -572,6 +577,7 @@ class DisplayServerWindows : public DisplayServer {
 	void _set_mouse_mode_impl(MouseMode p_mode);
 	WindowID _get_focused_window_or_popup() const;
 	void _register_raw_input_devices(WindowID p_target_window);
+	void _register_raw_input_kb_devices(WindowID p_target_window);
 
 	void _process_activate_event(WindowID p_window_id);
 	void _process_key_events();
@@ -772,6 +778,11 @@ public:
 
 	virtual void set_context(Context p_context) override;
 
+	//yuri
+	virtual void set_use_multikeyboards(bool p_use_multypeyboards);
+	#ifdef KBHOOKDLL_ENABLE
+	void convert_input_to_keys_msg(RAWINPUT *raw,const WindowID & window_id);
+	#endif
 	virtual bool is_window_transparency_available() const override;
 
 	static DisplayServer *create_func(const String &p_rendering_driver, WindowMode p_mode, VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Context p_context, Error &r_error);

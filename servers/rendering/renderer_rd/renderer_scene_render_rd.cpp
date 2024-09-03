@@ -1223,6 +1223,13 @@ void RendererSceneRenderRD::render_scene(const Ref<RenderSceneBuffers> &p_render
 		render_data.decals = &empty;
 	}
 
+	if (get_debug_draw_mode() == RS::VIEWPORT_DEBUG_DRAW_UNSHADED ||
+			get_debug_draw_mode() == RS::VIEWPORT_DEBUG_DRAW_OVERDRAW ||
+			get_debug_draw_mode() == RS::VIEWPORT_DEBUG_DRAW_LIGHTING ||
+			get_debug_draw_mode() == RS::VIEWPORT_DEBUG_DRAW_PSSM_SPLITS) {
+		render_data.decals = &empty;
+	}
+
 	Color clear_color;
 	if (p_render_buffers.is_valid() && p_reflection_probe.is_null()) {
 		clear_color = texture_storage->render_target_get_clear_request_color(rb->get_render_target());

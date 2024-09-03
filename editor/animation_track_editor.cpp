@@ -866,6 +866,8 @@ bool AnimationMultiTrackKeyEdit::_set(const StringName &p_name, const Variant &p
 						Vector2 prev = animation->bezier_track_get_key_in_handle(track, key);
 						undo_redo->add_do_method(animation.ptr(), "bezier_track_set_key_in_handle", track, key, value);
 						undo_redo->add_undo_method(animation.ptr(), "bezier_track_set_key_in_handle", track, key, prev);
+						undo_redo->add_do_method(animation.ptr(), "bezier_track_set_key_in_handle", track, key, value);
+						undo_redo->add_undo_method(animation.ptr(), "bezier_track_set_key_in_handle", track, key, prev);
 						update_obj = true;
 					} else if (name == "out_handle") {
 						const Variant &value = p_value;
@@ -5452,6 +5454,7 @@ void AnimationTrackEditor::_update_key_edit() {
 		key_edit->track = selection.front()->key().track;
 		key_edit->use_fps = timeline->is_using_fps();
 		key_edit->editor = this;
+		key_edit->editor = this;
 
 		int key_id = selection.front()->key().key;
 		if (key_id >= animation->track_get_key_count(key_edit->track)) {
@@ -5471,6 +5474,7 @@ void AnimationTrackEditor::_update_key_edit() {
 		multi_key_edit = memnew(AnimationMultiTrackKeyEdit);
 		multi_key_edit->animation = animation;
 		multi_key_edit->animation_read_only = read_only;
+		multi_key_edit->editor = this;
 		multi_key_edit->editor = this;
 
 		RBMap<int, List<float>> key_ofs_map;
@@ -7356,8 +7360,11 @@ AnimationTrackEditor::AnimationTrackEditor() {
 	edit->set_disabled(true);
 	edit->set_tooltip_text(TTR("Animation properties."));
 	edit->get_popup()->add_item(TTR("Copy Tracks..."), EDIT_COPY_TRACKS);
+	edit->get_popup()->add_item(TTR("Copy Tracks..."), EDIT_COPY_TRACKS);
 	edit->get_popup()->add_item(TTR("Paste Tracks"), EDIT_PASTE_TRACKS);
 	edit->get_popup()->add_separator();
+	edit->get_popup()->add_item(TTR("Scale Selection..."), EDIT_SCALE_SELECTION);
+	edit->get_popup()->add_item(TTR("Scale From Cursor..."), EDIT_SCALE_FROM_CURSOR);
 	edit->get_popup()->add_item(TTR("Scale Selection..."), EDIT_SCALE_SELECTION);
 	edit->get_popup()->add_item(TTR("Scale From Cursor..."), EDIT_SCALE_FROM_CURSOR);
 	edit->get_popup()->add_separator();
@@ -7383,6 +7390,9 @@ AnimationTrackEditor::AnimationTrackEditor() {
 	edit->get_popup()->add_separator();
 	edit->get_popup()->add_shortcut(ED_SHORTCUT("animation_editor/apply_reset", TTR("Apply Reset")), EDIT_APPLY_RESET);
 	edit->get_popup()->add_separator();
+	edit->get_popup()->add_item(TTR("Bake Animation..."), EDIT_BAKE_ANIMATION);
+	edit->get_popup()->add_item(TTR("Optimize Animation (no undo)..."), EDIT_OPTIMIZE_ANIMATION);
+	edit->get_popup()->add_item(TTR("Clean-Up Animation (no undo)..."), EDIT_CLEAN_UP_ANIMATION);
 	edit->get_popup()->add_item(TTR("Bake Animation..."), EDIT_BAKE_ANIMATION);
 	edit->get_popup()->add_item(TTR("Optimize Animation (no undo)..."), EDIT_OPTIMIZE_ANIMATION);
 	edit->get_popup()->add_item(TTR("Clean-Up Animation (no undo)..."), EDIT_CLEAN_UP_ANIMATION);

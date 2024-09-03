@@ -160,7 +160,8 @@ class InputEventKey : public InputEventWithModifiers {
 	KeyLocation location = KeyLocation::UNSPECIFIED;
 
 	bool echo = false; /// true if this is an echo key
-
+	
+	uint32_t keyboard_id = 0;
 protected:
 	static void _bind_methods();
 
@@ -202,6 +203,12 @@ public:
 	virtual String to_string() override;
 
 	static Ref<InputEventKey> create_reference(Key p_keycode_with_modifier_masks, bool p_physical = false);
+
+	inline uint32_t get_keyboard_id() const { return keyboard_id; }
+
+	void set_keyboard_id(uint32_t p_keyboard_id) {
+		this->keyboard_id = p_keyboard_id; 
+	}
 
 	InputEventKey() {}
 };
