@@ -121,6 +121,7 @@
 #endif // TOOLS_ENABLED && !GDSCRIPT_NO_LSP
 #endif // MODULE_GDSCRIPT_ENABLED
 
+
 /* Static members */
 
 // Singletons
@@ -233,6 +234,9 @@ static bool validate_extension_api = false;
 static String validate_extension_api_file;
 #endif
 bool profile_gpu = false;
+
+//yuri
+static bool multikeyboard = false;
 
 // Constants.
 
@@ -1569,6 +1573,8 @@ Error Main::setup(const char *execpath, int argc, char *argv[], bool p_second_ph
 				goto error;
 			}
 #endif // TOOLS_ENABLED && MODULE_GDSCRIPT_ENABLED && !GDSCRIPT_NO_LSP
+		} else if (I->get() == "--multykeyboards") {
+			multikeyboard = true;
 		} else if (I->get() == "--" || I->get() == "++") {
 			adding_user_args = true;
 		} else {
@@ -3542,6 +3548,10 @@ bool Main::start() {
 		}
 	}
 
+	if(multikeyboard){
+		DisplayServer::get_singleton()->set_use_multikeyboards(multikeyboard);
+	}
+
 	OS::get_singleton()->benchmark_end_measure("startup_begin");
 	OS::get_singleton()->benchmark_dump();
 
@@ -3578,6 +3588,9 @@ static uint64_t navigation_process_max = 0;
 bool Main::iteration() {
 	//for now do not error on this
 	//ERR_FAIL_COND_V(iterating, false);
+	#ifdef TRACY_ENABLE
+	ZoneScoped;
+	#endif // TRACY_ENABLE
 
 	iterating++;
 
@@ -3623,6 +3636,10 @@ bool Main::iteration() {
 	NavigationServer3D::get_singleton()->sync();
 
 	for (int iters = 0; iters < advance.physics_steps; ++iters) {
+		#ifdef TRACY_ENABLE
+			ZoneScopedN("Main::iteration::PhysicsStep");
+		#endif // TRACY_ENABLE
+	
 		if (Input::get_singleton()->is_using_input_buffering() && agile_input_event_flushing) {
 			Input::get_singleton()->flush_buffered_events();
 		}

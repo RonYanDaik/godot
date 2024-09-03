@@ -303,6 +303,7 @@ void InputEventWithModifiers::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "shift_pressed"), "set_shift_pressed", "is_shift_pressed");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "ctrl_pressed"), "set_ctrl_pressed", "is_ctrl_pressed");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "meta_pressed"), "set_meta_pressed", "is_meta_pressed");
+
 }
 
 void InputEventWithModifiers::_validate_property(PropertyInfo &p_property) const {
@@ -610,6 +611,10 @@ void InputEventKey::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "key_label"), "set_key_label", "get_key_label");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "unicode"), "set_unicode", "get_unicode");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "echo"), "set_echo", "is_echo");
+
+	ClassDB::bind_method(D_METHOD("set_keyboard_id", "keyboard_id"), &InputEventKey::set_keyboard_id);
+	ClassDB::bind_method(D_METHOD("get_keyboard_id"), &InputEventKey::get_keyboard_id);
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "keyboard_id"), "set_keyboard_id", "get_keyboard_id");
 }
 
 ///////////////////////////////////

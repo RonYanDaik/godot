@@ -1,0 +1,35 @@
+#!/usr/bin/env python
+
+Import("env")
+Import("env_modules")
+
+env_kb_hook = env_modules.Clone()
+
+#tracy_dir = "./tracy/public/"
+
+tracy_src = [
+    "kb_hook.cpp",
+]
+
+#tracy_sources = [tracy_dir + file for file in tracy_src]
+
+# Treat headers as system headers to avoid raising warnings. Not supported on MSVC.
+#if not env.msvc:
+#    env_tracy.Append(CPPFLAGS=["-isystem", Dir(tracy_dir).path])
+#else:
+#    env_tracy.Prepend(CPPPATH=[tracy_dir])
+
+
+#env_tracy.disable_warnings()
+
+
+if "keyboardhook_enable" in env and (env["keyboardhook_enable"] == "yes" or env["keyboardhook_enable"] == "true"):
+    print("---------keyboard_hook_dll-------------")
+    env_kb_hook.Append(CPPDEFINES=["KBHOOKDLL_ENABLE"])
+    env_modules.Append(CPPDEFINES=["KBHOOKDLL_ENABLE"])
+    env.Append(CPPDEFINES=["KBHOOKDLL_ENABLE"])
+    
+
+
+    #env_tracy.add_source_files(env.modules_sources, tracy_sources)
+env_kb_hook.add_source_files(env.modules_sources, "*.cpp")

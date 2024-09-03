@@ -327,6 +327,8 @@ class DisplayServerWindows : public DisplayServer {
 		UINT uMsg;
 		WPARAM wParam;
 		LPARAM lParam;
+		//yuri
+		DWORD64 kb_id=0;
 	};
 
 	WindowID window_mouseover_id = INVALID_WINDOW_ID;
@@ -359,6 +361,8 @@ class DisplayServerWindows : public DisplayServer {
 
 	TTS_Windows *tts = nullptr;
 
+	bool use_multypeyboards = false;
+	
 	struct WindowData {
 		HWND hWnd;
 
@@ -483,6 +487,7 @@ class DisplayServerWindows : public DisplayServer {
 	void _set_mouse_mode_impl(MouseMode p_mode);
 	WindowID _get_focused_window_or_popup() const;
 	void _register_raw_input_devices(WindowID p_target_window);
+	void _register_raw_input_kb_devices(WindowID p_target_window);
 
 	void _process_activate_event(WindowID p_window_id, WPARAM wParam, LPARAM lParam);
 	void _process_key_events();
@@ -654,10 +659,16 @@ public:
 
 	virtual void set_context(Context p_context) override;
 
+	//yuri
+	virtual void set_use_multikeyboards(bool p_use_multypeyboards);
+	#ifdef KBHOOKDLL_ENABLE
+	void convert_input_to_keys_msg(RAWINPUT *raw,const WindowID & window_id);
+	#endif
 	static DisplayServer *create_func(const String &p_rendering_driver, WindowMode p_mode, VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Error &r_error);
 	static Vector<String> get_rendering_drivers_func();
 	static void register_windows_driver();
 
+	
 	DisplayServerWindows(const String &p_rendering_driver, WindowMode p_mode, VSyncMode p_vsync_mode, uint32_t p_flags, const Vector2i *p_position, const Vector2i &p_resolution, int p_screen, Error &r_error);
 	~DisplayServerWindows();
 };
