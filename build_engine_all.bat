@@ -1,0 +1,4 @@
+call build_engine_dev.bat
+call build_engine.bat
+call build_engine_tracy_dll.bat
+call build_engine_tracy_dll_dev.bat

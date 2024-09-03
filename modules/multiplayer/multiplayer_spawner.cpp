@@ -177,6 +177,11 @@ void MultiplayerSpawner::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_spawn_function", "spawn_function"), &MultiplayerSpawner::set_spawn_function);
 	ADD_PROPERTY(PropertyInfo(Variant::CALLABLE, "spawn_function", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NONE), "set_spawn_function", "get_spawn_function");
 
+	//yuri: 2024-08-20
+	ClassDB::bind_method(D_METHOD("get_despawn_function"), &MultiplayerSpawner::get_despawn_function);
+	ClassDB::bind_method(D_METHOD("set_despawn_function", "despawn_function"), &MultiplayerSpawner::set_despawn_function);
+	ADD_PROPERTY(PropertyInfo(Variant::CALLABLE, "despawn_function", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NONE), "set_despawn_function", "get_despawn_function");
+
 	ADD_SIGNAL(MethodInfo("despawned", PropertyInfo(Variant::OBJECT, "node", PROPERTY_HINT_RESOURCE_TYPE, "Node")));
 	ADD_SIGNAL(MethodInfo("spawned", PropertyInfo(Variant::OBJECT, "node", PROPERTY_HINT_RESOURCE_TYPE, "Node")));
 }

@@ -41,6 +41,11 @@
 #include "editor/editor_undo_redo_manager.h"
 #endif // TOOLS_ENABLED
 
+#ifdef TRACY_ENABLE
+#include "modules/godot_tracy_dll/tracy/public/tracy/Tracy.hpp"
+#include "modules/godot_tracy_dll/tracy/public/tracy/TracyC.h"
+#endif
+
 bool AnimationMixer::_set(const StringName &p_name, const Variant &p_value) {
 	String name = p_name;
 
@@ -936,6 +941,9 @@ bool AnimationMixer::_update_caches() {
 void AnimationMixer::_process_animation(double p_delta, bool p_update_only) {
 	_blend_init();
 	if (_blend_pre_process(p_delta, track_count, track_map)) {
+		#ifdef TRACY_ENABLE
+		ZoneScoped;
+		#endif
 		_blend_calc_total_weight();
 		_blend_process(p_delta, p_update_only);
 		_blend_apply();

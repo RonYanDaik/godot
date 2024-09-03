@@ -1,1 +1,1 @@
-scons platform=windows dev_build=yes debug_symbols=yes
+scons platform=windows keyboardhook_enable=true dev_build=yes debug_symbols=yes 

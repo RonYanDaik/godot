@@ -33,6 +33,11 @@
 #include "animation_blend_tree.h"
 #include "core/math/geometry_2d.h"
 
+#ifdef TRACY_ENABLE
+#include "modules/godot_tracy_dll/tracy/public/tracy/Tracy.hpp"
+#include "modules/godot_tracy_dll/tracy/public/tracy/TracyC.h"
+#endif
+
 void AnimationNodeBlendSpace2D::get_parameter_list(List<PropertyInfo> *r_list) const {
 	r_list->push_back(PropertyInfo(Variant::VECTOR2, blend_position));
 	r_list->push_back(PropertyInfo(Variant::INT, closest, PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NONE));
@@ -62,6 +67,9 @@ void AnimationNodeBlendSpace2D::add_blend_point(const Ref<AnimationRootNode> &p_
 	ERR_FAIL_COND(blend_points_used >= MAX_BLEND_POINTS);
 	ERR_FAIL_COND(p_node.is_null());
 	ERR_FAIL_COND(p_at_index < -1 || p_at_index > blend_points_used);
+
+	//yuri
+	MutexLock l(blend_points_mutex);
 
 	if (p_at_index == -1 || p_at_index == blend_points_used) {
 		p_at_index = blend_points_used;
@@ -127,6 +135,9 @@ void AnimationNodeBlendSpace2D::remove_blend_point(int p_point) {
 	ERR_FAIL_INDEX(p_point, blend_points_used);
 
 	ERR_FAIL_COND(blend_points[p_point].node.is_null());
+	//yuri
+	MutexLock l(blend_points_mutex);
+
 	blend_points[p_point].node->disconnect("tree_changed", callable_mp(this, &AnimationNodeBlendSpace2D::_tree_changed));
 	blend_points[p_point].node->disconnect("animation_node_renamed", callable_mp(this, &AnimationNodeBlendSpace2D::_animation_node_renamed));
 	blend_points[p_point].node->disconnect("animation_node_removed", callable_mp(this, &AnimationNodeBlendSpace2D::_animation_node_removed));
@@ -152,6 +163,7 @@ void AnimationNodeBlendSpace2D::remove_blend_point(int p_point) {
 		blend_points[i] = blend_points[i + 1];
 	}
 	blend_points_used--;
+
 
 	emit_signal(SNAME("animation_node_removed"), get_instance_id(), itos(p_point));
 	emit_signal(SNAME("tree_changed"));
@@ -331,8 +343,19 @@ void AnimationNodeBlendSpace2D::_queue_auto_triangles() {
 		return;
 	}
 
+	#ifdef TRACY_ENABLE
+	TracyCZone(ctx, true);
+	const CharString c = to_string().utf8();
+	TracyCZoneName(ctx, c.ptr(), c.size());
+	TracyCMessage(c.ptr(),c.size())
+	#endif // TRACY_ENABLE
+	
 	trianges_dirty = true;
 	call_deferred(SNAME("_update_triangles"));
+	
+	#ifdef TRACY_ENABLE
+	TracyCZoneEnd(ctx);
+	#endif // TRACY_ENABLE
 }
 
 void AnimationNodeBlendSpace2D::_update_triangles() {
@@ -340,10 +363,23 @@ void AnimationNodeBlendSpace2D::_update_triangles() {
 		return;
 	}
 
+	//yuri
+#ifdef TRACY_ENABLE
+	TracyCZone(ctx, true);
+	const CharString c = to_string().utf8();
+	TracyCZoneName(ctx, c.ptr(), c.size());
+	TracyCMessage(c.ptr(),c.size())
+#endif // TRACY_ENABLE
+	//yuri
+	MutexLock l(blend_points_mutex);
+
 	trianges_dirty = false;
 	triangles.clear();
 	if (blend_points_used < 3) {
 		emit_signal(SNAME("triangles_updated"));
+		#ifdef TRACY_ENABLE
+			TracyCZoneEnd(ctx);
+		#endif // TRACY_ENABLE
 		return;
 	}
 
@@ -359,6 +395,11 @@ void AnimationNodeBlendSpace2D::_update_triangles() {
 		add_triangle(tr[i].points[0], tr[i].points[1], tr[i].points[2]);
 	}
 	emit_signal(SNAME("triangles_updated"));
+
+	//yuri
+#ifdef TRACY_ENABLE
+	TracyCZoneEnd(ctx);
+#endif // TRACY_ENABLE
 }
 
 Vector2 AnimationNodeBlendSpace2D::get_closest_point(const Vector2 &p_point) {
@@ -718,6 +759,7 @@ AnimationNodeBlendSpace2D::AnimationNodeBlendSpace2D() {
 	for (int i = 0; i < MAX_BLEND_POINTS; i++) {
 		blend_points[i].name = itos(i);
 	}
+
 }
 
 AnimationNodeBlendSpace2D::~AnimationNodeBlendSpace2D() {

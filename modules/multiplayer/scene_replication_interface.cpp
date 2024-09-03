@@ -676,7 +676,13 @@ Error SceneReplicationInterface::on_despawn_receive(int p_from, const uint8_t *p
 	if (node->get_parent() != nullptr) {
 		node->get_parent()->remove_child(node);
 	}
-	node->queue_free();
+
+	//yuri: we need a custom despanw function
+	if(spawner->get_despawn_function().is_valid()){
+		spawner->get_despawn_function().call(node);
+	}else{
+		node->queue_free();
+	}
 	spawner->emit_signal(SNAME("despawned"), node);
 
 	return OK;

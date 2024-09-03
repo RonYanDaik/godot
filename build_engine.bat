@@ -1,1 +1,1 @@
-scons platform=windows
+scons platform=windows keyboardhook_enable=true

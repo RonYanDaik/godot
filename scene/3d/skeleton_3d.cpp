@@ -276,7 +276,7 @@ void Skeleton3D::_notification(int p_what) {
 						} else if (skin->get_bind_bone(i) >= 0) {
 							int bind_index = skin->get_bind_bone(i);
 							if (bind_index >= len) {
-								ERR_PRINT("Skin bind #" + itos(i) + " contains bone index bind: " + itos(bind_index) + " , which is greater than the skeleton bone count: " + itos(len) + ".");
+								ERR_PRINT("Skin bind #" + itos(i) + " contains bone index bind: " + itos(bind_index) + " , which is greater than the skeleton bone count: " + itos(len) + "." + vformat("%s %s",this,this->get_parent()?this->get_parent():0));
 								E->skin_bone_indices_ptrs[i] = 0;
 							} else {
 								E->skin_bone_indices_ptrs[i] = bind_index;

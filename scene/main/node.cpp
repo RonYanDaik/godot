@@ -3576,6 +3576,9 @@ String Node::_get_name_num_separator() {
 
 Node::Node() {
 	orphan_node_count++;
+
+	//yuri
+	int created_on_thread_with_id = Thread::get_caller_id();
 }
 
 Node::~Node() {

@@ -556,7 +556,8 @@ public:
 	}
 
 	_FORCE_INLINE_ bool is_readable_from_caller_thread() const {
-		if (current_process_thread_group == nullptr) {
+		//yuri: todo: add ability to know what thread created it
+		if (is_inside_tree() && current_process_thread_group == nullptr) {
 			// No thread processing.
 			return is_current_thread_safe_for_nodes();
 		} else {
