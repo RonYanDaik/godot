@@ -25,7 +25,6 @@ tracy_src = [
 
 
 if "tracy_enable" in env and (env["tracy_enable"] == "yes" or env["tracy_enable"] == "true"):
-
     print("---------TRACY_ENABLE-------------")
     env_tracy.Append(CPPDEFINES=["TRACY_ENABLE"])
     env_modules.Append(CPPDEFINES=["TRACY_ENABLE"])

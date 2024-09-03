@@ -60,8 +60,6 @@ uint64_t TracyProfiler::zone_begin(const String &p_zone_name) {
 #ifdef TRACY_ENABLE
 	static_assert(sizeof(___tracy_c_zone_context) == sizeof(uint64_t));
 	
-	int suka1 = 1;
-
 	TracyCZone(zone_id, true);
 
 	const CharString c = p_zone_name.utf8();

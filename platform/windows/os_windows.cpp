@@ -1468,28 +1468,35 @@ String OS_Windows::get_processor_name() const {
 }
 
 void OS_Windows::run() {
+	#ifdef TRACY_ENABLE
+	ZoneScoped;
+	#endif
+	
 	if (!main_loop) {
 		return;
 	}
 
 	main_loop->initialize();
-	#ifdef TRACY_ENABLE
+	/*#ifdef TRACY_ENABLE
 	TracyCZone(ctx, true);
 	const CharString c = "MainFrame";
 	TracyCZoneName(ctx, c.ptr(), c.size());;
-	#endif
+	#endif*/
 
 	while (true) {
 		#ifdef TRACY_ENABLE
 		//TracyCFrameMark;
-		FrameMark;
-        ZoneScoped;
+        ZoneScopedN("Main Frame Loop");
 		#endif
 
 		DisplayServer::get_singleton()->process_events(); // get rid of pending events
 		if (Main::iteration()) {
 			break;
 		}
+		
+		#ifdef TRACY_ENABLE
+		FrameMark;
+		#endif
 	}
 
 	main_loop->finalize();

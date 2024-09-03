@@ -1,0 +1,1 @@
+scons platform=windows tracy_enable=yes CCFLAGS="-fno-omit-frame-pointer -fno-inline -ggdb3" extra_suffix="tracy"
