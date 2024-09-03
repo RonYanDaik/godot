@@ -172,6 +172,11 @@ void DisplayServerWindows::_set_mouse_mode_impl(MouseMode p_mode) {
 		ClipCursor(nullptr);
 
 		_register_raw_input_devices(INVALID_WINDOW_ID);
+		
+		#ifdef KBHOOKDLL_ENABLE
+		_register_raw_input_kb_devices(MAIN_WINDOW_ID);
+		#endif
+		
 	}
 
 	if (p_mode == MOUSE_MODE_HIDDEN || p_mode == MOUSE_MODE_CAPTURED || p_mode == MOUSE_MODE_CONFINED_HIDDEN) {
@@ -197,6 +202,7 @@ DisplayServer::WindowID DisplayServerWindows::_get_focused_window_or_popup() con
 }
 
 void DisplayServerWindows::_register_raw_input_kb_devices(WindowID p_target_window){
+	//return;
 	RAWINPUTDEVICE rid[1] = {};
 	rid[0].usUsagePage = 0x01;
 	rid[0].usUsage = 0x06;
@@ -234,6 +240,9 @@ void DisplayServerWindows::_register_raw_input_devices(WindowID p_target_window)
 		// Follow the defined window
 		rid[0].hwndTarget = windows[p_target_window].hWnd;
 		rid[1].hwndTarget = windows[p_target_window].hWnd;
+		#ifdef KBHOOKDLL_ENABLE
+		rid[1].dwFlags = RIDEV_INPUTSINK;
+		#endif
 	} else {
 		// Follow the keyboard focus
 		rid[0].hwndTarget = nullptr;
@@ -4070,9 +4079,7 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 			if (use_multypeyboards && !Engine::get_singleton()->is_editor_hint() && raw->header.dwType == RIM_TYPEKEYBOARD)
 			{
     			ERR_BREAK(key_event_pos >= KEY_EVENT_BUFFER_SIZE);
-				convert_input_to_keys_msg(raw);
-				
-
+				convert_input_to_keys_msg(raw,window_id);
 			}
 			#else
 			
@@ -5237,10 +5244,12 @@ void DisplayServerWindows::convert_input_to_keys_msg(RAWINPUT *raw,const WindowI
 		
 		UINT tMsg = raw->data.keyboard.Flags & RI_KEY_BREAK ? WM_KEYUP : WM_KEYDOWN;
 		// Make sure we don't include modifiers for the modifier key itself.
-		ke.shift = (tkey != VK_SHIFT) ? shift_mem : false;
-		ke.alt = (!(tkey == VK_MENU && (tMsg == WM_KEYDOWN || tMsg == WM_SYSKEYDOWN))) ? alt_mem : false;
-		ke.control = (tkey != VK_CONTROL) ? control_mem : false;
-		ke.meta = meta_mem;
+		const BitField<WinKeyModifierMask> &mods = _get_mods();
+
+		ke.shift = mods.has_flag(WinKeyModifierMask::SHIFT);
+		ke.alt = mods.has_flag(WinKeyModifierMask::ALT);
+		ke.control = mods.has_flag(WinKeyModifierMask::CTRL);
+		ke.meta = mods.has_flag(WinKeyModifierMask::META);
 		ke.uMsg = tMsg;
 		ke.window_id = window_id;
 
@@ -6315,14 +6324,12 @@ DisplayServerWindows::DisplayServerWindows(const String &p_rendering_driver, Win
 
 
 	//yuri.
+	#ifdef KBHOOKDLL_ENABLE
 	if (use_multypeyboards && !Engine::get_singleton()->is_editor_hint()) //todo: add custom enable/disable option
 	{
-		/*WindowID window_id = _get_focused_window_or_popup();
-		if (!windows.has(window_id)) {
-			window_id = MAIN_WINDOW_ID;
-		}*/
 		_register_raw_input_kb_devices(MAIN_WINDOW_ID);
 	}
+	#endif
 }
 
 Vector<String> DisplayServerWindows::get_rendering_drivers_func() {
