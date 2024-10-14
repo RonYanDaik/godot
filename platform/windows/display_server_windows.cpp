@@ -5221,11 +5221,12 @@ void DisplayServerWindows::_process_activate_event(WindowID p_window_id) {
 }
 
 #ifdef KBHOOKDLL_ENABLE
-void DisplayServerWindows::convert_input_to_keys_msg(RAWINPUT *raw,const WindowID & window_id) {
+void DisplayServerWindows::convert_input_to_keys_msg(RAWINPUT *raw, const WindowID & window_id) {
 	KeyEvent ke;
 	USHORT tkey = raw->data.keyboard.VKey;
+	Key keycode = KeyMappingWindows::get_keysym(tkey);
 	
-	if(Multikeyboard::get_singleton()->has_background_key(tkey)) {
+	if(Multikeyboard::get_singleton()->has_background_key((int)keycode)) {
 
 		// Get the device name
 		//UINT res1 = GetRawInputDeviceInfo( raw->header.hDevice, RIDI_DEVICENAME, NULL, &dwSize );
@@ -5259,6 +5260,7 @@ void DisplayServerWindows::convert_input_to_keys_msg(RAWINPUT *raw,const WindowI
 		if (ke.uMsg == WM_SYSKEYUP) {
 			ke.uMsg = WM_KEYUP;
 		}
+		
 
 		ke.wParam = tkey;
 		ke.kb_id = s.hash();
