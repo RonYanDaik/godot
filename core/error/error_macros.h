@@ -444,6 +444,13 @@ void _err_flush_stdout();
 	} else                                                                                                                        \
 		((void)0)
 
+#define ERR_FAIL_COND_V_ASS(m_cond, m_retval)                                                                                         \
+	if (unlikely(m_cond)) {                                                                                                       \
+		_err_print_error(FUNCTION_STR, __FILE__, __LINE__, "Condition \"" _STR(m_cond) "\" is true. Returning: " _STR(m_retval)); \
+		assert(0); 																														 \
+		return m_retval;                                                                                                          \
+	} else                                                                                                                        \
+		((void)0)
 /**
  * Ensures `m_cond` is false.
  * If `m_cond` is true, prints `m_msg` and the current function returns `m_retval`.
