@@ -2592,7 +2592,7 @@ void Node::get_storable_properties(HashSet<StringName> &r_storable_properties) c
 
 String Node::to_string() {
 	// Keep this method in sync with `Object::to_string`.
-	ERR_THREAD_GUARD_V(String());
+	ERR_THREAD_GUARD_V_ASS(String());
 	if (get_script_instance()) {
 		bool valid;
 		String ret = get_script_instance()->to_string(&valid);

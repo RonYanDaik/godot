@@ -801,6 +801,7 @@ Error Node::rpc_id(int p_peer_id, const StringName &p_method, VarArgs... p_args)
 #ifdef DEBUG_ENABLED
 #define ERR_THREAD_GUARD ERR_FAIL_COND_MSG(!is_accessible_from_caller_thread(), vformat("Caller thread can't call this function (%s) in this node (%s). Use call_deferred() or call_thread_group() instead.",__FUNCTION__, get_description()));
 #define ERR_THREAD_GUARD_V(m_ret) ERR_FAIL_COND_V_MSG(!is_accessible_from_caller_thread(), (m_ret), vformat("Caller thread can't call this function (%s) in this node (%s). Use call_deferred() or call_thread_group() instead.",__FUNCTION__, get_description()));
+#define ERR_THREAD_GUARD_V_ASS(m_ret) ERR_FAIL_COND_V_MSG_ASSERT(!is_accessible_from_caller_thread(), (m_ret), vformat("Caller thread can't call this function (%s) in this node (%s). Use call_deferred() or call_thread_group() instead.",__FUNCTION__, get_description()));
 #define ERR_THREAD_GUARD_V_MSG(m_ret , m_msg) ERR_FAIL_COND_V_MSG(!is_accessible_from_caller_thread(), (m_ret), vformat("Caller thread can't call this function (%s)(%s) in this node (%s). Use call_deferred() or call_thread_group() instead.",__FUNCTION__,m_msg, get_description()));
 #define ERR_THREAD_GUARD_V_MSG_ASS(m_ret , m_msg) ERR_FAIL_COND_V_MSG_ASSERT(!is_accessible_from_caller_thread(), (m_ret), vformat("Caller thread can't call this function (%s)(%s) in this node (%s). Use call_deferred() or call_thread_group() instead.",__FUNCTION__,m_msg, get_description()));
 #define ERR_MAIN_THREAD_GUARD ERR_FAIL_COND_MSG(is_inside_tree() && !is_current_thread_safe_for_nodes(), vformat("This function (%s) in this node (%s) can only be accessed from the main thread. Use call_deferred() instead.",__FUNCTION__, get_description()));
@@ -812,6 +813,7 @@ Error Node::rpc_id(int p_peer_id, const StringName &p_method, VarArgs... p_args)
 #else
 #define ERR_THREAD_GUARD
 #define ERR_THREAD_GUARD_V(m_ret)
+#define ERR_THREAD_GUARD_V_ASS(m_ret)
 #define ERR_THREAD_GUARD_V_MSG(m_ret, m_msg )
 #define ERR_THREAD_GUARD_V_MSG_ASS(m_ret, m_msg )
 #define ERR_MAIN_THREAD_GUARD
