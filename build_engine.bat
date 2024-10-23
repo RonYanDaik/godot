@@ -1,1 +1,1 @@
-scons platform=windows tracy_enable=true CCFLAGS="-fno-omit-frame-pointer -fno-inline -ggdb3"
+scons platform=windows keyboardhook_enable=true

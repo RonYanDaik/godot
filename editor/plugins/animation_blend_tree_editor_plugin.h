@@ -47,6 +47,7 @@ class EditorFileDialog;
 class EditorProperty;
 class MenuButton;
 class PanelContainer;
+class EditorQuickOpen;
 
 class AnimationNodeBlendTreeEditor : public AnimationTreeNodeEditorPlugin {
 	GDCLASS(AnimationNodeBlendTreeEditor, AnimationTreeNodeEditorPlugin);
@@ -66,6 +67,9 @@ class AnimationNodeBlendTreeEditor : public AnimationTreeNodeEditorPlugin {
 	AcceptDialog *filter_dialog = nullptr;
 	Tree *filters = nullptr;
 	CheckBox *filter_enabled = nullptr;
+	Button *filter_fill_selection = nullptr;
+	Button *filter_invert_selection = nullptr;
+	Button *filter_clear_selection = nullptr;
 
 	HashMap<StringName, ProgressBar *> animations;
 	Vector<EditorProperty *> visible_properties;
@@ -108,7 +112,7 @@ class AnimationNodeBlendTreeEditor : public AnimationTreeNodeEditorPlugin {
 	void _scroll_changed(const Vector2 &p_scroll);
 	void _node_selected(Object *p_node);
 	void _open_in_editor(const String &p_which);
-	void _anim_selected(int p_index, Array p_options, const String &p_node);
+	void _anim_selected(int p_index, const Array &p_options, const String &p_node);
 	void _delete_node_request(const String &p_which);
 	void _delete_nodes_request(const TypedArray<StringName> &p_nodes);
 
@@ -116,6 +120,12 @@ class AnimationNodeBlendTreeEditor : public AnimationTreeNodeEditorPlugin {
 	void _inspect_filters(const String &p_which);
 	void _filter_edited();
 	void _filter_toggled();
+	void _filter_fill_selection();
+	void _filter_invert_selection();
+	void _filter_clear_selection();
+	void _filter_fill_selection_recursive(EditorUndoRedoManager *p_undo_redo, TreeItem *p_item, bool p_parent_filtered);
+	void _filter_invert_selection_recursive(EditorUndoRedoManager *p_undo_redo, TreeItem *p_item);
+	void _filter_clear_selection_recursive(EditorUndoRedoManager *p_undo_redo, TreeItem *p_item);
 	Ref<AnimationNode> _filter_edit;
 
 	void _popup(bool p_has_input_ports, const Vector2 &p_node_position);
@@ -129,13 +139,17 @@ class AnimationNodeBlendTreeEditor : public AnimationTreeNodeEditorPlugin {
 	void _update_editor_settings();
 
 	EditorFileDialog *open_file = nullptr;
+	EditorQuickOpen *quick_open = nullptr;
+
 	Ref<AnimationNode> file_loaded;
 	void _file_opened(const String &p_file);
+	void _file_quick_selected();
 
 	enum {
 		MENU_LOAD_FILE = 1000,
 		MENU_PASTE = 1001,
-		MENU_LOAD_FILE_CONFIRM = 1002
+		MENU_LOAD_FILE_CONFIRM = 1002,
+		MENU_QUICK_LOAD_FILE = 1003
 	};
 
 protected:

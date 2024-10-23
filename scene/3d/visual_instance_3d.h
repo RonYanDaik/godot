@@ -135,7 +135,7 @@ private:
 	GIMode gi_mode = GI_MODE_STATIC;
 	bool ignore_occlusion_culling = false;
 
-	const StringName *_instance_uniform_get_remap(const StringName p_name) const;
+	const StringName *_instance_uniform_get_remap(const StringName &p_name) const;
 
 protected:
 	bool _set(const StringName &p_name, const Variant &p_value);
@@ -187,6 +187,8 @@ public:
 
 	void set_instance_shader_parameter(const StringName &p_name, const Variant &p_value);
 	Variant get_instance_shader_parameter(const StringName &p_name) const;
+
+	Array get_instance_shader_parameter_list() const;
 
 	void set_custom_aabb(AABB p_aabb);
 	AABB get_custom_aabb() const;

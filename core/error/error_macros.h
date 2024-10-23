@@ -34,6 +34,7 @@
 #include "core/typedefs.h"
 
 #include <atomic> // We'd normally use safe_refcount.h, but that would cause circular includes.
+#include <assert.h>
 
 class String;
 
@@ -443,6 +444,13 @@ void _err_flush_stdout();
 	} else                                                                                                                        \
 		((void)0)
 
+#define ERR_FAIL_COND_V_ASS(m_cond, m_retval)                                                                                         \
+	if (unlikely(m_cond)) {                                                                                                       \
+		_err_print_error(FUNCTION_STR, __FILE__, __LINE__, "Condition \"" _STR(m_cond) "\" is true. Returning: " _STR(m_retval)); \
+		assert(0); 																														 \
+		return m_retval;                                                                                                          \
+	} else                                                                                                                        \
+		((void)0)
 /**
  * Ensures `m_cond` is false.
  * If `m_cond` is true, prints `m_msg` and the current function returns `m_retval`.
@@ -453,6 +461,14 @@ void _err_flush_stdout();
 #define ERR_FAIL_COND_V_MSG(m_cond, m_retval, m_msg)                                                                                     \
 	if (unlikely(m_cond)) {                                                                                                              \
 		_err_print_error(FUNCTION_STR, __FILE__, __LINE__, "Condition \"" _STR(m_cond) "\" is true. Returning: " _STR(m_retval), m_msg); \
+		return m_retval;                                                                                                                 \
+	} else                                                                                                                               \
+		((void)0)
+
+#define ERR_FAIL_COND_V_MSG_ASSERT(m_cond, m_retval, m_msg)                                                                                     \
+	if (unlikely(m_cond)) {                                                                                                              \
+		_err_print_error(FUNCTION_STR, __FILE__, __LINE__, "Condition \"" _STR(m_cond) "\" is true. Returning: " _STR(m_retval), m_msg); \
+		assert(0); 																														 \
 		return m_retval;                                                                                                                 \
 	} else                                                                                                                               \
 		((void)0)
@@ -730,6 +746,16 @@ void _err_flush_stdout();
 	} else                                                                                        \
 		((void)0)
 
+/**
+ * Warns about `m_msg` only when verbose mode is enabled.
+ */
+#define WARN_VERBOSE(m_msg)               \
+	{                                     \
+		if (is_print_verbose_enabled()) { \
+			WARN_PRINT(m_msg);            \
+		}                                 \
+	}
+
 // Print deprecated warning message macros.
 
 /**
@@ -810,6 +836,16 @@ void _err_flush_stdout();
 		((void)0)
 #else
 #define DEV_ASSERT(m_cond)
+#endif
+
+#ifdef DEV_ENABLED
+#define DEV_CHECK_ONCE(m_cond)                                                   \
+	if (unlikely(!(m_cond))) {                                                   \
+		ERR_PRINT_ONCE("DEV_CHECK_ONCE failed  \"" _STR(m_cond) "\" is false."); \
+	} else                                                                       \
+		((void)0)
+#else
+#define DEV_CHECK_ONCE(m_cond)
 #endif
 
 #endif // ERROR_MACROS_H

@@ -71,6 +71,8 @@ private:
 	HashMap<ObjectID, SpawnInfo> tracked_nodes;
 	uint32_t spawn_limit = 0;
 	Callable spawn_function;
+	//yuri
+	Callable despawn_function;
 
 	void _update_spawn_node();
 	void _track(Node *p_node, const Variant &p_argument, int p_scene_id = INVALID_ID);
@@ -108,6 +110,13 @@ public:
 	void set_spawn_limit(uint32_t p_limit) { spawn_limit = p_limit; }
 	void set_spawn_function(Callable p_spawn_function) { spawn_function = p_spawn_function; }
 	Callable get_spawn_function() const { return spawn_function; }
+
+	//yuri
+	inline Callable get_despawn_function() const { return despawn_function; }
+	void set_despawn_function( Callable p_despawn_function) {
+		this->despawn_function = p_despawn_function; 
+	}
+
 
 	const Variant get_spawn_argument(const ObjectID &p_id) const;
 	int find_spawnable_scene_index_from_object(const ObjectID &p_id) const;

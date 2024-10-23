@@ -31,10 +31,12 @@
 #ifndef NAVIGATION_MESH_H
 #define NAVIGATION_MESH_H
 
+#include "core/os/rw_lock.h"
 #include "scene/resources/mesh.h"
 
 class NavigationMesh : public Resource {
 	GDCLASS(NavigationMesh, Resource);
+	RWLock rwlock;
 
 	Vector<Vector3> vertices;
 	struct Polygon {
@@ -74,12 +76,15 @@ public:
 		SOURCE_GEOMETRY_ROOT_NODE_CHILDREN = 0,
 		SOURCE_GEOMETRY_GROUPS_WITH_CHILDREN,
 		SOURCE_GEOMETRY_GROUPS_EXPLICIT,
+		//yuri
+		SOURCE_GEOMETRY_PATH_NODE_CHILDREN,
 		SOURCE_GEOMETRY_MAX
 	};
 
 protected:
 	float cell_size = 0.25f; // Must match ProjectSettings default 3D cell_size and NavigationServer NavMap cell_size.
 	float cell_height = 0.25f; // Must match ProjectSettings default 3D cell_height and NavigationServer NavMap cell_height.
+	float border_size = 0.0f;
 	float agent_height = 1.5f;
 	float agent_radius = 0.5f;
 	float agent_max_climb = 0.25f;
@@ -105,7 +110,14 @@ protected:
 	AABB filter_baking_aabb;
 	Vector3 filter_baking_aabb_offset;
 
+	//yuri
+	NodePath path_to_node;
+
 public:
+	//yuri
+	NodePath get_path_to_source_node() const;
+	void set_path_to_source_node(const NodePath &path);
+
 	// Recast settings
 	void set_sample_partition_type(SamplePartitionType p_value);
 	SamplePartitionType get_sample_partition_type() const;
@@ -122,7 +134,7 @@ public:
 	void set_source_geometry_mode(SourceGeometryMode p_geometry_mode);
 	SourceGeometryMode get_source_geometry_mode() const;
 
-	void set_source_group_name(StringName p_group_name);
+	void set_source_group_name(const StringName &p_group_name);
 	StringName get_source_group_name() const;
 
 	void set_cell_size(float p_value);
@@ -130,6 +142,9 @@ public:
 
 	void set_cell_height(float p_value);
 	float get_cell_height() const;
+
+	void set_border_size(float p_value);
+	float get_border_size() const;
 
 	void set_agent_height(float p_value);
 	float get_agent_height() const;
@@ -191,11 +206,15 @@ public:
 
 	void clear();
 
+	void set_data(const Vector<Vector3> &p_vertices, const Vector<Vector<int>> &p_polygons);
+	void get_data(Vector<Vector3> &r_vertices, Vector<Vector<int>> &r_polygons);
+
 #ifdef DEBUG_ENABLED
 	Ref<ArrayMesh> get_debug_mesh();
 #endif // DEBUG_ENABLED
 
-	NavigationMesh();
+	NavigationMesh() {}
+	~NavigationMesh() {}
 };
 
 VARIANT_ENUM_CAST(NavigationMesh::SamplePartitionType);
