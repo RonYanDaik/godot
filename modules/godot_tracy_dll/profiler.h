@@ -2,7 +2,9 @@
 #define GODOT_TRACY_PROFILER_H
 
 #include "core/string/string_name.h"
+#ifdef TRACY_ENABLE
 #include "tracy/public/tracy/Tracy.hpp"
+#endif
 
 class Variant;
 

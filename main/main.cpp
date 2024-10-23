@@ -131,6 +131,10 @@
 #endif // TOOLS_ENABLED && !GDSCRIPT_NO_LSP
 #endif // MODULE_GDSCRIPT_ENABLED
 
+#ifdef TRACY_ENABLE
+#include "modules/godot_tracy_dll/tracy/public/tracy/Tracy.hpp"
+#include "modules/godot_tracy_dll/tracy/public/tracy/TracyC.h"
+#endif
 
 /* Static members */
 
