@@ -294,7 +294,7 @@ void AnimationPlayer::_blend_playback_data(double p_delta, bool p_started) {
 }
 
 bool AnimationPlayer::_blend_pre_process(double p_delta, int p_track_count, const HashMap<NodePath, int> &p_track_map) {
-	if (!playback.current.from) {
+	if (!playback.current.from || playback.current.from->animation.is_null()) {
 		_set_process(false);
 		return false;
 	}
@@ -637,7 +637,7 @@ double AnimationPlayer::get_current_animation_position() const {
 }
 
 double AnimationPlayer::get_current_animation_length() const {
-	ERR_FAIL_NULL_V_MSG(playback.current.from, 0, "AnimationPlayer has no current animation.");
+	ERR_FAIL_COND_V_MSG(playback.current.from!=nullptr && playback.current.from->animation.is_null(), 0, "AnimationPlayer has no current animation.");
 	return playback.current.from->animation->get_length();
 }
 
