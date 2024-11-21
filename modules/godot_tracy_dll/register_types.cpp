@@ -4,7 +4,7 @@
 #include "tracy_profiler.h"
 
 #ifdef TRACY_ENABLE
-#pragma comment(lib, "tracy_dll\\TracyProfiler.lib")
+#pragma comment(lib, "modules/godot_tracy_dll/tracy/library/win32/x64/Release/TracyProfiler.lib")
 #endif
 
 void initialize_godot_tracy_dll_module(ModuleInitializationLevel p_level) {

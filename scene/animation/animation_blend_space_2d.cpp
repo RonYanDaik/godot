@@ -355,6 +355,11 @@ void AnimationNodeBlendSpace2D::_queue_auto_triangles() {
 	
 	trianges_dirty = true;
 	callable_mp(this, &AnimationNodeBlendSpace2D::_update_triangles).call_deferred();
+
+		//yuri
+	#ifdef TRACY_ENABLE
+	TracyCZoneEnd(ctx);
+	#endif // TRACY_ENABLE
 }
 
 void AnimationNodeBlendSpace2D::_update_triangles() {
