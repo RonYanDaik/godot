@@ -31,6 +31,11 @@
 #include "animation_node_state_machine.h"
 #include "scene/main/window.h"
 
+#ifdef TRACY_ENABLE
+#include "modules/godot_tracy_dll/tracy/public/tracy/Tracy.hpp"
+#include "modules/godot_tracy_dll/tracy/public/tracy/TracyC.h"
+#endif
+
 StringName AnimationNodeStateMachine::START_NODE;
 StringName AnimationNodeStateMachine::END_NODE;
 
@@ -281,12 +286,19 @@ void AnimationNodeStateMachinePlayback::stop() {
 }
 
 void AnimationNodeStateMachinePlayback::_travel_main(const StringName &p_state, bool p_reset_on_teleport) {
+	#ifdef TRACY_ENABLE
+		ZoneScoped;
+	#endif
 	travel_request = p_state;
 	reset_request_on_teleport = p_reset_on_teleport;
 	stop_request = false;
 }
 
 void AnimationNodeStateMachinePlayback::_start_main(const StringName &p_state, bool p_reset) {
+	#ifdef TRACY_ENABLE
+		ZoneScoped;
+	#endif
+	
 	travel_request = StringName();
 	path.clear();
 	reset_request = p_reset;
@@ -489,6 +501,9 @@ bool AnimationNodeStateMachinePlayback::_travel_children(AnimationTree *p_tree, 
 }
 
 void AnimationNodeStateMachinePlayback::_start(AnimationNodeStateMachine *p_state_machine) {
+	#ifdef TRACY_ENABLE
+		ZoneScoped;
+	#endif
 	playing = true;
 	_set_current(p_state_machine, start_request != StringName() ? start_request : AnimationNodeStateMachine::START_NODE);
 	teleport_request = true;

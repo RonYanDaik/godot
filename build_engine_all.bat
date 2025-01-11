@@ -1,5 +1,5 @@
 call build_engine_dev.bat
 call build_engine.bat
-call build_engine_tracy_dll.bat
-call build_engine_tracy_dll_dev.bat
+call build_engine_tracy.bat
+call build_engine_tracy_dev.bat
 call build_export_templates.bat

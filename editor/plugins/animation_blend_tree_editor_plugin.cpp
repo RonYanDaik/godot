@@ -1215,7 +1215,7 @@ AnimationNodeBlendTreeEditor::AnimationNodeBlendTreeEditor() {
 	add_node->connect("about_to_popup", callable_mp(this, &AnimationNodeBlendTreeEditor::_update_options_menu).bind(false));
 	add_node->set_disabled(read_only);
 
-	add_options.push_back(AddOption("Animation", "AnimationNodeAnimation"));
+	/*add_options.push_back(AddOption("Animation", "AnimationNodeAnimation"));
 	add_options.push_back(AddOption("OneShot", "AnimationNodeOneShot", 2));
 	add_options.push_back(AddOption("Add2", "AnimationNodeAdd2", 2));
 	add_options.push_back(AddOption("Add3", "AnimationNodeAdd3", 3));
@@ -1224,10 +1224,13 @@ AnimationNodeBlendTreeEditor::AnimationNodeBlendTreeEditor() {
 	add_options.push_back(AddOption("Sub2", "AnimationNodeSub2", 2));
 	add_options.push_back(AddOption("TimeSeek", "AnimationNodeTimeSeek", 1));
 	add_options.push_back(AddOption("TimeScale", "AnimationNodeTimeScale", 1));
-	add_options.push_back(AddOption("Transition", "AnimationNodeTransition"));
+	add_options.push_back(AddOption("Transition", "AnimationNodeTransition"));*/
 
 	// Add all types that inherit from AnimationRootNode to options.
 	List<StringName> classes;
+	ClassDB::get_inheriters_from_class("AnimationNodeSync", &classes);
+	ClassDB::get_inheriters_from_class("AnimationNodeTimeScale", &classes);
+	ClassDB::get_inheriters_from_class("AnimationNodeTimeSeek", &classes);
 	ClassDB::get_inheriters_from_class("AnimationRootNode", &classes);
 	classes.sort_custom<StringName::AlphCompare>();
 
