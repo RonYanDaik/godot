@@ -1,5 +1,7 @@
 # GodotTracy
 
+V 11.1
+
 [Tracy Profiler](https://github.com/wolfpld/tracy) is a [Godot Engine](https://github.com/godotengine/godot) module that can be used to profile C++ and scripting at the same time, so to have good insight about what your game is really doing to take the correct actions to heal your game performance.
 
 > This module is a more feature reach and uptodated spin-off of this one [module](https://github.com/Pineapple/GodotTracy).
