@@ -35,6 +35,11 @@
 #include "core/config/engine.h"
 #include "scene/animation/animation_player.h"
 
+#ifdef TRACY_ENABLE
+#include "modules/godot_tracy_dll/tracy/public/tracy/Tracy.hpp"
+#include "modules/godot_tracy_dll/tracy/public/tracy/TracyC.h"
+#endif
+
 void AnimationNode::get_parameter_list(List<PropertyInfo> *r_list) const {
 	Array parameters;
 
@@ -609,6 +614,10 @@ bool AnimationTree::_blend_pre_process(double p_delta, int p_track_count, const 
 		return false;
 	}
 
+	#ifdef TRACY_ENABLE
+	ZoneScoped;
+	#endif
+
 	{ // Setup.
 		process_pass++;
 
@@ -730,6 +739,9 @@ void AnimationTree::_animation_node_removed(const ObjectID &p_oid, const StringN
 
 void AnimationTree::_update_properties_for_node(const String &p_base_path, Ref<AnimationNode> p_node) {
 	ERR_FAIL_COND(p_node.is_null());
+	#ifdef TRACY_ENABLE
+	ZoneScoped;
+	#endif
 	if (!property_parent_map.has(p_base_path)) {
 		property_parent_map[p_base_path] = HashMap<StringName, StringName>();
 	}
@@ -779,7 +791,9 @@ void AnimationTree::_update_properties() {
 	if (!properties_dirty) {
 		return;
 	}
-
+	#ifdef TRACY_ENABLE
+	ZoneScoped;
+	#endif
 	properties.clear();
 	property_reference_map.clear();
 	property_parent_map.clear();

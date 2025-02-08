@@ -33,6 +33,7 @@
 
 #include "scene/3d/node_3d.h"
 #include "scene/resources/3d/skin.h"
+#include "core/os/mutex.h"
 
 typedef int BoneId;
 
@@ -282,6 +283,8 @@ public:
 	void physical_bones_remove_collision_exception(RID p_exception);
 #endif // _DISABLE_DEPRECATED
 
+	//yuri
+	Mutex transfrom_mutex;
 public:
 	Skeleton3D();
 	~Skeleton3D();

@@ -33,6 +33,12 @@
 
 #include "core/config/engine.h"
 
+#ifdef TRACY_ENABLE
+#include "modules/godot_tracy_dll/tracy/public/tracy/Tracy.hpp"
+#include "modules/godot_tracy_dll/tracy/public/tracy/TracyC.h"
+#endif
+
+
 bool AnimationPlayer::_set(const StringName &p_name, const Variant &p_value) {
 	String name = p_name;
 	if (name.begins_with("playback/play")) { // For backward compatibility.
@@ -298,6 +304,10 @@ bool AnimationPlayer::_blend_pre_process(double p_delta, int p_track_count, cons
 		_set_process(false);
 		return false;
 	}
+	
+	#ifdef TRACY_ENABLE
+	ZoneScoped;
+	#endif
 
 	tmp_from = playback.current.from->animation->get_instance_id();
 	end_reached = false;

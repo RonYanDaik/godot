@@ -141,6 +141,10 @@ void AnimationMixer::_validate_property(PropertyInfo &p_property) const {
 
 void AnimationMixer::_animation_set_cache_update() {
 	// Relatively fast function to update all animations.
+	#ifdef TRACY_ENABLE
+	ZoneScoped;
+	#endif
+	
 	animation_set_update_pass++;
 	bool clear_cache_needed = false;
 
@@ -562,6 +566,9 @@ bool AnimationMixer::is_dummy() const {
 /* -------------------------------------------- */
 
 void AnimationMixer::_clear_caches() {
+	#ifdef TRACY_ENABLE
+	ZoneScoped;
+	#endif	
 	_init_root_motion_cache();
 	_clear_audio_streams();
 	_clear_playing_caches();
@@ -606,6 +613,10 @@ void AnimationMixer::_init_root_motion_cache() {
 }
 
 bool AnimationMixer::_update_caches() {
+	#ifdef TRACY_ENABLE
+	ZoneScoped;
+	#endif
+
 	setup_pass++;
 
 	root_motion_cache.loc = Vector3(0, 0, 0);
@@ -940,11 +951,11 @@ bool AnimationMixer::_update_caches() {
 /* -------------------------------------------- */
 
 void AnimationMixer::_process_animation(double p_delta, bool p_update_only) {
+	#ifdef TRACY_ENABLE
+	ZoneScoped;
+	#endif
 	_blend_init();
 	if (_blend_pre_process(p_delta, track_count, track_map)) {
-		#ifdef TRACY_ENABLE
-		ZoneScoped;
-		#endif
 		_blend_capture(p_delta);
 		_blend_calc_total_weight();
 		_blend_process(p_delta, p_update_only);
@@ -985,6 +996,10 @@ Variant AnimationMixer::_post_process_key_value(const Ref<Animation> &p_anim, in
 
 void AnimationMixer::_blend_init() {
 	// Check all tracks, see if they need modification.
+	#ifdef TRACY_ENABLE
+	ZoneScoped;
+	#endif
+
 	root_motion_position = Vector3(0, 0, 0);
 	root_motion_rotation = Quaternion(0, 0, 0, 1);
 	root_motion_scale = Vector3(0, 0, 0);
@@ -1930,6 +1945,9 @@ void AnimationMixer::make_animation_instance(const StringName &p_name, const Pla
 }
 
 void AnimationMixer::clear_animation_instances() {
+	#ifdef TRACY_ENABLE
+	ZoneScoped;
+	#endif
 	animation_instances.clear();
 }
 
