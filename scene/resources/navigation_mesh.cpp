@@ -61,12 +61,12 @@ void NavigationMesh::create_from_mesh(const Ref<Mesh> &p_mesh) {
 		int rlen = iarr.size();
 		const int *r = iarr.ptr();
 
+		Vector<int> polygon;
 		for (int j = 0; j < rlen; j += 3) {
-			Polygon polygon;
-			polygon.indices.resize(3);
-			polygon.indices.write[0] = r[j + 0] + from;
-			polygon.indices.write[1] = r[j + 1] + from;
-			polygon.indices.write[2] = r[j + 2] + from;
+			polygon.resize(3);
+			polygon.write[0] = r[j + 0] + from;
+			polygon.write[1] = r[j + 1] + from;
+			polygon.write[2] = r[j + 2] + from;
 			polygons.push_back(polygon);
 		}
 	}
@@ -318,7 +318,7 @@ void NavigationMesh::_set_polygons(const Array &p_array) {
 	RWLockWrite write_lock(rwlock);
 	polygons.resize(p_array.size());
 	for (int i = 0; i < p_array.size(); i++) {
-		polygons.write[i].indices = p_array[i];
+		polygons.write[i] = p_array[i];
 	}
 	notify_property_list_changed();
 }
@@ -328,26 +328,26 @@ Array NavigationMesh::_get_polygons() const {
 	Array ret;
 	ret.resize(polygons.size());
 	for (int i = 0; i < ret.size(); i++) {
-		ret[i] = polygons[i].indices;
+		ret[i] = polygons[i];
 	}
 
 	return ret;
 }
 
-NodePath NavigationMesh::get_path_to_source_node() const
-{ 
-	return path_to_node; 
+void NavigationMesh::set_polygons(const Vector<Vector<int>> &p_polygons) {
+	RWLockWrite write_lock(rwlock);
+	polygons = p_polygons;
+	notify_property_list_changed();
 }
 
-void NavigationMesh::set_path_to_source_node(const NodePath &path) {
-	this->path_to_node = path; 
+Vector<Vector<int>> NavigationMesh::get_polygons() const {
+	RWLockRead read_lock(rwlock);
+	return polygons;
 }
 
 void NavigationMesh::add_polygon(const Vector<int> &p_polygon) {
 	RWLockWrite write_lock(rwlock);
-	Polygon polygon;
-	polygon.indices = p_polygon;
-	polygons.push_back(polygon);
+	polygons.push_back(p_polygon);
 	notify_property_list_changed();
 }
 
@@ -359,7 +359,7 @@ int NavigationMesh::get_polygon_count() const {
 Vector<int> NavigationMesh::get_polygon(int p_idx) {
 	RWLockRead read_lock(rwlock);
 	ERR_FAIL_INDEX_V(p_idx, polygons.size(), Vector<int>());
-	return polygons[p_idx].indices;
+	return polygons[p_idx];
 }
 
 void NavigationMesh::clear_polygons() {
@@ -376,19 +376,13 @@ void NavigationMesh::clear() {
 void NavigationMesh::set_data(const Vector<Vector3> &p_vertices, const Vector<Vector<int>> &p_polygons) {
 	RWLockWrite write_lock(rwlock);
 	vertices = p_vertices;
-	polygons.resize(p_polygons.size());
-	for (int i = 0; i < p_polygons.size(); i++) {
-		polygons.write[i].indices = p_polygons[i];
-	}
+	polygons = p_polygons;
 }
 
 void NavigationMesh::get_data(Vector<Vector3> &r_vertices, Vector<Vector<int>> &r_polygons) {
 	RWLockRead read_lock(rwlock);
 	r_vertices = vertices;
-	r_polygons.resize(polygons.size());
-	for (int i = 0; i < polygons.size(); i++) {
-		r_polygons.write[i] = polygons[i].indices;
-	}
+	r_polygons = polygons;
 }
 
 #ifdef DEBUG_ENABLED
@@ -398,8 +392,8 @@ Ref<ArrayMesh> NavigationMesh::get_debug_mesh() {
 		return debug_mesh;
 	}
 
-	if (!debug_mesh.is_valid()) {
-		debug_mesh = Ref<ArrayMesh>(memnew(ArrayMesh));
+	if (debug_mesh.is_null()) {
+		debug_mesh.instantiate();
 	} else {
 		debug_mesh->clear_surfaces();
 	}
@@ -575,15 +569,8 @@ void NavigationMesh::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("clear"), &NavigationMesh::clear);
 
-	//yuri
-	ClassDB::bind_method(D_METHOD("get_path_to_source_node"), &NavigationMesh::get_path_to_source_node);
-	ClassDB::bind_method(D_METHOD("set_path_to_source_node", "path"), &NavigationMesh::set_path_to_source_node);
-
 	ADD_PROPERTY(PropertyInfo(Variant::PACKED_VECTOR3_ARRAY, "vertices", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR | PROPERTY_USAGE_INTERNAL), "set_vertices", "get_vertices");
 	ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "polygons", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR | PROPERTY_USAGE_INTERNAL), "_set_polygons", "_get_polygons");
-
-	//yuri
-	ADD_PROPERTY(PropertyInfo(Variant::NODE_PATH, "path_to_source_node"), "set_path_to_source_node", "get_path_to_source_node");
 
 	ADD_GROUP("Sampling", "sample_");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "sample_partition_type", PROPERTY_HINT_ENUM, "Watershed,Monotone,Layers"), "set_sample_partition_type", "get_sample_partition_type");
@@ -591,9 +578,8 @@ void NavigationMesh::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "geometry_parsed_geometry_type", PROPERTY_HINT_ENUM, "Mesh Instances,Static Colliders,Both"), "set_parsed_geometry_type", "get_parsed_geometry_type");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "geometry_collision_mask", PROPERTY_HINT_LAYERS_3D_PHYSICS), "set_collision_mask", "get_collision_mask");
 	ADD_PROPERTY_DEFAULT("geometry_collision_mask", 0xFFFFFFFF);
-	ADD_PROPERTY(PropertyInfo(Variant::INT, "geometry_source_geometry_mode", PROPERTY_HINT_ENUM, "Root Node Children,Group With Children,Group Explicit,Path To Node"), "set_source_geometry_mode", "get_source_geometry_mode");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "geometry_source_geometry_mode", PROPERTY_HINT_ENUM, "Root Node Children,Group With Children,Group Explicit"), "set_source_geometry_mode", "get_source_geometry_mode");
 	ADD_PROPERTY(PropertyInfo(Variant::STRING, "geometry_source_group_name"), "set_source_group_name", "get_source_group_name");
-	
 	ADD_PROPERTY_DEFAULT("geometry_source_group_name", StringName("navigation_mesh_source_group"));
 	ADD_GROUP("Cells", "");
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "cell_size", PROPERTY_HINT_RANGE, "0.01,500.0,0.01,or_greater,suffix:m"), "set_cell_size", "get_cell_size");
@@ -622,9 +608,6 @@ void NavigationMesh::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::AABB, "filter_baking_aabb"), "set_filter_baking_aabb", "get_filter_baking_aabb");
 	ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "filter_baking_aabb_offset"), "set_filter_baking_aabb_offset", "get_filter_baking_aabb_offset");
 
-	
-
-
 	BIND_ENUM_CONSTANT(SAMPLE_PARTITION_WATERSHED);
 	BIND_ENUM_CONSTANT(SAMPLE_PARTITION_MONOTONE);
 	BIND_ENUM_CONSTANT(SAMPLE_PARTITION_LAYERS);
@@ -638,7 +621,6 @@ void NavigationMesh::_bind_methods() {
 	BIND_ENUM_CONSTANT(SOURCE_GEOMETRY_ROOT_NODE_CHILDREN);
 	BIND_ENUM_CONSTANT(SOURCE_GEOMETRY_GROUPS_WITH_CHILDREN);
 	BIND_ENUM_CONSTANT(SOURCE_GEOMETRY_GROUPS_EXPLICIT);
-	BIND_ENUM_CONSTANT(SOURCE_GEOMETRY_PATH_NODE_CHILDREN);
 	BIND_ENUM_CONSTANT(SOURCE_GEOMETRY_MAX);
 }
 
@@ -651,7 +633,7 @@ void NavigationMesh::_validate_property(PropertyInfo &p_property) const {
 	}
 
 	if (p_property.name == "geometry_source_group_name") {
-		if (source_geometry_mode == SOURCE_GEOMETRY_ROOT_NODE_CHILDREN || source_geometry_mode == SOURCE_GEOMETRY_PATH_NODE_CHILDREN) {
+		if (source_geometry_mode == SOURCE_GEOMETRY_ROOT_NODE_CHILDREN) {
 			p_property.usage = PROPERTY_USAGE_NONE;
 			return;
 		}
