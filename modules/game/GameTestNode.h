@@ -3,12 +3,12 @@
 
 #include "scene/main/node.h"
 
-class GameTestNode : public Node{
+class GameTestNode : public Node {
     GDCLASS(GameTestNode , Node)
+    protected:
+    static void _bind_methods(){}
     public:
     void _bind_functions(){}
-
-    void _bind_methods(){}
 
     void _ready();
 
