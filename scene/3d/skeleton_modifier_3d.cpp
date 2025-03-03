@@ -106,7 +106,9 @@ void SkeletonModifier3D::process_modification() {
 		return;
 	}
 	_process_modification();
-	emit_signal(SNAME("modification_processed"));
+	if(Thread::is_main_thread()) {
+		emit_signal(SNAME("modification_processed"));
+	}
 }
 
 void SkeletonModifier3D::_process_modification() {
