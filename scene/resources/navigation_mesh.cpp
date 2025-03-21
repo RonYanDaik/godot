@@ -334,6 +334,15 @@ Array NavigationMesh::_get_polygons() const {
 	return ret;
 }
 
+NodePath NavigationMesh::get_path_to_source_node() const
+{ 
+	return path_to_node; 
+}
+
+void NavigationMesh::set_path_to_source_node(const NodePath &path) {
+	this->path_to_node = path; 
+}
+
 void NavigationMesh::set_polygons(const Vector<Vector<int>> &p_polygons) {
 	RWLockWrite write_lock(rwlock);
 	polygons = p_polygons;

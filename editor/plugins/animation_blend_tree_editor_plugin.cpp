@@ -35,11 +35,11 @@
 #include "editor/editor_inspector.h"
 #include "editor/editor_node.h"
 #include "editor/editor_properties.h"
-#include "editor/editor_quick_open.h"
 #include "editor/editor_settings.h"
 #include "editor/editor_string_names.h"
 #include "editor/editor_undo_redo_manager.h"
 #include "editor/gui/editor_file_dialog.h"
+#include "editor/gui/editor_quick_open_dialog.h"
 #include "editor/themes/editor_scale.h"
 #include "scene/3d/skeleton_3d.h"
 #include "scene/gui/check_box.h"
@@ -301,9 +301,9 @@ void AnimationNodeBlendTreeEditor::update_graph() {
 }
 
 void AnimationNodeBlendTreeEditor::_file_quick_selected() {
-	if (quick_open) {
+	/*if (quick_open) {
 		_file_opened(quick_open->get_selected());
-	}
+	}*/
 }
 
 void AnimationNodeBlendTreeEditor::_file_opened(const String &p_file) {
@@ -321,13 +321,13 @@ void AnimationNodeBlendTreeEditor::_add_node(int p_idx) {
 	String base_name;
 
 	if (p_idx == MENU_QUICK_LOAD_FILE) {
-		if (!quick_open) {
-			quick_open = memnew(EditorQuickOpen);
+		/*if (!quick_open) {
+			quick_open = EditorNode::get_singleton()->get_quick_open_dialog();
 			add_child(quick_open);
 			quick_open->connect("quick_open", callable_mp(this, &AnimationNodeBlendTreeEditor::_file_quick_selected));
 		}
 		quick_open->popup_dialog("AnimationNode");
-		quick_open->set_title(TTR("Open Animation Node"));
+		quick_open->set_title(TTR("Open Animation Node"));*/
 		return;
 	} else if (p_idx == MENU_LOAD_FILE) {
 		open_file->clear_filters();

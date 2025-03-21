@@ -34,6 +34,7 @@
 #include "core/object/script_language.h"
 #include "editor/editor_inspector.h"
 #include "editor/plugins/animation_tree_editor_plugin.h"
+#include "editor/gui/editor_quick_open_dialog.h"
 #include "scene/animation/animation_blend_tree.h"
 #include "scene/gui/button.h"
 #include "scene/gui/dialogs.h"
@@ -141,7 +142,7 @@ class AnimationNodeBlendTreeEditor : public AnimationTreeNodeEditorPlugin {
 	void _update_editor_settings();
 
 	EditorFileDialog *open_file = nullptr;
-	EditorQuickOpen *quick_open = nullptr;
+	EditorQuickOpenDialog *quick_open = nullptr;
 
 	Ref<AnimationNode> file_loaded;
 	void _file_opened(const String &p_file);

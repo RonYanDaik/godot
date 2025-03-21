@@ -36,9 +36,6 @@
 #include "modules/godot_tracy_dll/tracy/public/tracy/TracyC.h"
 #endif
 
-StringName AnimationNodeStateMachine::START_NODE;
-StringName AnimationNodeStateMachine::END_NODE;
-
 /////////////////////////////////////////////////
 
 void AnimationNodeStateMachineTransition::set_switch_mode(SwitchMode p_mode) {

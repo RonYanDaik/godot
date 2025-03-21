@@ -6988,12 +6988,6 @@ DisplayServerWindows::DisplayServerWindows(const String &p_rendering_driver, Win
 // Init context and rendering device
 #if defined(GLES3_ENABLED)
 
-#if defined(__arm__) || defined(__aarch64__) || defined(_M_ARM) || defined(_M_ARM64)
-	// There's no native OpenGL drivers on Windows for ARM, switch to ANGLE over DX.
-	if (rendering_driver == "opengl3") {
-		rendering_driver = "opengl3_angle";
-	}
-#elif defined(EGL_STATIC)
 	bool fallback = GLOBAL_GET("rendering/gl_compatibility/fallback_to_angle");
 	bool show_warning = true;
 
@@ -7059,7 +7053,6 @@ DisplayServerWindows::DisplayServerWindows(const String &p_rendering_driver, Win
 			OS::get_singleton()->set_current_rendering_driver_name(rendering_driver);
 		}
 	}
-#endif
 
 	if (rendering_driver == "opengl3_angle") {
 		gl_manager_angle = memnew(GLManagerANGLE_Windows);
