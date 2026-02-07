@@ -1871,11 +1871,11 @@ Node *Node::get_node(const NodePath &p_path) const {
 	if (unlikely(!node)) {
 		const String desc = get_description();
 		if (p_path.is_absolute()) {
-			assert(!p_path.is_empty());
+			//assert(!p_path.is_empty());
 			ERR_FAIL_V_MSG(nullptr,
 					vformat(R"(Node not found: "%s" (absolute path attempted from "%s").)", p_path, desc));
 		} else {
-			assert(!p_path.is_empty());
+			//assert(!p_path.is_empty());
 			ERR_FAIL_V_MSG(nullptr,
 					vformat(R"(Node not found: "%s" (relative to "%s").)", p_path, desc));
 		}

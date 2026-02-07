@@ -31,7 +31,8 @@ if "tracy_enable" in env and (env["tracy_enable"] == "yes" or env["tracy_enable"
     env.Append(CPPDEFINES=["TRACY_ENABLE"])
 
     #env_tracy.add_source_files(env.modules_sources, tracy_sources)
-
+    env_tracy.add_source_files(env.modules_sources, "*.cpp")
+    
 if "tracy_on_demand" in env and env["tracy_on_demand"]:
 
     tracy_src = [
