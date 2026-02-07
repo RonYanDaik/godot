@@ -599,6 +599,12 @@ Ref<ResourceLoader::LoadToken> ResourceLoader::_load_start(const String &p_path,
 		}
 
 		load_token.instantiate();
+		
+		if(local_path.length()==0){ //yuri. 23-01-2026 (some crash while loading)
+			print_error(vformat("%s cant be found.",p_path));
+			return load_token;
+		}
+
 		load_token->local_path = local_path;
 		if (p_for_user) {
 			_load_threaded_request_setup_user_token(load_token.ptr(), p_path);
