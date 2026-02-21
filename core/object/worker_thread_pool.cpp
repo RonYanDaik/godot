@@ -759,19 +759,22 @@ void WorkerThreadPool::wait_for_group_task_completion(GroupID p_group) {
 
 int WorkerThreadPool::get_thread_index() const {
 	Thread::ID tid = Thread::get_caller_id();
-==== BASE ====
-	return singleton->thread_ids.has(tid) ? singleton->thread_ids[tid] : -1;
-==== BASE ====
+	return thread_ids.has(tid) ? thread_ids[tid] : -1;
 }
 
-==== BASE ====
-WorkerThreadPool::TaskID WorkerThreadPool::get_caller_task_id() {
-==== BASE ====
+WorkerThreadPool::TaskID WorkerThreadPool::get_caller_task_id() const {
 	int th_index = get_thread_index();
-==== BASE ====
-	if (th_index != -1 && singleton->threads[th_index].current_task) {
-		return singleton->threads[th_index].current_task->self;
-==== BASE ====
+	if (th_index != -1 && threads[th_index].current_task) {
+		return threads[th_index].current_task->self;
+	} else {
+		return INVALID_TASK_ID;
+	}
+}
+
+WorkerThreadPool::GroupID WorkerThreadPool::get_caller_group_id() const {
+	int th_index = get_thread_index();
+	if (th_index != -1 && threads[th_index].current_task && threads[th_index].current_task->group) {
+		return threads[th_index].current_task->group->self;
 	} else {
 		return INVALID_TASK_ID;
 	}
@@ -906,10 +909,10 @@ WorkerThreadPool *WorkerThreadPool::get_named_pool(const StringName &p_name) {
 	}
 }
 
-==== BASE ====
-WorkerThreadPool::WorkerThreadPool() {
-	singleton = this;
-==== BASE ====
+WorkerThreadPool::WorkerThreadPool(bool p_singleton) {
+	if (p_singleton) {
+		singleton = this;
+	}
 }
 
 WorkerThreadPool::~WorkerThreadPool() {

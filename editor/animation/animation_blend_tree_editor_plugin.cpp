@@ -1280,19 +1280,19 @@ AnimationNodeBlendTreeEditor::AnimationNodeBlendTreeEditor() {
 	add_options.push_back(AddOption("Transition", "AnimationNodeTransition"));*/
 
 	// Add all types that inherit from AnimationRootNode to options.
-	List<StringName> classes;
-	ClassDB::get_inheriters_from_class("AnimationNodeSync", &classes);
-	ClassDB::get_inheriters_from_class("AnimationNodeTimeScale", &classes);
-	ClassDB::get_inheriters_from_class("AnimationNodeTimeSeek", &classes);
-	ClassDB::get_inheriters_from_class("AnimationRootNode", &classes);
+	LocalVector<StringName> classes;
+	ClassDB::get_inheriters_from_class("AnimationNodeSync", classes);
+	ClassDB::get_inheriters_from_class("AnimationNodeTimeScale", classes);
+	ClassDB::get_inheriters_from_class("AnimationNodeTimeSeek", classes);
+	ClassDB::get_inheriters_from_class("AnimationRootNode", classes);
 	classes.sort_custom<StringName::AlphCompare>();
 
-	for (List<StringName>::Element *E = classes.front(); E; E = E->next()) {
-		String name = String(E->get()).replace_first("AnimationNode", "");
+	for (const StringName &E : classes) {
+		String name = String(E).replace_first("AnimationNode", "");
 		if (name == "Animation" || name == "StartState" || name == "EndState") {
 			continue;
 		}
-		add_options.push_back(AddOption(name, E->get()));
+		add_options.push_back(AddOption(name, E));
 	}
 
 	_update_options_menu();

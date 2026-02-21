@@ -1697,11 +1697,10 @@ void Node::_add_child_nocheck(Node *p_child, const StringName &p_name, InternalM
 }
 
 void Node::add_child(RequiredParam<Node> rp_child, bool p_force_readable_name, InternalMode p_internal) {
+	EXTRACT_PARAM_OR_FAIL(p_child, rp_child);
 	ERR_FAIL_COND_MSG(data.tree && !Thread::is_main_thread(), vformat("Adding children to a node inside the SceneTree is only allowed from the main thread. Use call_deferred(\"add_child\",node). %s",p_child));
 
-
 	ERR_THREAD_GUARD
-	EXTRACT_PARAM_OR_FAIL(p_child, rp_child);
 	ERR_FAIL_COND_MSG(p_child == this, vformat("Can't add child '%s' to itself.", p_child->get_name())); // adding to itself!
 	ERR_FAIL_COND_MSG(p_child->data.parent, vformat("Can't add child '%s' to '%s', already has a parent '%s'.", p_child->get_name(), get_name(), p_child->data.parent->get_name())); //Fail if node has a parent
 #ifdef DEBUG_ENABLED
@@ -1854,14 +1853,28 @@ Node *Node::get_child(int p_index, bool p_include_internal) const {
 }
 
 TypedArray<Node> Node::get_children(bool p_include_internal) const {
-==== BASE ====
-	ERR_THREAD_GUARD_V(TypedArray<Node>());
-	TypedArray<Node> arr;
-	int cc = get_child_count(p_include_internal);
-	arr.resize(cc);
-	for (int i = 0; i < cc; i++) {
-		arr[i] = get_child(i, p_include_internal);
-==== BASE ====
+	ERR_THREAD_GUARD_V_MSG_ASS(TypedArray<Node>(),"");
+	_update_children_cache();
+
+	TypedArray<Node> children;
+
+	if (p_include_internal) {
+		children.resize(data.children_cache.size());
+
+		Array::Iterator itr = children.begin();
+		for (const Node *child : data.children_cache) {
+			*itr = child;
+			++itr;
+		}
+	} else {
+		const int size = data.children_cache.size() - data.internal_children_back_count_cache;
+		children.resize(size - data.internal_children_front_count_cache);
+
+		Array::Iterator itr = children.begin();
+		for (int i = data.internal_children_front_count_cache; i < size; i++) {
+			*itr = data.children_cache[i];
+			++itr;
+		}
 	}
 
 	return children;
@@ -4076,10 +4089,14 @@ String Node::_get_name_num_separator() {
 }
 
 Node::Node() {
-==== BASE ====
-	orphan_node_count++;
+	_define_ancestry(AncestralClass::NODE);
+#ifdef DEBUG_ENABLED
+	total_node_count.increment();
+#endif
+	
+	//yuri
+	int created_on_thread_with_id = Thread::get_caller_id();
 
-==== BASE ====
 	// Default member initializer for bitfield is a C++20 extension, so:
 
 	data.process_mode = PROCESS_MODE_INHERIT;

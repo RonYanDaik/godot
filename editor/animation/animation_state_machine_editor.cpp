@@ -833,8 +833,8 @@ void AnimationNodeStateMachineEditor::_open_menu(const Vector2 &p_position) {
 		}
 	}
 
-	List<StringName> classes;
-	ClassDB::get_inheriters_from_class("AnimationNode", &classes);
+	LocalVector<StringName> classes;
+	ClassDB::get_inheriters_from_class("AnimationNode", classes);
 	classes.sort_custom<StringName::AlphCompare>();
 
 	for (const StringName &class_name : classes) {

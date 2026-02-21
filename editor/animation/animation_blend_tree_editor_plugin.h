@@ -31,8 +31,8 @@
 #pragma once
 
 #include "core/object/script_language.h"
-#include "editor/plugins/animation_tree_editor_plugin.h"
-#include "editor/editor_inspector.h"
+#include "editor/animation/animation_tree_editor_plugin.h"
+#include "editor/inspector/editor_inspector.h"
 #include "editor/gui/editor_quick_open_dialog.h"
 #include "scene/animation/animation_blend_tree.h"
 #include "scene/gui/button.h"

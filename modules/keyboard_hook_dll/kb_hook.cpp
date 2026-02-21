@@ -1,6 +1,7 @@
 #include "kb_hook.h"
 
 #include "core/math/color.h"
+#include "core/object/class_db.h"
 
 Multikeyboard *Multikeyboard::singleton = nullptr;
 

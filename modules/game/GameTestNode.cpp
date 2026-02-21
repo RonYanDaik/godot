@@ -2,6 +2,7 @@
 #include "core/string/print_string.h"
 
 void GameTestNode::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("test"), &GameTestNode::test);
 }
 
 void GameTestNode::_ready() {

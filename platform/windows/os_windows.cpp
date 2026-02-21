@@ -2686,9 +2686,8 @@ void OS_Windows::add_frame_delay(bool p_can_draw, bool p_wake_for_events) {
 	}
 }
 
-==== BASE ====
-bool OS_Windows::_test_create_rendering_device() const {
-==== BASE ====
+#ifdef TOOLS_ENABLED
+bool OS_Windows::_test_create_rendering_device(const String &p_display_driver) const {
 	// Tests Rendering Device creation.
 
 	bool ok = false;

@@ -1,1 +1,1 @@
-scons platform=windows keyboardhook_enable=true dev_build=yes debug_symbols=yes profiler=tracy profiler_path=".modules/godot_tracy_dll/tracy" CCFLAGS="-fno-omit-frame-pointer -fno-inline -ggdb3" extra_suffix="tracy"
+scons platform=windows keyboardhook_enable=true dev_build=yes debug_symbols=yes profiler=tracy profiler_path="D:\YurasGarbage\GitHubRepos\Godot_4_6t\modules\godot_tracy_dll\tracy" CCFLAGS="-fno-omit-frame-pointer -fno-inline -ggdb3" extra_suffix="tracy"

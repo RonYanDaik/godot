@@ -260,8 +260,6 @@ public:
 
 	static void set_is_import_thread(bool p_import_thread);
 
-	static void set_is_import_thread(bool p_import_thread);
-
 	static void set_timestamp_on_load(bool p_timestamp) { timestamp_on_load = p_timestamp; }
 	static bool get_timestamp_on_load() { return timestamp_on_load; }
 

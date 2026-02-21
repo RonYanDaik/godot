@@ -12,6 +12,7 @@ class GameTestNode : public Node {
     void _ready();
 
     void _exit_tree();
+    void test(){};
 
     void _process(double delta){}
 

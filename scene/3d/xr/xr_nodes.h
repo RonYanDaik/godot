@@ -46,7 +46,6 @@ protected:
 	StringName tracker_name = "head";
 	StringName pose_name = SceneStringName(default_);
 	Ref<XRPositionalTracker> tracker;
-	Transform3D pose_offset;
 
 	void _validate_property(PropertyInfo &p_property) const;
 
@@ -83,7 +82,6 @@ private:
 	StringName pose_name = SceneStringName(default_);
 	bool has_tracking_data = false;
 	bool show_when_tracked = false;
-	Transform3D pose_offset;
 
 protected:
 	Ref<XRPositionalTracker> tracker;
@@ -100,8 +98,7 @@ protected:
 	void _set_has_tracking_data(bool p_has_tracking_data);
 
 	void _update_visibility();
-==== BASE ====
-==== BASE ====
+	virtual void _physics_interpolated_changed() override;
 
 public:
 	void _validate_property(PropertyInfo &p_property) const;

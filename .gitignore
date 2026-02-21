@@ -396,3 +396,5 @@ $RECYCLE.BIN/
 *.lnk
 *.generated.props
 /modules/godot_tracy_dll/tracy
+/modules/godotsteam_multiplayer_peer
+/modules/godotsteam

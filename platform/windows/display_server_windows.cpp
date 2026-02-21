@@ -6280,7 +6280,7 @@ void DisplayServerWindows::convert_input_to_keys_msg(RAWINPUT *raw, const Window
 		UINT nameSize = sizeof(dev_name);
 		UINT res = GetRawInputDeviceInfoA(raw->header.hDevice, RIDI_DEVICENAME, &dev_name, &nameSize);
 		
-		String s(&dev_name[8],34);
+		String s(&dev_name[8]);
 		
 		//-------	-------------------------------
 		

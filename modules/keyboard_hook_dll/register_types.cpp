@@ -1,7 +1,9 @@
 #include "register_types.h"
 
-#include "core/config/engine.h"
 #include "kb_hook.h"
+
+#include "core/config/engine.h"
+#include "core/object/class_db.h"
 
 void initialize_keyboard_hook_dll_module(ModuleInitializationLevel p_level) {
 	if (p_level == ModuleInitializationLevel::MODULE_INITIALIZATION_LEVEL_CORE) {
