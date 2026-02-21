@@ -35,8 +35,7 @@
 #include "scene/resources/material.h"
 
 #ifdef TRACY_ENABLE
-#include "modules/godot_tracy_dll/tracy/public/tracy/Tracy.hpp"
-#include "modules/godot_tracy_dll/tracy/public/tracy/TracyC.h"
+#include "modules/godot_tracy_dll/gdtracy_custom_defines.h"
 #endif
 
 void AnimationNodeBlendSpace2D::get_parameter_list(List<PropertyInfo> *r_list) const {
@@ -351,7 +350,7 @@ void AnimationNodeBlendSpace2D::_queue_auto_triangles() {
 	TracyCZone(ctx, true);
 	const CharString c = to_string().utf8();
 	TracyCZoneName(ctx, c.ptr(), c.size());
-	TracyCMessage(c.ptr(),c.size())
+	TracyCMessage(c.ptr(),c.size());
 	#endif // TRACY_ENABLE
 	
 	triangles_dirty = true;
@@ -370,10 +369,11 @@ void AnimationNodeBlendSpace2D::_update_triangles() {
 
 	//yuri
 #ifdef TRACY_ENABLE
-	TracyCZone(ctx, true);
-	const CharString c = to_string().utf8();
-	TracyCZoneName(ctx, c.ptr(), c.size());
-	TracyCMessage(c.ptr(),c.size())
+	GDTracyDynN(ctx);
+	//TracyCZone(ctx, true);
+	//const CharString c = to_string().utf8();
+	//TracyCZoneName(ctx, c.ptr(), c.size());
+	//TracyCMessage(c.ptr(),c.size());
 #endif // TRACY_ENABLE
 	//yuri
 	MutexLock l(blend_points_mutex);

@@ -1,6 +1,7 @@
 #include "register_types.h"
 
 #include "core/config/engine.h"
+#include "core/object/class_db.h"
 #include "tracy_profiler.h"
 
 #ifdef TRACY_ENABLE
