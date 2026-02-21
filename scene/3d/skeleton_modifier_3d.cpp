@@ -121,7 +121,7 @@ void SkeletonModifier3D::process_modification(double p_delta) {
 		return;
 	}
 	_process_modification(p_delta);
-	if(Thread::is_main_thread()) {
+	if(Thread::is_main_thread()) { //yuri
 		emit_signal(SNAME("modification_processed"));
 	}
 }

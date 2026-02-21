@@ -163,6 +163,7 @@ public:
 	void set_target_node(const NodePath &p_node);
 	NodePath get_target_node();
 
+	//+yuri
 	bool get_use_parent() const { return use_parent; }
 	void set_use_parent(bool p_use_parent);
 
@@ -170,6 +171,7 @@ public:
 
 	void set_target_skeleton(const NodePath &p_node);
 	NodePath get_target_skeleton();
+	//-yuri
 
 	void set_override_tip_basis(bool p_override);
 	bool is_override_tip_basis() const;

@@ -306,7 +306,9 @@ void AnimationPlayer::_blend_playback_data(double p_delta, bool p_started) {
 }
 
 bool AnimationPlayer::_blend_pre_process(double p_delta, int p_track_count, const AHashMap<NodePath, int> &p_track_map) {
-	if (!playback.current.from || playback.current.from->animation.is_null()) {
+	if (!playback.current.from || 
+		playback.current.from->animation.is_null()) //yuri: my chech. was a bug? 
+	{
 		_set_process(false);
 		return false;
 	}

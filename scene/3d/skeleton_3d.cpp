@@ -840,7 +840,7 @@ void Skeleton3D::clear_bones() {
 // Posing api
 
 void Skeleton3D::set_bone_pose(int p_bone, const Transform3D &p_pose) {
-	MutexLock lock(transfrom_mutex);
+	MutexLock lock(transfrom_mutex); //yuri
 	const int bone_size = bones.size();
 	ERR_FAIL_INDEX(p_bone, bone_size);
 
@@ -1057,7 +1057,7 @@ void Skeleton3D::_force_update_all_dirty_bones() const {
 }
 
 void Skeleton3D::force_update_all_bone_transforms() {
-	MutexLock lock(transfrom_mutex);
+	MutexLock lock(transfrom_mutex); //yuri
 	_force_update_all_bone_transforms();
 }
 
@@ -1077,7 +1077,7 @@ void Skeleton3D::_force_update_all_bone_transforms() const {
 		return;
 	}
 	
-	if(Thread::is_main_thread())
+	if(Thread::is_main_thread()) //yuri
 		const_cast<Skeleton3D *>(this)->emit_signal(SceneStringName(pose_updated));
 }
 
