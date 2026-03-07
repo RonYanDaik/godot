@@ -10,9 +10,9 @@
 #define _GDT_VARNAME_CONCAT_(m_a, m_b, m_c) _GDT_VARNAME_CONCAT_A_(m_a, m_b, m_c)
 #define GDT_UNIQUE_NAME(m_name) _GDT_VARNAME_CONCAT_(m_name, _, __COUNTER__)
 #define GDTracyZoneNN(m_zone_name) ZoneNamedN(GDT_UNIQUE_NAME(__godot_tracy_szone_), m_zone_name, true)
-#define GDTracyDynN(ctx) TracyCZone(ctx, true); \
+#define GDTracyDynN(ctx) TracyCZone(ctx##__COUNTER__, true); \
 	                     const CharString c_zone_name##__COUNTER__ = to_string().utf8(); \
-	                     TracyCZoneName(ctx, c_zone_name##__COUNTER__.ptr(), c_zone_name##__COUNTER__.size());\
+	                     TracyCZoneName(ctx##__COUNTER__, c_zone_name##__COUNTER__.ptr(), c_zone_name##__COUNTER__.size());\
 	                     TracyCMessage(c_zone_name##__COUNTER__.ptr(),c_zone_name##__COUNTER__.size());
 #else
 #define GDTracyDynN(ctx) 
