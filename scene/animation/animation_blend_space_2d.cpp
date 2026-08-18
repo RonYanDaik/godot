@@ -454,21 +454,9 @@ void AnimationNodeBlendSpace2D::_queue_auto_triangles() {
 	if (!auto_triangles || triangles_dirty) {
 		return;
 	}
-
-	#ifdef TRACY_ENABLE
-	TracyCZone(ctx, true);
-	const CharString c = to_string().utf8();
-	TracyCZoneName(ctx, c.ptr(), c.size());
-	TracyCMessage(c.ptr(),c.size());
-	#endif // TRACY_ENABLE
 	
 	triangles_dirty = true;
 	callable_mp(this, &AnimationNodeBlendSpace2D::_update_triangles).call_deferred();
-
-	//yuri
-	#ifdef TRACY_ENABLE
-	TracyCZoneEnd(ctx);
-	#endif // TRACY_ENABLE
 }
 
 void AnimationNodeBlendSpace2D::_update_triangles() {
@@ -479,21 +467,14 @@ void AnimationNodeBlendSpace2D::_update_triangles() {
 	//yuri
 #ifdef TRACY_ENABLE
 	GDTracyDynN(ctx);
-	//TracyCZone(ctx, true);
-	//const CharString c = to_string().utf8();
-	//TracyCZoneName(ctx, c.ptr(), c.size());
-	//TracyCMessage(c.ptr(),c.size());
 #endif // TRACY_ENABLE
 	//yuri
-	MutexLock l(blend_points_mutex);
+	//MutexLock l(blend_points_mutex);
 
 	triangles_dirty = false;
 	triangles.clear();
 	if (blend_points_used < 3) {
 		emit_signal(SNAME("triangles_updated"));
-		//#ifdef TRACY_ENABLE
-		//	TracyCZoneEnd(ctx);
-		//#endif // TRACY_ENABLE
 		return;
 	}
 
@@ -509,11 +490,6 @@ void AnimationNodeBlendSpace2D::_update_triangles() {
 		add_triangle(tr[i].points[0], tr[i].points[1], tr[i].points[2]);
 	}
 	emit_signal(SNAME("triangles_updated"));
-
-	//yuri
-#ifdef TRACY_ENABLE
-	//TracyCZoneEnd(ctx);
-#endif // TRACY_ENABLE
 }
 
 Vector2 AnimationNodeBlendSpace2D::get_closest_point(const Vector2 &p_point) {
