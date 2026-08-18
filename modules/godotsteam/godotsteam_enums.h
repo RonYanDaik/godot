@@ -1,35 +1,35 @@
-//================================================================================================//
-// GodotSteam - godotsteam_enums.h
-//================================================================================================//
-//
-// Copyright (c) 2015-Current | GP Garcia and Contributors
-//
-// View all contributors at https://godotsteam.com/contribute/contributors/
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-//
-//================================================================================================//
+/***************************************************************************/
+/*  godotsteam_enums.h                                                     */
+/***************************************************************************/
+/*                         This file is part of:                           */
+/*                              GODOTSTEAM                                 */
+/*                         https://godotsteam.com                          */
+/***************************************************************************/
+/* Copyright (c) 2015-Current | GP Garcia and Contributors                 */
+/*                                                                         */
+/* View all contributors at https://godotsteam.com/contribute/contributors */
+/*                                                                         */
+/* Permission is hereby granted, free of charge, to any person obtaining   */
+/* a copy of this software and associated documentation files (the         */
+/* "Software"), to deal in the Software without restriction, including     */
+/* without limitation the rights to use, copy, modify, merge, publish,     */
+/* distribute, sublicense, and/or sell copies of the Software, and to      */
+/* permit persons to whom the Software is furnished to do so, subject to   */
+/* the following conditions:                                               */
+/*                                                                         */
+/* The above copyright notice and this permission notice shall be included */
+/* in all copies or substantial portions of the Software.                  */
+/*                                                                         */
+/* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,         */
+/* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF      */
+/* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  */
+/* IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY    */
+/* CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,    */
+/* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE       */
+/* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                  */
+/***************************************************************************/
 
-
-#ifndef GODOTSTEAM_ENUMS_H
-#define GODOTSTEAM_ENUMS_H
-
+#pragma once
 
 enum AccountType {
 	// Found in steamclientpublic.h
@@ -174,7 +174,6 @@ enum GameIDType {
 	GAME_TYPE_APP = CGameID::k_EGameIDTypeApp,
 	GAME_TYPE_GAME_MOD = CGameID::k_EGameIDTypeGameMod,
 	GAME_TYPE_SHORTCUT = CGameID::k_EGameIDTypeShortcut,
-	GAME_TYPE_P2P = CGameID::k_EGameIDTypeP2P
 };
 
 enum IPType {
@@ -401,6 +400,16 @@ enum VoiceResult {
 	VOICE_RESULT_RECEIVER_DID_NOT_ANSWER = k_EVoiceResultReceiverDidNotAnswer
 };
 
+// Apps enums
+enum GamePerformanceSetting {
+	GAME_PERFORMANCE_SETTING_NOT_SET = k_EGamePerformanceSetting_NotSet,
+	GAME_PERFORMANCE_SETTING_LOW = k_EGamePerformanceSetting_Low,
+	GAME_PERFORMANCE_SETTING_MEDIUM = k_EGamePerformanceSetting_Medium,
+	GAME_PERFORMANCE_SETTING_HIGH = k_EGamePerformanceSetting_High,
+	GAME_PERFORMANCE_SETTING_ULTRA = k_EGamePerformanceSetting_Ultra,
+	GAME_PERFORMANCE_SETTING_CUSTOM = k_EGamePerformanceSetting_Custom
+};
+
 // Friends enums
 enum AvatarSizes {
 	AVATAR_SMALL = 1,
@@ -484,7 +493,7 @@ enum PersonaChange {
 	PERSONA_CHANGE_LEFT_SOURCE = k_EPersonaChangeLeftSource,
 	PERSONA_CHANGE_RELATIONSHIP_CHANGED = k_EPersonaChangeRelationshipChanged,
 	PERSONA_CHANGE_NAME_FIRST_SET = k_EPersonaChangeNameFirstSet,
-	PERSONA_CHANGE_FACEBOOK_INFO = k_EPersonaChangeBroadcast,
+	PERSONA_CHANGE_BROADCAST = k_EPersonaChangeBroadcast,
 	PERSONA_CHANGE_NICKNAME = k_EPersonaChangeNickname,
 	PERSONA_CHANGE_STEAM_LEVEL = k_EPersonaChangeSteamLevel,
 	PERSONA_CHANGE_RICH_PRESENCE = k_EPersonaChangeRichPresence
@@ -563,7 +572,6 @@ enum HTMLMouseCursor {
 	HTML_MOUSE_CURSOR_LAST = ISteamHTMLSurface::k_EHTMLMouseCursor_last
 };
 
-
 // HTTP enums
 enum HTTPMethod {
 	HTTP_METHOD_INVALID = k_EHTTPMethodInvalid,
@@ -639,7 +647,6 @@ enum HTTPStatusCode {
 	HTTP_STATUS_CODE_5XX_UNKNOWN = k_EHTTPStatusCode5xxUnknown
 };
 
-
 // Input enums
 enum ControllerHapticLocation {
 	CONTROLLER_HAPTIC_LOCATION_LEFT = k_EControllerHapticLocation_Left,
@@ -653,11 +660,6 @@ enum ControllerHapticType {
 	CONTROLLER_HAPTIC_TYPE_CLICK = k_EControllerHapticType_Click
 };
 
-enum ControllerPad {
-	STEAM_CONTROLLER_PAD_LEFT = k_ESteamControllerPad_Left,
-	STEAM_CONTROLLER_PAD_RIGHT = k_ESteamControllerPad_Right
-};
-
 enum InputActionEventType {
 	INPUT_ACTION_EVENT_TYPE_DIGITAL_ACTION = ESteamInputActionEventType_DigitalAction,
 	INPUT_ACTION_EVENT_TYPE_ANALOG_ACTION = ESteamInputActionEventType_AnalogAction
@@ -669,36 +671,36 @@ enum InputActionOrigin {
 	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_B = k_EInputActionOrigin_SteamController_B,
 	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_X = k_EInputActionOrigin_SteamController_X,
 	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_Y = k_EInputActionOrigin_SteamController_Y,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFTBUMPER = k_EInputActionOrigin_SteamController_LeftBumper,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_RIGHTBUMPER = k_EInputActionOrigin_SteamController_RightBumper,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFTGRIP = k_EInputActionOrigin_SteamController_LeftGrip,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_RIGHTGRIP = k_EInputActionOrigin_SteamController_RightGrip,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFT_BUMPER = k_EInputActionOrigin_SteamController_LeftBumper,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_RIGHT_BUMPER = k_EInputActionOrigin_SteamController_RightBumper,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFT_GRIP = k_EInputActionOrigin_SteamController_LeftGrip,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_RIGHT_GRIP = k_EInputActionOrigin_SteamController_RightGrip,
 	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_START = k_EInputActionOrigin_SteamController_Start,
 	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_BACK = k_EInputActionOrigin_SteamController_Back,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFTPAD_TOUCH = k_EInputActionOrigin_SteamController_LeftPad_Touch,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFTPAD_SWIPE = k_EInputActionOrigin_SteamController_LeftPad_Swipe,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFTPAD_CLICK = k_EInputActionOrigin_SteamController_LeftPad_Click,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFTPAD_DPADNORTH = k_EInputActionOrigin_SteamController_LeftPad_DPadNorth,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFTPAD_DPADSOUTH = k_EInputActionOrigin_SteamController_LeftPad_DPadSouth,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFTPAD_DPADWEST = k_EInputActionOrigin_SteamController_LeftPad_DPadWest,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFTPAD_DPADEAST = k_EInputActionOrigin_SteamController_LeftPad_DPadEast,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_RIGHTPAD_TOUCH = k_EInputActionOrigin_SteamController_RightPad_Touch,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_RIGHTPAD_SWIPE = k_EInputActionOrigin_SteamController_RightPad_Swipe,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_RIGHTPAD_CLICK = k_EInputActionOrigin_SteamController_RightPad_Click,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_RIGHTPAD_DPADNORTH = k_EInputActionOrigin_SteamController_RightPad_DPadNorth,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_RIGHTPAD_DPADSOUTH = k_EInputActionOrigin_SteamController_RightPad_DPadSouth,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_RIGHTPAD_DPADWEST = k_EInputActionOrigin_SteamController_RightPad_DPadWest,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_RIGHTPAD_DPADEAST = k_EInputActionOrigin_SteamController_RightPad_DPadEast,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFTTRIGGER_PULL = k_EInputActionOrigin_SteamController_LeftTrigger_Pull,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFTTRIGGER_CLICK = k_EInputActionOrigin_SteamController_LeftTrigger_Click,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_RIGHTTRIGGER_PULL = k_EInputActionOrigin_SteamController_RightTrigger_Pull,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_RIGHTTRIGGER_CLICK = k_EInputActionOrigin_SteamController_RightTrigger_Click,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFTSTICK_MOVE = k_EInputActionOrigin_SteamController_LeftStick_Move,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFTSTICK_CLICK = k_EInputActionOrigin_SteamController_LeftStick_Click,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFTSTICK_DPADNORTH = k_EInputActionOrigin_SteamController_LeftStick_DPadNorth,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFTSTICK_DPADSOUTH = k_EInputActionOrigin_SteamController_LeftStick_DPadSouth,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFTSTICK_DPADWEST = k_EInputActionOrigin_SteamController_LeftStick_DPadWest,
-	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFTSTICK_DPADEAST = k_EInputActionOrigin_SteamController_LeftStick_DPadEast,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFT_PAD_TOUCH = k_EInputActionOrigin_SteamController_LeftPad_Touch,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFT_PAD_SWIPE = k_EInputActionOrigin_SteamController_LeftPad_Swipe,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFT_PAD_CLICK = k_EInputActionOrigin_SteamController_LeftPad_Click,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFT_PAD_DPAD_NORTH = k_EInputActionOrigin_SteamController_LeftPad_DPadNorth,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFT_PAD_DPAD_SOUTH = k_EInputActionOrigin_SteamController_LeftPad_DPadSouth,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFT_PAD_DPAD_WEST = k_EInputActionOrigin_SteamController_LeftPad_DPadWest,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFT_PAD_DPAD_EAST = k_EInputActionOrigin_SteamController_LeftPad_DPadEast,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_RIGHT_PAD_TOUCH = k_EInputActionOrigin_SteamController_RightPad_Touch,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_RIGHT_PAD_SWIPE = k_EInputActionOrigin_SteamController_RightPad_Swipe,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_RIGHT_PAD_CLICK = k_EInputActionOrigin_SteamController_RightPad_Click,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_RIGHT_PAD_DPAD_NORTH = k_EInputActionOrigin_SteamController_RightPad_DPadNorth,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_RIGHT_PAD_DPAD_SOUTH = k_EInputActionOrigin_SteamController_RightPad_DPadSouth,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_RIGHT_PAD_DPAD_WEST = k_EInputActionOrigin_SteamController_RightPad_DPadWest,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_RIGHT_PAD_DPAD_EAST = k_EInputActionOrigin_SteamController_RightPad_DPadEast,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFT_TRIGGER_PULL = k_EInputActionOrigin_SteamController_LeftTrigger_Pull,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFT_TRIGGER_CLICK = k_EInputActionOrigin_SteamController_LeftTrigger_Click,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_RIGHT_TRIGGER_PULL = k_EInputActionOrigin_SteamController_RightTrigger_Pull,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_RIGHT_TRIGGER_CLICK = k_EInputActionOrigin_SteamController_RightTrigger_Click,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFT_STICK_MOVE = k_EInputActionOrigin_SteamController_LeftStick_Move,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFT_STICK_CLICK = k_EInputActionOrigin_SteamController_LeftStick_Click,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFT_STICK_DPAD_NORTH = k_EInputActionOrigin_SteamController_LeftStick_DPadNorth,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFT_STICK_DPAD_SOUTH = k_EInputActionOrigin_SteamController_LeftStick_DPadSouth,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFT_STICK_DPAD_WEST = k_EInputActionOrigin_SteamController_LeftStick_DPadWest,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_LEFT_STICK_DPAD_EAST = k_EInputActionOrigin_SteamController_LeftStick_DPadEast,
 	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_GYRO_MOVE = k_EInputActionOrigin_SteamController_Gyro_Move,
 	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_GYRO_PITCH = k_EInputActionOrigin_SteamController_Gyro_Pitch,
 	INPUT_ACTION_ORIGIN_STEAMCONTROLLER_GYRO_YAW = k_EInputActionOrigin_SteamController_Gyro_Yaw,
@@ -718,47 +720,47 @@ enum InputActionOrigin {
 	INPUT_ACTION_ORIGIN_PS4_CIRCLE = k_EInputActionOrigin_PS4_Circle,
 	INPUT_ACTION_ORIGIN_PS4_TRIANGLE = k_EInputActionOrigin_PS4_Triangle,
 	INPUT_ACTION_ORIGIN_PS4_SQUARE = k_EInputActionOrigin_PS4_Square,
-	INPUT_ACTION_ORIGIN_PS4_LEFTBUMPER = k_EInputActionOrigin_PS4_LeftBumper,
-	INPUT_ACTION_ORIGIN_PS4_RIGHTBUMPER = k_EInputActionOrigin_PS4_RightBumper,
+	INPUT_ACTION_ORIGIN_PS4_LEFT_BUMPER = k_EInputActionOrigin_PS4_LeftBumper,
+	INPUT_ACTION_ORIGIN_PS4_RIGHT_BUMPER = k_EInputActionOrigin_PS4_RightBumper,
 	INPUT_ACTION_ORIGIN_PS4_OPTIONS = k_EInputActionOrigin_PS4_Options,
 	INPUT_ACTION_ORIGIN_PS4_SHARE = k_EInputActionOrigin_PS4_Share,
-	INPUT_ACTION_ORIGIN_PS4_LEFTPAD_TOUCH = k_EInputActionOrigin_PS4_LeftPad_Touch,
-	INPUT_ACTION_ORIGIN_PS4_LEFTPAD_SWIPE = k_EInputActionOrigin_PS4_LeftPad_Swipe,
-	INPUT_ACTION_ORIGIN_PS4_LEFTPAD_CLICK = k_EInputActionOrigin_PS4_LeftPad_Click,
-	INPUT_ACTION_ORIGIN_PS4_LEFTPAD_DPADNORTH = k_EInputActionOrigin_PS4_LeftPad_DPadNorth,
-	INPUT_ACTION_ORIGIN_PS4_LEFTPAD_DPADSOUTH = k_EInputActionOrigin_PS4_LeftPad_DPadSouth,
-	INPUT_ACTION_ORIGIN_PS4_LEFTPAD_DPADWEST = k_EInputActionOrigin_PS4_LeftPad_DPadWest,
-	INPUT_ACTION_ORIGIN_PS4_LEFTPAD_DPADEAST = k_EInputActionOrigin_PS4_LeftPad_DPadEast,
-	INPUT_ACTION_ORIGIN_PS4_RIGHTPAD_TOUCH = k_EInputActionOrigin_PS4_RightPad_Touch,
-	INPUT_ACTION_ORIGIN_PS4_RIGHTPAD_SWIPE = k_EInputActionOrigin_PS4_RightPad_Swipe,
-	INPUT_ACTION_ORIGIN_PS4_RIGHTPAD_CLICK = k_EInputActionOrigin_PS4_RightPad_Click,
-	INPUT_ACTION_ORIGIN_PS4_RIGHTPAD_DPADNORTH = k_EInputActionOrigin_PS4_RightPad_DPadNorth,
-	INPUT_ACTION_ORIGIN_PS4_RIGHTPAD_DPADSOUTH = k_EInputActionOrigin_PS4_RightPad_DPadSouth,
-	INPUT_ACTION_ORIGIN_PS4_RIGHTPAD_DPADWEST = k_EInputActionOrigin_PS4_RightPad_DPadWest,
-	INPUT_ACTION_ORIGIN_PS4_RIGHTPAD_DPADEAST = k_EInputActionOrigin_PS4_RightPad_DPadEast,
-	INPUT_ACTION_ORIGIN_PS4_CENTERPAD_TOUCH = k_EInputActionOrigin_PS4_CenterPad_Touch,
-	INPUT_ACTION_ORIGIN_PS4_CENTERPAD_SWIPE = k_EInputActionOrigin_PS4_CenterPad_Swipe,
-	INPUT_ACTION_ORIGIN_PS4_CENTERPAD_CLICK = k_EInputActionOrigin_PS4_CenterPad_Click,
-	INPUT_ACTION_ORIGIN_PS4_CENTERPAD_DPADNORTH = k_EInputActionOrigin_PS4_CenterPad_DPadNorth,
-	INPUT_ACTION_ORIGIN_PS4_CENTERPAD_DPADSOUTH = k_EInputActionOrigin_PS4_CenterPad_DPadSouth,
-	INPUT_ACTION_ORIGIN_PS4_CENTERPAD_DPADWEST = k_EInputActionOrigin_PS4_CenterPad_DPadWest,
-	INPUT_ACTION_ORIGIN_PS4_CENTERPAD_DPADEAST = k_EInputActionOrigin_PS4_CenterPad_DPadEast,
-	INPUT_ACTION_ORIGIN_PS4_LEFTTRIGGER_PULL = k_EInputActionOrigin_PS4_LeftTrigger_Pull,
-	INPUT_ACTION_ORIGIN_PS4_LEFTTRIGGER_CLICK = k_EInputActionOrigin_PS4_LeftTrigger_Click,
-	INPUT_ACTION_ORIGIN_PS4_RIGHTTRIGGER_PULL = k_EInputActionOrigin_PS4_RightTrigger_Pull,
-	INPUT_ACTION_ORIGIN_PS4_RIGHTTRIGGER_CLICK = k_EInputActionOrigin_PS4_RightTrigger_Click,
-	INPUT_ACTION_ORIGIN_PS4_LEFTSTICK_MOVE = k_EInputActionOrigin_PS4_LeftStick_Move,
-	INPUT_ACTION_ORIGIN_PS4_LEFTSTICK_CLICK = k_EInputActionOrigin_PS4_LeftStick_Click,
-	INPUT_ACTION_ORIGIN_PS4_LEFTSTICK_DPADNORTH = k_EInputActionOrigin_PS4_LeftStick_DPadNorth,
-	INPUT_ACTION_ORIGIN_PS4_LEFTSTICK_DPADSOUTH = k_EInputActionOrigin_PS4_LeftStick_DPadSouth,
-	INPUT_ACTION_ORIGIN_PS4_LEFTSTICK_DPADWEST = k_EInputActionOrigin_PS4_LeftStick_DPadWest,
-	INPUT_ACTION_ORIGIN_PS4_LEFTSTICK_DPADEAST = k_EInputActionOrigin_PS4_LeftStick_DPadEast,
-	INPUT_ACTION_ORIGIN_PS4_RIGHTSTICK_MOVE = k_EInputActionOrigin_PS4_RightStick_Move,
-	INPUT_ACTION_ORIGIN_PS4_RIGHTSTICK_CLICK = k_EInputActionOrigin_PS4_RightStick_Click,
-	INPUT_ACTION_ORIGIN_PS4_RIGHTSTICK_DPADNORTH = k_EInputActionOrigin_PS4_RightStick_DPadNorth,
-	INPUT_ACTION_ORIGIN_PS4_RIGHTSTICK_DPADSOUTH = k_EInputActionOrigin_PS4_RightStick_DPadSouth,
-	INPUT_ACTION_ORIGIN_PS4_RIGHTSTICK_DPADWEST = k_EInputActionOrigin_PS4_RightStick_DPadWest,
-	INPUT_ACTION_ORIGIN_PS4_RIGHTSTICK_DPADEAST = k_EInputActionOrigin_PS4_RightStick_DPadEast,
+	INPUT_ACTION_ORIGIN_PS4_LEFT_PAD_TOUCH = k_EInputActionOrigin_PS4_LeftPad_Touch,
+	INPUT_ACTION_ORIGIN_PS4_LEFT_PAD_SWIPE = k_EInputActionOrigin_PS4_LeftPad_Swipe,
+	INPUT_ACTION_ORIGIN_PS4_LEFT_PAD_CLICK = k_EInputActionOrigin_PS4_LeftPad_Click,
+	INPUT_ACTION_ORIGIN_PS4_LEFT_PAD_DPAD_NORTH = k_EInputActionOrigin_PS4_LeftPad_DPadNorth,
+	INPUT_ACTION_ORIGIN_PS4_LEFT_PAD_DPAD_SOUTH = k_EInputActionOrigin_PS4_LeftPad_DPadSouth,
+	INPUT_ACTION_ORIGIN_PS4_LEFT_PAD_DPAD_WEST = k_EInputActionOrigin_PS4_LeftPad_DPadWest,
+	INPUT_ACTION_ORIGIN_PS4_LEFT_PAD_DPAD_EAST = k_EInputActionOrigin_PS4_LeftPad_DPadEast,
+	INPUT_ACTION_ORIGIN_PS4_RIGHT_PAD_TOUCH = k_EInputActionOrigin_PS4_RightPad_Touch,
+	INPUT_ACTION_ORIGIN_PS4_RIGHT_PAD_SWIPE = k_EInputActionOrigin_PS4_RightPad_Swipe,
+	INPUT_ACTION_ORIGIN_PS4_RIGHT_PAD_CLICK = k_EInputActionOrigin_PS4_RightPad_Click,
+	INPUT_ACTION_ORIGIN_PS4_RIGHT_PAD_DPAD_NORTH = k_EInputActionOrigin_PS4_RightPad_DPadNorth,
+	INPUT_ACTION_ORIGIN_PS4_RIGHT_PAD_DPAD_SOUTH = k_EInputActionOrigin_PS4_RightPad_DPadSouth,
+	INPUT_ACTION_ORIGIN_PS4_RIGHT_PAD_DPAD_WEST = k_EInputActionOrigin_PS4_RightPad_DPadWest,
+	INPUT_ACTION_ORIGIN_PS4_RIGHT_PAD_DPAD_EAST = k_EInputActionOrigin_PS4_RightPad_DPadEast,
+	INPUT_ACTION_ORIGIN_PS4_CENTER_PAD_TOUCH = k_EInputActionOrigin_PS4_CenterPad_Touch,
+	INPUT_ACTION_ORIGIN_PS4_CENTER_PAD_SWIPE = k_EInputActionOrigin_PS4_CenterPad_Swipe,
+	INPUT_ACTION_ORIGIN_PS4_CENTER_PAD_CLICK = k_EInputActionOrigin_PS4_CenterPad_Click,
+	INPUT_ACTION_ORIGIN_PS4_CENTER_PAD_DPAD_NORTH = k_EInputActionOrigin_PS4_CenterPad_DPadNorth,
+	INPUT_ACTION_ORIGIN_PS4_CENTER_PAD_DPAD_SOUTH = k_EInputActionOrigin_PS4_CenterPad_DPadSouth,
+	INPUT_ACTION_ORIGIN_PS4_CENTER_PAD_DPAD_WEST = k_EInputActionOrigin_PS4_CenterPad_DPadWest,
+	INPUT_ACTION_ORIGIN_PS4_CENTER_PAD_DPAD_EAST = k_EInputActionOrigin_PS4_CenterPad_DPadEast,
+	INPUT_ACTION_ORIGIN_PS4_LEFT_TRIGGER_PULL = k_EInputActionOrigin_PS4_LeftTrigger_Pull,
+	INPUT_ACTION_ORIGIN_PS4_LEFT_TRIGGER_CLICK = k_EInputActionOrigin_PS4_LeftTrigger_Click,
+	INPUT_ACTION_ORIGIN_PS4_RIGHT_TRIGGER_PULL = k_EInputActionOrigin_PS4_RightTrigger_Pull,
+	INPUT_ACTION_ORIGIN_PS4_RIGHT_TRIGGER_CLICK = k_EInputActionOrigin_PS4_RightTrigger_Click,
+	INPUT_ACTION_ORIGIN_PS4_LEFT_STICK_MOVE = k_EInputActionOrigin_PS4_LeftStick_Move,
+	INPUT_ACTION_ORIGIN_PS4_LEFT_STICK_CLICK = k_EInputActionOrigin_PS4_LeftStick_Click,
+	INPUT_ACTION_ORIGIN_PS4_LEFT_STICK_DPAD_NORTH = k_EInputActionOrigin_PS4_LeftStick_DPadNorth,
+	INPUT_ACTION_ORIGIN_PS4_LEFT_STICK_DPAD_SOUTH = k_EInputActionOrigin_PS4_LeftStick_DPadSouth,
+	INPUT_ACTION_ORIGIN_PS4_LEFT_STICK_DPAD_WEST = k_EInputActionOrigin_PS4_LeftStick_DPadWest,
+	INPUT_ACTION_ORIGIN_PS4_LEFT_STICK_DPAD_EAST = k_EInputActionOrigin_PS4_LeftStick_DPadEast,
+	INPUT_ACTION_ORIGIN_PS4_RIGHT_STICK_MOVE = k_EInputActionOrigin_PS4_RightStick_Move,
+	INPUT_ACTION_ORIGIN_PS4_RIGHT_STICK_CLICK = k_EInputActionOrigin_PS4_RightStick_Click,
+	INPUT_ACTION_ORIGIN_PS4_RIGHT_STICK_DPAD_NORTH = k_EInputActionOrigin_PS4_RightStick_DPadNorth,
+	INPUT_ACTION_ORIGIN_PS4_RIGHT_STICK_DPAD_SOUTH = k_EInputActionOrigin_PS4_RightStick_DPadSouth,
+	INPUT_ACTION_ORIGIN_PS4_RIGHT_STICK_DPAD_WEST = k_EInputActionOrigin_PS4_RightStick_DPadWest,
+	INPUT_ACTION_ORIGIN_PS4_RIGHT_STICK_DPAD_EAST = k_EInputActionOrigin_PS4_RightStick_DPadEast,
 	INPUT_ACTION_ORIGIN_PS4_DPAD_NORTH = k_EInputActionOrigin_PS4_DPad_North,
 	INPUT_ACTION_ORIGIN_PS4_DPAD_SOUTH = k_EInputActionOrigin_PS4_DPad_South,
 	INPUT_ACTION_ORIGIN_PS4_DPAD_WEST = k_EInputActionOrigin_PS4_DPad_West,
@@ -782,35 +784,35 @@ enum InputActionOrigin {
 	INPUT_ACTION_ORIGIN_XBOXONE_B = k_EInputActionOrigin_XBoxOne_B,
 	INPUT_ACTION_ORIGIN_XBOXONE_X = k_EInputActionOrigin_XBoxOne_X,
 	INPUT_ACTION_ORIGIN_XBOXONE_Y = k_EInputActionOrigin_XBoxOne_Y,
-	INPUT_ACTION_ORIGIN_XBOXONE_LEFTBUMPER = k_EInputActionOrigin_XBoxOne_LeftBumper,
-	INPUT_ACTION_ORIGIN_XBOXONE_RIGHTBUMPER = k_EInputActionOrigin_XBoxOne_RightBumper,
+	INPUT_ACTION_ORIGIN_XBOXONE_LEFT_BUMPER = k_EInputActionOrigin_XBoxOne_LeftBumper,
+	INPUT_ACTION_ORIGIN_XBOXONE_RIGHT_BUMPER = k_EInputActionOrigin_XBoxOne_RightBumper,
 	INPUT_ACTION_ORIGIN_XBOXONE_MENU = k_EInputActionOrigin_XBoxOne_Menu,
 	INPUT_ACTION_ORIGIN_XBOXONE_VIEW = k_EInputActionOrigin_XBoxOne_View,
-	INPUT_ACTION_ORIGIN_XBOXONE_LEFTTRIGGER_PULL = k_EInputActionOrigin_XBoxOne_LeftTrigger_Pull,
-	INPUT_ACTION_ORIGIN_XBOXONE_LEFTTRIGGER_CLICK = k_EInputActionOrigin_XBoxOne_LeftTrigger_Click,
-	INPUT_ACTION_ORIGIN_XBOXONE_RIGHTTRIGGER_PULL = k_EInputActionOrigin_XBoxOne_RightTrigger_Pull,
-	INPUT_ACTION_ORIGIN_XBOXONE_RIGHTTRIGGER_CLICK = k_EInputActionOrigin_XBoxOne_RightTrigger_Click,
-	INPUT_ACTION_ORIGIN_XBOXONE_LEFTSTICK_MOVE = k_EInputActionOrigin_XBoxOne_LeftStick_Move,
-	INPUT_ACTION_ORIGIN_XBOXONE_LEFTSTICK_CLICK = k_EInputActionOrigin_XBoxOne_LeftStick_Click,
-	INPUT_ACTION_ORIGIN_XBOXONE_LEFTSTICK_DPADNORTH = k_EInputActionOrigin_XBoxOne_LeftStick_DPadNorth,
-	INPUT_ACTION_ORIGIN_XBOXONE_LEFTSTICK_DPADSOUTH = k_EInputActionOrigin_XBoxOne_LeftStick_DPadSouth,
-	INPUT_ACTION_ORIGIN_XBOXONE_LEFTSTICK_DPADWEST = k_EInputActionOrigin_XBoxOne_LeftStick_DPadWest,
-	INPUT_ACTION_ORIGIN_XBOXONE_LEFTSTICK_DPADEAST = k_EInputActionOrigin_XBoxOne_LeftStick_DPadEast,
-	INPUT_ACTION_ORIGIN_XBOXONE_RIGHTSTICK_MOVE = k_EInputActionOrigin_XBoxOne_RightStick_Move,
-	INPUT_ACTION_ORIGIN_XBOXONE_RIGHTSTICK_CLICK = k_EInputActionOrigin_XBoxOne_RightStick_Click,
-	INPUT_ACTION_ORIGIN_XBOXONE_RIGHTSTICK_DPADNORTH = k_EInputActionOrigin_XBoxOne_RightStick_DPadNorth,
-	INPUT_ACTION_ORIGIN_XBOXONE_RIGHTSTICK_DPADSOUTH = k_EInputActionOrigin_XBoxOne_RightStick_DPadSouth,
-	INPUT_ACTION_ORIGIN_XBOXONE_RIGHTSTICK_DPADWEST = k_EInputActionOrigin_XBoxOne_RightStick_DPadWest,
-	INPUT_ACTION_ORIGIN_XBOXONE_RIGHTSTICK_DPADEAST = k_EInputActionOrigin_XBoxOne_RightStick_DPadEast,
+	INPUT_ACTION_ORIGIN_XBOXONE_LEFT_TRIGGER_PULL = k_EInputActionOrigin_XBoxOne_LeftTrigger_Pull,
+	INPUT_ACTION_ORIGIN_XBOXONE_LEFT_TRIGGER_CLICK = k_EInputActionOrigin_XBoxOne_LeftTrigger_Click,
+	INPUT_ACTION_ORIGIN_XBOXONE_RIGHT_TRIGGER_PULL = k_EInputActionOrigin_XBoxOne_RightTrigger_Pull,
+	INPUT_ACTION_ORIGIN_XBOXONE_RIGHT_TRIGGER_CLICK = k_EInputActionOrigin_XBoxOne_RightTrigger_Click,
+	INPUT_ACTION_ORIGIN_XBOXONE_LEFT_STICK_MOVE = k_EInputActionOrigin_XBoxOne_LeftStick_Move,
+	INPUT_ACTION_ORIGIN_XBOXONE_LEFT_STICK_CLICK = k_EInputActionOrigin_XBoxOne_LeftStick_Click,
+	INPUT_ACTION_ORIGIN_XBOXONE_LEFT_STICK_DPAD_NORTH = k_EInputActionOrigin_XBoxOne_LeftStick_DPadNorth,
+	INPUT_ACTION_ORIGIN_XBOXONE_LEFT_STICK_DPAD_SOUTH = k_EInputActionOrigin_XBoxOne_LeftStick_DPadSouth,
+	INPUT_ACTION_ORIGIN_XBOXONE_LEFT_STICK_DPAD_WEST = k_EInputActionOrigin_XBoxOne_LeftStick_DPadWest,
+	INPUT_ACTION_ORIGIN_XBOXONE_LEFT_STICK_DPAD_EAST = k_EInputActionOrigin_XBoxOne_LeftStick_DPadEast,
+	INPUT_ACTION_ORIGIN_XBOXONE_RIGHT_STICK_MOVE = k_EInputActionOrigin_XBoxOne_RightStick_Move,
+	INPUT_ACTION_ORIGIN_XBOXONE_RIGHT_STICK_CLICK = k_EInputActionOrigin_XBoxOne_RightStick_Click,
+	INPUT_ACTION_ORIGIN_XBOXONE_RIGHT_STICK_DPAD_NORTH = k_EInputActionOrigin_XBoxOne_RightStick_DPadNorth,
+	INPUT_ACTION_ORIGIN_XBOXONE_RIGHT_STICK_DPAD_SOUTH = k_EInputActionOrigin_XBoxOne_RightStick_DPadSouth,
+	INPUT_ACTION_ORIGIN_XBOXONE_RIGHT_STICK_DPAD_WEST = k_EInputActionOrigin_XBoxOne_RightStick_DPadWest,
+	INPUT_ACTION_ORIGIN_XBOXONE_RIGHT_STICK_DPAD_EAST = k_EInputActionOrigin_XBoxOne_RightStick_DPadEast,
 	INPUT_ACTION_ORIGIN_XBOXONE_DPAD_NORTH = k_EInputActionOrigin_XBoxOne_DPad_North,
 	INPUT_ACTION_ORIGIN_XBOXONE_DPAD_SOUTH = k_EInputActionOrigin_XBoxOne_DPad_South,
 	INPUT_ACTION_ORIGIN_XBOXONE_DPAD_WEST = k_EInputActionOrigin_XBoxOne_DPad_West,
 	INPUT_ACTION_ORIGIN_XBOXONE_DPAD_EAST = k_EInputActionOrigin_XBoxOne_DPad_East,
 	INPUT_ACTION_ORIGIN_XBOXONE_DPAD_MOVE = k_EInputActionOrigin_XBoxOne_DPad_Move,
-	INPUT_ACTION_ORIGIN_XBOXONE_LEFTGRIP_LOWER = k_EInputActionOrigin_XBoxOne_LeftGrip_Lower,
-	INPUT_ACTION_ORIGIN_XBOXONE_LEFTGRIP_UPPER = k_EInputActionOrigin_XBoxOne_LeftGrip_Upper,
-	INPUT_ACTION_ORIGIN_XBOXONE_RIGHTGRIP_LOWER = k_EInputActionOrigin_XBoxOne_RightGrip_Lower,
-	INPUT_ACTION_ORIGIN_XBOXONE_RIGHTGRIP_UPPER = k_EInputActionOrigin_XBoxOne_RightGrip_Upper,
+	INPUT_ACTION_ORIGIN_XBOXONE_LEFT_GRIP_LOWER = k_EInputActionOrigin_XBoxOne_LeftGrip_Lower,
+	INPUT_ACTION_ORIGIN_XBOXONE_LEFT_GRIP_UPPER = k_EInputActionOrigin_XBoxOne_LeftGrip_Upper,
+	INPUT_ACTION_ORIGIN_XBOXONE_RIGHT_GRIP_LOWER = k_EInputActionOrigin_XBoxOne_RightGrip_Lower,
+	INPUT_ACTION_ORIGIN_XBOXONE_RIGHT_GRIP_UPPER = k_EInputActionOrigin_XBoxOne_RightGrip_Upper,
 	INPUT_ACTION_ORIGIN_XBOXONE_SHARE = k_EInputActionOrigin_XBoxOne_Share,
 	INPUT_ACTION_ORIGIN_XBOXONE_RESERVED6 = k_EInputActionOrigin_XBoxOne_Reserved6,
 	INPUT_ACTION_ORIGIN_XBOXONE_RESERVED7 = k_EInputActionOrigin_XBoxOne_Reserved7,
@@ -821,26 +823,26 @@ enum InputActionOrigin {
 	INPUT_ACTION_ORIGIN_XBOX360_B = k_EInputActionOrigin_XBox360_B,
 	INPUT_ACTION_ORIGIN_XBOX360_X = k_EInputActionOrigin_XBox360_X,
 	INPUT_ACTION_ORIGIN_XBOX360_Y = k_EInputActionOrigin_XBox360_Y,
-	INPUT_ACTION_ORIGIN_XBOX360_LEFTBUMPER = k_EInputActionOrigin_XBox360_LeftBumper,
-	INPUT_ACTION_ORIGIN_XBOX360_RIGHTBUMPER = k_EInputActionOrigin_XBox360_RightBumper,
+	INPUT_ACTION_ORIGIN_XBOX360_LEFT_BUMPER = k_EInputActionOrigin_XBox360_LeftBumper,
+	INPUT_ACTION_ORIGIN_XBOX360_RIGHT_BUMPER = k_EInputActionOrigin_XBox360_RightBumper,
 	INPUT_ACTION_ORIGIN_XBOX360_START = k_EInputActionOrigin_XBox360_Start,
 	INPUT_ACTION_ORIGIN_XBOX360_BACK = k_EInputActionOrigin_XBox360_Back,
-	INPUT_ACTION_ORIGIN_XBOX360_LEFTTRIGGER_PULL = k_EInputActionOrigin_XBox360_LeftTrigger_Pull,
-	INPUT_ACTION_ORIGIN_XBOX360_LEFTTRIGGER_CLICK = k_EInputActionOrigin_XBox360_LeftTrigger_Click,
-	INPUT_ACTION_ORIGIN_XBOX360_RIGHTTRIGGER_PULL = k_EInputActionOrigin_XBox360_RightTrigger_Pull,
-	INPUT_ACTION_ORIGIN_XBOX360_RIGHTTRIGGER_CLICK = k_EInputActionOrigin_XBox360_RightTrigger_Click,
-	INPUT_ACTION_ORIGIN_XBOX360_LEFTSTICK_MOVE = k_EInputActionOrigin_XBox360_LeftStick_Move,
-	INPUT_ACTION_ORIGIN_XBOX360_LEFTSTICK_CLICK = k_EInputActionOrigin_XBox360_LeftStick_Click,
-	INPUT_ACTION_ORIGIN_XBOX360_LEFTSTICK_DPADNORTH = k_EInputActionOrigin_XBox360_LeftStick_DPadNorth,
-	INPUT_ACTION_ORIGIN_XBOX360_LEFTSTICK_DPADSOUTH = k_EInputActionOrigin_XBox360_LeftStick_DPadSouth,
-	INPUT_ACTION_ORIGIN_XBOX360_LEFTSTICK_DPADWEST = k_EInputActionOrigin_XBox360_LeftStick_DPadWest,
-	INPUT_ACTION_ORIGIN_XBOX360_LEFTSTICK_DPADEAST = k_EInputActionOrigin_XBox360_LeftStick_DPadEast,
-	INPUT_ACTION_ORIGIN_XBOX360_RIGHTSTICK_MOVE = k_EInputActionOrigin_XBox360_RightStick_Move,
-	INPUT_ACTION_ORIGIN_XBOX360_RIGHTSTICK_CLICK = k_EInputActionOrigin_XBox360_RightStick_Click,
-	INPUT_ACTION_ORIGIN_XBOX360_RIGHTSTICK_DPADNORTH = k_EInputActionOrigin_XBox360_RightStick_DPadNorth,
-	INPUT_ACTION_ORIGIN_XBOX360_RIGHTSTICK_DPADSOUTH = k_EInputActionOrigin_XBox360_RightStick_DPadSouth,
-	INPUT_ACTION_ORIGIN_XBOX360_RIGHTSTICK_DPADWEST = k_EInputActionOrigin_XBox360_RightStick_DPadWest,
-	INPUT_ACTION_ORIGIN_XBOX360_RIGHTSTICK_DPADEAST = k_EInputActionOrigin_XBox360_RightStick_DPadEast,
+	INPUT_ACTION_ORIGIN_XBOX360_LEFT_TRIGGER_PULL = k_EInputActionOrigin_XBox360_LeftTrigger_Pull,
+	INPUT_ACTION_ORIGIN_XBOX360_LEFT_TRIGGER_CLICK = k_EInputActionOrigin_XBox360_LeftTrigger_Click,
+	INPUT_ACTION_ORIGIN_XBOX360_RIGHT_TRIGGER_PULL = k_EInputActionOrigin_XBox360_RightTrigger_Pull,
+	INPUT_ACTION_ORIGIN_XBOX360_RIGHT_TRIGGER_CLICK = k_EInputActionOrigin_XBox360_RightTrigger_Click,
+	INPUT_ACTION_ORIGIN_XBOX360_LEFT_STICK_MOVE = k_EInputActionOrigin_XBox360_LeftStick_Move,
+	INPUT_ACTION_ORIGIN_XBOX360_LEFT_STICK_CLICK = k_EInputActionOrigin_XBox360_LeftStick_Click,
+	INPUT_ACTION_ORIGIN_XBOX360_LEFT_STICK_DPAD_NORTH = k_EInputActionOrigin_XBox360_LeftStick_DPadNorth,
+	INPUT_ACTION_ORIGIN_XBOX360_LEFT_STICK_DPAD_SOUTH = k_EInputActionOrigin_XBox360_LeftStick_DPadSouth,
+	INPUT_ACTION_ORIGIN_XBOX360_LEFT_STICK_DPAD_WEST = k_EInputActionOrigin_XBox360_LeftStick_DPadWest,
+	INPUT_ACTION_ORIGIN_XBOX360_LEFT_STICK_DPAD_EAST = k_EInputActionOrigin_XBox360_LeftStick_DPadEast,
+	INPUT_ACTION_ORIGIN_XBOX360_RIGHT_STICK_MOVE = k_EInputActionOrigin_XBox360_RightStick_Move,
+	INPUT_ACTION_ORIGIN_XBOX360_RIGHT_STICK_CLICK = k_EInputActionOrigin_XBox360_RightStick_Click,
+	INPUT_ACTION_ORIGIN_XBOX360_RIGHT_STICK_DPAD_NORTH = k_EInputActionOrigin_XBox360_RightStick_DPadNorth,
+	INPUT_ACTION_ORIGIN_XBOX360_RIGHT_STICK_DPAD_SOUTH = k_EInputActionOrigin_XBox360_RightStick_DPadSouth,
+	INPUT_ACTION_ORIGIN_XBOX360_RIGHT_STICK_DPAD_WEST = k_EInputActionOrigin_XBox360_RightStick_DPadWest,
+	INPUT_ACTION_ORIGIN_XBOX360_RIGHT_STICK_DPAD_EAST = k_EInputActionOrigin_XBox360_RightStick_DPadEast,
 	INPUT_ACTION_ORIGIN_XBOX360_DPAD_NORTH = k_EInputActionOrigin_XBox360_DPad_North,
 	INPUT_ACTION_ORIGIN_XBOX360_DPAD_SOUTH = k_EInputActionOrigin_XBox360_DPad_South,
 	INPUT_ACTION_ORIGIN_XBOX360_DPAD_WEST = k_EInputActionOrigin_XBox360_DPad_West,
@@ -860,35 +862,35 @@ enum InputActionOrigin {
 	INPUT_ACTION_ORIGIN_SWITCH_B = k_EInputActionOrigin_Switch_B,
 	INPUT_ACTION_ORIGIN_SWITCH_X = k_EInputActionOrigin_Switch_X,
 	INPUT_ACTION_ORIGIN_SWITCH_Y = k_EInputActionOrigin_Switch_Y,
-	INPUT_ACTION_ORIGIN_SWITCH_LEFTBUMPER = k_EInputActionOrigin_Switch_LeftBumper,
-	INPUT_ACTION_ORIGIN_SWITCH_RIGHTBUMPER = k_EInputActionOrigin_Switch_RightBumper,
+	INPUT_ACTION_ORIGIN_SWITCH_LEFT_BUMPER = k_EInputActionOrigin_Switch_LeftBumper,
+	INPUT_ACTION_ORIGIN_SWITCH_RIGHT_BUMPER = k_EInputActionOrigin_Switch_RightBumper,
 	INPUT_ACTION_ORIGIN_SWITCH_PLUS = k_EInputActionOrigin_Switch_Plus,
 	INPUT_ACTION_ORIGIN_SWITCH_MINUS = k_EInputActionOrigin_Switch_Minus,
 	INPUT_ACTION_ORIGIN_SWITCH_CAPTURE = k_EInputActionOrigin_Switch_Capture,
-	INPUT_ACTION_ORIGIN_SWITCH_LEFTTRIGGER_PULL = k_EInputActionOrigin_Switch_LeftTrigger_Pull,
-	INPUT_ACTION_ORIGIN_SWITCH_LEFTTRIGGER_CLICK = k_EInputActionOrigin_Switch_LeftTrigger_Click,
-	INPUT_ACTION_ORIGIN_SWITCH_RIGHTTRIGGER_PULL = k_EInputActionOrigin_Switch_RightTrigger_Pull,
-	INPUT_ACTION_ORIGIN_SWITCH_RIGHTTRIGGER_CLICK = k_EInputActionOrigin_Switch_RightTrigger_Click,
-	INPUT_ACTION_ORIGIN_SWITCH_LEFTSTICK_MOVE = k_EInputActionOrigin_Switch_LeftStick_Move,
-	INPUT_ACTION_ORIGIN_SWITCH_LEFTSTICK_CLICK = k_EInputActionOrigin_Switch_LeftStick_Click,
-	INPUT_ACTION_ORIGIN_SWITCH_LEFTSTICK_DPADNORTH = k_EInputActionOrigin_Switch_LeftStick_DPadNorth,
-	INPUT_ACTION_ORIGIN_SWITCH_LEFTSTICK_DPADSOUTH = k_EInputActionOrigin_Switch_LeftStick_DPadSouth,
-	INPUT_ACTION_ORIGIN_SWITCH_LEFTSTICK_DPADWEST = k_EInputActionOrigin_Switch_LeftStick_DPadWest,
-	INPUT_ACTION_ORIGIN_SWITCH_LEFTSTICK_DPADEAST = k_EInputActionOrigin_Switch_LeftStick_DPadEast,
-	INPUT_ACTION_ORIGIN_SWITCH_RIGHTSTICK_MOVE = k_EInputActionOrigin_Switch_RightStick_Move,
-	INPUT_ACTION_ORIGIN_SWITCH_RIGHTSTICK_CLICK = k_EInputActionOrigin_Switch_RightStick_Click,
-	INPUT_ACTION_ORIGIN_SWITCH_RIGHTSTICK_DPADNORTH = k_EInputActionOrigin_Switch_RightStick_DPadNorth,
-	INPUT_ACTION_ORIGIN_SWITCH_RIGHTSTICK_DPADSOUTH = k_EInputActionOrigin_Switch_RightStick_DPadSouth,
-	INPUT_ACTION_ORIGIN_SWITCH_RIGHTSTICK_DPADWEST = k_EInputActionOrigin_Switch_RightStick_DPadWest,
-	INPUT_ACTION_ORIGIN_SWITCH_RIGHTSTICK_DPADEAST = k_EInputActionOrigin_Switch_RightStick_DPadEast,
+	INPUT_ACTION_ORIGIN_SWITCH_LEFT_TRIGGER_PULL = k_EInputActionOrigin_Switch_LeftTrigger_Pull,
+	INPUT_ACTION_ORIGIN_SWITCH_LEFT_TRIGGER_CLICK = k_EInputActionOrigin_Switch_LeftTrigger_Click,
+	INPUT_ACTION_ORIGIN_SWITCH_RIGHT_TRIGGER_PULL = k_EInputActionOrigin_Switch_RightTrigger_Pull,
+	INPUT_ACTION_ORIGIN_SWITCH_RIGHT_TRIGGER_CLICK = k_EInputActionOrigin_Switch_RightTrigger_Click,
+	INPUT_ACTION_ORIGIN_SWITCH_LEFT_STICK_MOVE = k_EInputActionOrigin_Switch_LeftStick_Move,
+	INPUT_ACTION_ORIGIN_SWITCH_LEFT_STICK_CLICK = k_EInputActionOrigin_Switch_LeftStick_Click,
+	INPUT_ACTION_ORIGIN_SWITCH_LEFT_STICK_DPAD_NORTH = k_EInputActionOrigin_Switch_LeftStick_DPadNorth,
+	INPUT_ACTION_ORIGIN_SWITCH_LEFT_STICK_DPAD_SOUTH = k_EInputActionOrigin_Switch_LeftStick_DPadSouth,
+	INPUT_ACTION_ORIGIN_SWITCH_LEFT_STICK_DPAD_WEST = k_EInputActionOrigin_Switch_LeftStick_DPadWest,
+	INPUT_ACTION_ORIGIN_SWITCH_LEFT_STICK_DPAD_EAST = k_EInputActionOrigin_Switch_LeftStick_DPadEast,
+	INPUT_ACTION_ORIGIN_SWITCH_RIGHT_STICK_MOVE = k_EInputActionOrigin_Switch_RightStick_Move,
+	INPUT_ACTION_ORIGIN_SWITCH_RIGHT_STICK_CLICK = k_EInputActionOrigin_Switch_RightStick_Click,
+	INPUT_ACTION_ORIGIN_SWITCH_RIGHT_STICK_DPAD_NORTH = k_EInputActionOrigin_Switch_RightStick_DPadNorth,
+	INPUT_ACTION_ORIGIN_SWITCH_RIGHT_STICK_DPAD_SOUTH = k_EInputActionOrigin_Switch_RightStick_DPadSouth,
+	INPUT_ACTION_ORIGIN_SWITCH_RIGHT_STICK_DPAD_WEST = k_EInputActionOrigin_Switch_RightStick_DPadWest,
+	INPUT_ACTION_ORIGIN_SWITCH_RIGHT_STICK_DPAD_EAST = k_EInputActionOrigin_Switch_RightStick_DPadEast,
 	INPUT_ACTION_ORIGIN_SWITCH_DPAD_NORTH = k_EInputActionOrigin_Switch_DPad_North,
 	INPUT_ACTION_ORIGIN_SWITCH_DPAD_SOUTH = k_EInputActionOrigin_Switch_DPad_South,
 	INPUT_ACTION_ORIGIN_SWITCH_DPAD_WEST = k_EInputActionOrigin_Switch_DPad_West,
 	INPUT_ACTION_ORIGIN_SWITCH_DPAD_EAST = k_EInputActionOrigin_Switch_DPad_East,
-	INPUT_ACTION_ORIGIN_SWITCH_PROGYRO_MOVE = k_EInputActionOrigin_Switch_ProGyro_Move,
-	INPUT_ACTION_ORIGIN_SWITCH_PROGYRO_PITCH = k_EInputActionOrigin_Switch_ProGyro_Pitch,
-	INPUT_ACTION_ORIGIN_SWITCH_PROGYRO_YAW = k_EInputActionOrigin_Switch_ProGyro_Yaw,
-	INPUT_ACTION_ORIGIN_SWITCH_PROGYRO_ROLL = k_EInputActionOrigin_Switch_ProGyro_Roll,
+	INPUT_ACTION_ORIGIN_SWITCH_PRO_GYRO_MOVE = k_EInputActionOrigin_Switch_ProGyro_Move,
+	INPUT_ACTION_ORIGIN_SWITCH_PRO_GYRO_PITCH = k_EInputActionOrigin_Switch_ProGyro_Pitch,
+	INPUT_ACTION_ORIGIN_SWITCH_PRO_GYRO_YAW = k_EInputActionOrigin_Switch_ProGyro_Yaw,
+	INPUT_ACTION_ORIGIN_SWITCH_PRO_GYRO_ROLL = k_EInputActionOrigin_Switch_ProGyro_Roll,
 	INPUT_ACTION_ORIGIN_SWITCH_DPAD_MOVE = k_EInputActionOrigin_Switch_DPad_Move,
 	INPUT_ACTION_ORIGIN_SWITCH_RESERVED1 = k_EInputActionOrigin_Switch_Reserved1,
 	INPUT_ACTION_ORIGIN_SWITCH_RESERVED2 = k_EInputActionOrigin_Switch_Reserved2,
@@ -900,18 +902,18 @@ enum InputActionOrigin {
 	INPUT_ACTION_ORIGIN_SWITCH_RESERVED8 = k_EInputActionOrigin_Switch_Reserved8,
 	INPUT_ACTION_ORIGIN_SWITCH_RESERVED9 = k_EInputActionOrigin_Switch_Reserved9,
 	INPUT_ACTION_ORIGIN_SWITCH_RESERVED10 = k_EInputActionOrigin_Switch_Reserved10,
-	INPUT_ACTION_ORIGIN_SWITCH_RIGHTGYRO_MOVE = k_EInputActionOrigin_Switch_RightGyro_Move,
-	INPUT_ACTION_ORIGIN_SWITCH_RIGHTGYRO_PITCH = k_EInputActionOrigin_Switch_RightGyro_Pitch,
-	INPUT_ACTION_ORIGIN_SWITCH_RIGHTGYRO_YAW = k_EInputActionOrigin_Switch_RightGyro_Yaw,
-	INPUT_ACTION_ORIGIN_SWITCH_RIGHTGYRO_ROLL = k_EInputActionOrigin_Switch_RightGyro_Roll,
-	INPUT_ACTION_ORIGIN_SWITCH_LEFTGYRO_MOVE = k_EInputActionOrigin_Switch_LeftGyro_Move,
-	INPUT_ACTION_ORIGIN_SWITCH_LEFTGYRO_PITCH = k_EInputActionOrigin_Switch_LeftGyro_Pitch,
-	INPUT_ACTION_ORIGIN_SWITCH_LEFTGYRO_YAW = k_EInputActionOrigin_Switch_LeftGyro_Yaw,
-	INPUT_ACTION_ORIGIN_SWITCH_LEFTGYRO_ROLL = k_EInputActionOrigin_Switch_LeftGyro_Roll,
-	INPUT_ACTION_ORIGIN_SWITCH_LEFTGRIP_LOWER = k_EInputActionOrigin_Switch_LeftGrip_Lower,
-	INPUT_ACTION_ORIGIN_SWITCH_LEFTGRIP_UPPER = k_EInputActionOrigin_Switch_LeftGrip_Upper,
-	INPUT_ACTION_ORIGIN_SWITCH_RIGHTGRIP_LOWER = k_EInputActionOrigin_Switch_RightGrip_Lower,
-	INPUT_ACTION_ORIGIN_SWITCH_RIGHTGRIP_UPPER = k_EInputActionOrigin_Switch_RightGrip_Upper,
+	INPUT_ACTION_ORIGIN_SWITCH_RIGHT_GYRO_MOVE = k_EInputActionOrigin_Switch_RightGyro_Move,
+	INPUT_ACTION_ORIGIN_SWITCH_RIGHT_GYRO_PITCH = k_EInputActionOrigin_Switch_RightGyro_Pitch,
+	INPUT_ACTION_ORIGIN_SWITCH_RIGHT_GYRO_YAW = k_EInputActionOrigin_Switch_RightGyro_Yaw,
+	INPUT_ACTION_ORIGIN_SWITCH_RIGHT_GYRO_ROLL = k_EInputActionOrigin_Switch_RightGyro_Roll,
+	INPUT_ACTION_ORIGIN_SWITCH_LEFT_GYRO_MOVE = k_EInputActionOrigin_Switch_LeftGyro_Move,
+	INPUT_ACTION_ORIGIN_SWITCH_LEFT_GYRO_PITCH = k_EInputActionOrigin_Switch_LeftGyro_Pitch,
+	INPUT_ACTION_ORIGIN_SWITCH_LEFT_GYRO_YAW = k_EInputActionOrigin_Switch_LeftGyro_Yaw,
+	INPUT_ACTION_ORIGIN_SWITCH_LEFT_GYRO_ROLL = k_EInputActionOrigin_Switch_LeftGyro_Roll,
+	INPUT_ACTION_ORIGIN_SWITCH_LEFT_GRIP_LOWER = k_EInputActionOrigin_Switch_LeftGrip_Lower,
+	INPUT_ACTION_ORIGIN_SWITCH_LEFT_GRIP_UPPER = k_EInputActionOrigin_Switch_LeftGrip_Upper,
+	INPUT_ACTION_ORIGIN_SWITCH_RIGHT_GRIP_LOWER = k_EInputActionOrigin_Switch_RightGrip_Lower,
+	INPUT_ACTION_ORIGIN_SWITCH_RIGHT_GRIP_UPPER = k_EInputActionOrigin_Switch_RightGrip_Upper,
 	INPUT_ACTION_ORIGIN_SWITCH_JOYCON_BUTTON_N = k_EInputActionOrigin_Switch_JoyConButton_N,
 	INPUT_ACTION_ORIGIN_SWITCH_JOYCON_BUTTON_E = k_EInputActionOrigin_Switch_JoyConButton_E,
 	INPUT_ACTION_ORIGIN_SWITCH_JOYCON_BUTTON_S = k_EInputActionOrigin_Switch_JoyConButton_S,
@@ -926,48 +928,48 @@ enum InputActionOrigin {
 	INPUT_ACTION_ORIGIN_PS5_CIRCLE = k_EInputActionOrigin_PS5_Circle,
 	INPUT_ACTION_ORIGIN_PS5_TRIANGLE = k_EInputActionOrigin_PS5_Triangle,
 	INPUT_ACTION_ORIGIN_PS5_SQUARE = k_EInputActionOrigin_PS5_Square,
-	INPUT_ACTION_ORIGIN_PS5_LEFTBUMPER = k_EInputActionOrigin_PS5_LeftBumper,
-	INPUT_ACTION_ORIGIN_PS5_RIGHTBUMPER = k_EInputActionOrigin_PS5_RightBumper,
+	INPUT_ACTION_ORIGIN_PS5_LEFT_BUMPER = k_EInputActionOrigin_PS5_LeftBumper,
+	INPUT_ACTION_ORIGIN_PS5_RIGHT_BUMPER = k_EInputActionOrigin_PS5_RightBumper,
 	INPUT_ACTION_ORIGIN_PS5_OPTION = k_EInputActionOrigin_PS5_Option,
 	INPUT_ACTION_ORIGIN_PS5_CREATE = k_EInputActionOrigin_PS5_Create,
 	INPUT_ACTION_ORIGIN_PS5_MUTE = k_EInputActionOrigin_PS5_Mute,
-	INPUT_ACTION_ORIGIN_PS5_LEFTPAD_TOUCH = k_EInputActionOrigin_PS5_LeftPad_Touch,
-	INPUT_ACTION_ORIGIN_PS5_LEFTPAD_SWIPE = k_EInputActionOrigin_PS5_LeftPad_Swipe,
-	INPUT_ACTION_ORIGIN_PS5_LEFTPAD_CLICK = k_EInputActionOrigin_PS5_LeftPad_Click,
-	INPUT_ACTION_ORIGIN_PS5_LEFTPAD_DPADNORTH = k_EInputActionOrigin_PS5_LeftPad_DPadNorth,
-	INPUT_ACTION_ORIGIN_PS5_LEFTPAD_DPADSOUTH = k_EInputActionOrigin_PS5_LeftPad_DPadSouth,
-	INPUT_ACTION_ORIGIN_PS5_LEFTPAD_DPADWEST = k_EInputActionOrigin_PS5_LeftPad_DPadWest,
-	INPUT_ACTION_ORIGIN_PS5_LEFTPAD_DPADEAST = k_EInputActionOrigin_PS5_LeftPad_DPadEast,
-	INPUT_ACTION_ORIGIN_PS5_RIGHTPAD_TOUCH = k_EInputActionOrigin_PS5_RightPad_Touch,
-	INPUT_ACTION_ORIGIN_PS5_RIGHTPAD_SWIPE = k_EInputActionOrigin_PS5_RightPad_Swipe,
-	INPUT_ACTION_ORIGIN_PS5_RIGHTPAD_CLICK = k_EInputActionOrigin_PS5_RightPad_Click,
-	INPUT_ACTION_ORIGIN_PS5_RIGHTPAD_DPADNORTH = k_EInputActionOrigin_PS5_RightPad_DPadNorth,
-	INPUT_ACTION_ORIGIN_PS5_RIGHTPAD_DPADSOUTH = k_EInputActionOrigin_PS5_RightPad_DPadSouth,
-	INPUT_ACTION_ORIGIN_PS5_RIGHTPAD_DPADWEST = k_EInputActionOrigin_PS5_RightPad_DPadWest,
-	INPUT_ACTION_ORIGIN_PS5_RIGHTPAD_DPADEAST = k_EInputActionOrigin_PS5_RightPad_DPadEast,
-	INPUT_ACTION_ORIGIN_PS5_CENTERPAD_TOUCH = k_EInputActionOrigin_PS5_CenterPad_Touch,
-	INPUT_ACTION_ORIGIN_PS5_CENTERPAD_SWIPE = k_EInputActionOrigin_PS5_CenterPad_Swipe,
-	INPUT_ACTION_ORIGIN_PS5_CENTERPAD_CLICK = k_EInputActionOrigin_PS5_CenterPad_Click,
-	INPUT_ACTION_ORIGIN_PS5_CENTERPAD_DPADNORTH = k_EInputActionOrigin_PS5_CenterPad_DPadNorth,
-	INPUT_ACTION_ORIGIN_PS5_CENTERPAD_DPADSOUTH = k_EInputActionOrigin_PS5_CenterPad_DPadSouth,
-	INPUT_ACTION_ORIGIN_PS5_CENTERPAD_DPADWEST = k_EInputActionOrigin_PS5_CenterPad_DPadWest,
-	INPUT_ACTION_ORIGIN_PS5_CENTERPAD_DPADEAST = k_EInputActionOrigin_PS5_CenterPad_DPadEast,
-	INPUT_ACTION_ORIGIN_PS5_LEFTTRIGGER_PULL = k_EInputActionOrigin_PS5_LeftTrigger_Pull,
-	INPUT_ACTION_ORIGIN_PS5_LEFTTRIGGER_CLICK = k_EInputActionOrigin_PS5_LeftTrigger_Click,
-	INPUT_ACTION_ORIGIN_PS5_RIGHTTRIGGER_PULL = k_EInputActionOrigin_PS5_RightTrigger_Pull,
-	INPUT_ACTION_ORIGIN_PS5_RIGHTTRIGGER_CLICK = k_EInputActionOrigin_PS5_RightTrigger_Click,
-	INPUT_ACTION_ORIGIN_PS5_LEFTSTICK_MOVE = k_EInputActionOrigin_PS5_LeftStick_Move,
-	INPUT_ACTION_ORIGIN_PS5_LEFTSTICK_CLICK = k_EInputActionOrigin_PS5_LeftStick_Click,
-	INPUT_ACTION_ORIGIN_PS5_LEFTSTICK_DPADNORTH = k_EInputActionOrigin_PS5_LeftStick_DPadNorth,
-	INPUT_ACTION_ORIGIN_PS5_LEFTSTICK_DPADSOUTH = k_EInputActionOrigin_PS5_LeftStick_DPadSouth,
-	INPUT_ACTION_ORIGIN_PS5_LEFTSTICK_DPADWEST = k_EInputActionOrigin_PS5_LeftStick_DPadWest,
-	INPUT_ACTION_ORIGIN_PS5_LEFTSTICK_DPADEAST = k_EInputActionOrigin_PS5_LeftStick_DPadEast,
-	INPUT_ACTION_ORIGIN_PS5_RIGHTSTICK_MOVE = k_EInputActionOrigin_PS5_RightStick_Move,
-	INPUT_ACTION_ORIGIN_PS5_RIGHTSTICK_CLICK = k_EInputActionOrigin_PS5_RightStick_Click,
-	INPUT_ACTION_ORIGIN_PS5_RIGHTSTICK_DPADNORTH = k_EInputActionOrigin_PS5_RightStick_DPadNorth,
-	INPUT_ACTION_ORIGIN_PS5_RIGHTSTICK_DPADSOUTH = k_EInputActionOrigin_PS5_RightStick_DPadSouth,
-	INPUT_ACTION_ORIGIN_PS5_RIGHTSTICK_DPADWEST = k_EInputActionOrigin_PS5_RightStick_DPadWest,
-	INPUT_ACTION_ORIGIN_PS5_RIGHTSTICK_DPADEAST = k_EInputActionOrigin_PS5_RightStick_DPadEast,
+	INPUT_ACTION_ORIGIN_PS5_LEFT_PAD_TOUCH = k_EInputActionOrigin_PS5_LeftPad_Touch,
+	INPUT_ACTION_ORIGIN_PS5_LEFT_PAD_SWIPE = k_EInputActionOrigin_PS5_LeftPad_Swipe,
+	INPUT_ACTION_ORIGIN_PS5_LEFT_PAD_CLICK = k_EInputActionOrigin_PS5_LeftPad_Click,
+	INPUT_ACTION_ORIGIN_PS5_LEFT_PAD_DPAD_NORTH = k_EInputActionOrigin_PS5_LeftPad_DPadNorth,
+	INPUT_ACTION_ORIGIN_PS5_LEFT_PAD_DPAD_SOUTH = k_EInputActionOrigin_PS5_LeftPad_DPadSouth,
+	INPUT_ACTION_ORIGIN_PS5_LEFT_PAD_DPAD_WEST = k_EInputActionOrigin_PS5_LeftPad_DPadWest,
+	INPUT_ACTION_ORIGIN_PS5_LEFT_PAD_DPAD_EAST = k_EInputActionOrigin_PS5_LeftPad_DPadEast,
+	INPUT_ACTION_ORIGIN_PS5_RIGHT_PAD_TOUCH = k_EInputActionOrigin_PS5_RightPad_Touch,
+	INPUT_ACTION_ORIGIN_PS5_RIGHT_PAD_SWIPE = k_EInputActionOrigin_PS5_RightPad_Swipe,
+	INPUT_ACTION_ORIGIN_PS5_RIGHT_PAD_CLICK = k_EInputActionOrigin_PS5_RightPad_Click,
+	INPUT_ACTION_ORIGIN_PS5_RIGHT_PAD_DPAD_NORTH = k_EInputActionOrigin_PS5_RightPad_DPadNorth,
+	INPUT_ACTION_ORIGIN_PS5_RIGHT_PAD_DPAD_SOUTH = k_EInputActionOrigin_PS5_RightPad_DPadSouth,
+	INPUT_ACTION_ORIGIN_PS5_RIGHT_PAD_DPAD_WEST = k_EInputActionOrigin_PS5_RightPad_DPadWest,
+	INPUT_ACTION_ORIGIN_PS5_RIGHT_PAD_DPAD_EAST = k_EInputActionOrigin_PS5_RightPad_DPadEast,
+	INPUT_ACTION_ORIGIN_PS5_CENTER_PAD_TOUCH = k_EInputActionOrigin_PS5_CenterPad_Touch,
+	INPUT_ACTION_ORIGIN_PS5_CENTER_PAD_SWIPE = k_EInputActionOrigin_PS5_CenterPad_Swipe,
+	INPUT_ACTION_ORIGIN_PS5_CENTER_PAD_CLICK = k_EInputActionOrigin_PS5_CenterPad_Click,
+	INPUT_ACTION_ORIGIN_PS5_CENTER_PAD_DPAD_NORTH = k_EInputActionOrigin_PS5_CenterPad_DPadNorth,
+	INPUT_ACTION_ORIGIN_PS5_CENTER_PAD_DPAD_SOUTH = k_EInputActionOrigin_PS5_CenterPad_DPadSouth,
+	INPUT_ACTION_ORIGIN_PS5_CENTER_PAD_DPAD_WEST = k_EInputActionOrigin_PS5_CenterPad_DPadWest,
+	INPUT_ACTION_ORIGIN_PS5_CENTER_PAD_DPAD_EAST = k_EInputActionOrigin_PS5_CenterPad_DPadEast,
+	INPUT_ACTION_ORIGIN_PS5_LEFT_TRIGGER_PULL = k_EInputActionOrigin_PS5_LeftTrigger_Pull,
+	INPUT_ACTION_ORIGIN_PS5_LEFT_TRIGGER_CLICK = k_EInputActionOrigin_PS5_LeftTrigger_Click,
+	INPUT_ACTION_ORIGIN_PS5_RIGHT_TRIGGER_PULL = k_EInputActionOrigin_PS5_RightTrigger_Pull,
+	INPUT_ACTION_ORIGIN_PS5_RIGHT_TRIGGER_CLICK = k_EInputActionOrigin_PS5_RightTrigger_Click,
+	INPUT_ACTION_ORIGIN_PS5_LEFT_STICK_MOVE = k_EInputActionOrigin_PS5_LeftStick_Move,
+	INPUT_ACTION_ORIGIN_PS5_LEFT_STICK_CLICK = k_EInputActionOrigin_PS5_LeftStick_Click,
+	INPUT_ACTION_ORIGIN_PS5_LEFT_STICK_DPAD_NORTH = k_EInputActionOrigin_PS5_LeftStick_DPadNorth,
+	INPUT_ACTION_ORIGIN_PS5_LEFT_STICK_DPAD_SOUTH = k_EInputActionOrigin_PS5_LeftStick_DPadSouth,
+	INPUT_ACTION_ORIGIN_PS5_LEFT_STICK_DPAD_WEST = k_EInputActionOrigin_PS5_LeftStick_DPadWest,
+	INPUT_ACTION_ORIGIN_PS5_LEFT_STICK_DPAD_EAST = k_EInputActionOrigin_PS5_LeftStick_DPadEast,
+	INPUT_ACTION_ORIGIN_PS5_RIGHT_STICK_MOVE = k_EInputActionOrigin_PS5_RightStick_Move,
+	INPUT_ACTION_ORIGIN_PS5_RIGHT_STICK_CLICK = k_EInputActionOrigin_PS5_RightStick_Click,
+	INPUT_ACTION_ORIGIN_PS5_RIGHT_STICK_DPAD_NORTH = k_EInputActionOrigin_PS5_RightStick_DPadNorth,
+	INPUT_ACTION_ORIGIN_PS5_RIGHT_STICK_DPAD_SOUTH = k_EInputActionOrigin_PS5_RightStick_DPadSouth,
+	INPUT_ACTION_ORIGIN_PS5_RIGHT_STICK_DPAD_WEST = k_EInputActionOrigin_PS5_RightStick_DPadWest,
+	INPUT_ACTION_ORIGIN_PS5_RIGHT_STICK_DPAD_EAST = k_EInputActionOrigin_PS5_RightStick_DPadEast,
 	INPUT_ACTION_ORIGIN_PS5_DPAD_NORTH = k_EInputActionOrigin_PS5_DPad_North,
 	INPUT_ACTION_ORIGIN_PS5_DPAD_SOUTH = k_EInputActionOrigin_PS5_DPad_South,
 	INPUT_ACTION_ORIGIN_PS5_DPAD_WEST = k_EInputActionOrigin_PS5_DPad_West,
@@ -977,10 +979,10 @@ enum InputActionOrigin {
 	INPUT_ACTION_ORIGIN_PS5_GYRO_YAW = k_EInputActionOrigin_PS5_Gyro_Yaw,
 	INPUT_ACTION_ORIGIN_PS5_GYRO_ROLL = k_EInputActionOrigin_PS5_Gyro_Roll,
 	INPUT_ACTION_ORIGIN_PS5_DPAD_MOVE = k_EInputActionOrigin_PS5_DPad_Move,
-	INPUT_ACTION_ORIGIN_PS5_LEFTGRIP = k_EInputActionOrigin_PS5_LeftGrip,
-	INPUT_ACTION_ORIGIN_PS5_RIGHTGRIP = k_EInputActionOrigin_PS5_RightGrip,
-	INPUT_ACTION_ORIGIN_PS5_LEFTFN = k_EInputActionOrigin_PS5_LeftFn,
-	INPUT_ACTION_ORIGIN_PS5_RIGHTFN = k_EInputActionOrigin_PS5_RightFn,
+	INPUT_ACTION_ORIGIN_PS5_LEFT_GRIP = k_EInputActionOrigin_PS5_LeftGrip,
+	INPUT_ACTION_ORIGIN_PS5_RIGHT_GRIP = k_EInputActionOrigin_PS5_RightGrip,
+	INPUT_ACTION_ORIGIN_PS5_LEFT_FN = k_EInputActionOrigin_PS5_LeftFn,
+	INPUT_ACTION_ORIGIN_PS5_RIGHT_FN = k_EInputActionOrigin_PS5_RightFn,
 	INPUT_ACTION_ORIGIN_PS5_RESERVED5 = k_EInputActionOrigin_PS5_Reserved5,
 	INPUT_ACTION_ORIGIN_PS5_RESERVED6 = k_EInputActionOrigin_PS5_Reserved6,
 	INPUT_ACTION_ORIGIN_PS5_RESERVED7 = k_EInputActionOrigin_PS5_Reserved7,
@@ -1005,38 +1007,38 @@ enum InputActionOrigin {
 	INPUT_ACTION_ORIGIN_STEAMDECK_R1 = k_EInputActionOrigin_SteamDeck_R1,
 	INPUT_ACTION_ORIGIN_STEAMDECK_MENU = k_EInputActionOrigin_SteamDeck_Menu,
 	INPUT_ACTION_ORIGIN_STEAMDECK_VIEW = k_EInputActionOrigin_SteamDeck_View,
-	INPUT_ACTION_ORIGIN_STEAMDECK_LEFTPAD_TOUCH = k_EInputActionOrigin_SteamDeck_LeftPad_Touch,
-	INPUT_ACTION_ORIGIN_STEAMDECK_LEFTPAD_SWIPE = k_EInputActionOrigin_SteamDeck_LeftPad_Swipe,
-	INPUT_ACTION_ORIGIN_STEAMDECK_LEFTPAD_CLICK = k_EInputActionOrigin_SteamDeck_LeftPad_Click,
-	INPUT_ACTION_ORIGIN_STEAMDECK_LEFTPAD_DPADNORTH = k_EInputActionOrigin_SteamDeck_LeftPad_DPadNorth,
-	INPUT_ACTION_ORIGIN_STEAMDECK_LEFTPAD_DPADSOUTH = k_EInputActionOrigin_SteamDeck_LeftPad_DPadSouth,
-	INPUT_ACTION_ORIGIN_STEAMDECK_LEFTPAD_DPADWEST = k_EInputActionOrigin_SteamDeck_LeftPad_DPadWest,
-	INPUT_ACTION_ORIGIN_STEAMDECK_LEFTPAD_DPADEAST = k_EInputActionOrigin_SteamDeck_LeftPad_DPadEast,
-	INPUT_ACTION_ORIGIN_STEAMDECK_RIGHTPAD_TOUCH = k_EInputActionOrigin_SteamDeck_RightPad_Touch,
-	INPUT_ACTION_ORIGIN_STEAMDECK_RIGHTPAD_SWIPE = k_EInputActionOrigin_SteamDeck_RightPad_Swipe,
-	INPUT_ACTION_ORIGIN_STEAMDECK_RIGHTPAD_CLICK = k_EInputActionOrigin_SteamDeck_RightPad_Click,
-	INPUT_ACTION_ORIGIN_STEAMDECK_RIGHTPAD_DPADNORTH = k_EInputActionOrigin_SteamDeck_RightPad_DPadNorth,
-	INPUT_ACTION_ORIGIN_STEAMDECK_RIGHTPAD_DPADSOUTH = k_EInputActionOrigin_SteamDeck_RightPad_DPadSouth,
-	INPUT_ACTION_ORIGIN_STEAMDECK_RIGHTPAD_DPADWEST = k_EInputActionOrigin_SteamDeck_RightPad_DPadWest,
-	INPUT_ACTION_ORIGIN_STEAMDECK_RIGHTPAD_DPADEAST = k_EInputActionOrigin_SteamDeck_RightPad_DPadEast,
+	INPUT_ACTION_ORIGIN_STEAMDECK_LEFT_PAD_TOUCH = k_EInputActionOrigin_SteamDeck_LeftPad_Touch,
+	INPUT_ACTION_ORIGIN_STEAMDECK_LEFT_PAD_SWIPE = k_EInputActionOrigin_SteamDeck_LeftPad_Swipe,
+	INPUT_ACTION_ORIGIN_STEAMDECK_LEFT_PAD_CLICK = k_EInputActionOrigin_SteamDeck_LeftPad_Click,
+	INPUT_ACTION_ORIGIN_STEAMDECK_LEFT_PAD_DPAD_NORTH = k_EInputActionOrigin_SteamDeck_LeftPad_DPadNorth,
+	INPUT_ACTION_ORIGIN_STEAMDECK_LEFT_PAD_DPAD_SOUTH = k_EInputActionOrigin_SteamDeck_LeftPad_DPadSouth,
+	INPUT_ACTION_ORIGIN_STEAMDECK_LEFT_PAD_DPAD_WEST = k_EInputActionOrigin_SteamDeck_LeftPad_DPadWest,
+	INPUT_ACTION_ORIGIN_STEAMDECK_LEFT_PAD_DPAD_EAST = k_EInputActionOrigin_SteamDeck_LeftPad_DPadEast,
+	INPUT_ACTION_ORIGIN_STEAMDECK_RIGHT_PAD_TOUCH = k_EInputActionOrigin_SteamDeck_RightPad_Touch,
+	INPUT_ACTION_ORIGIN_STEAMDECK_RIGHT_PAD_SWIPE = k_EInputActionOrigin_SteamDeck_RightPad_Swipe,
+	INPUT_ACTION_ORIGIN_STEAMDECK_RIGHT_PAD_CLICK = k_EInputActionOrigin_SteamDeck_RightPad_Click,
+	INPUT_ACTION_ORIGIN_STEAMDECK_RIGHT_PAD_DPAD_NORTH = k_EInputActionOrigin_SteamDeck_RightPad_DPadNorth,
+	INPUT_ACTION_ORIGIN_STEAMDECK_RIGHT_PAD_DPAD_SOUTH = k_EInputActionOrigin_SteamDeck_RightPad_DPadSouth,
+	INPUT_ACTION_ORIGIN_STEAMDECK_RIGHT_PAD_DPAD_WEST = k_EInputActionOrigin_SteamDeck_RightPad_DPadWest,
+	INPUT_ACTION_ORIGIN_STEAMDECK_RIGHT_PAD_DPAD_EAST = k_EInputActionOrigin_SteamDeck_RightPad_DPadEast,
 	INPUT_ACTION_ORIGIN_STEAMDECK_L2_SOFTPULL = k_EInputActionOrigin_SteamDeck_L2_SoftPull,
 	INPUT_ACTION_ORIGIN_STEAMDECK_L2 = k_EInputActionOrigin_SteamDeck_L2,
 	INPUT_ACTION_ORIGIN_STEAMDECK_R2_SOFTPULL = k_EInputActionOrigin_SteamDeck_R2_SoftPull,
 	INPUT_ACTION_ORIGIN_STEAMDECK_R2 = k_EInputActionOrigin_SteamDeck_R2,
-	INPUT_ACTION_ORIGIN_STEAMDECK_LEFTSTICK_MOVE = k_EInputActionOrigin_SteamDeck_LeftStick_Move,
+	INPUT_ACTION_ORIGIN_STEAMDECK_LEFT_STICK_MOVE = k_EInputActionOrigin_SteamDeck_LeftStick_Move,
 	INPUT_ACTION_ORIGIN_STEAMDECK_L3 = k_EInputActionOrigin_SteamDeck_L3,
-	INPUT_ACTION_ORIGIN_STEAMDECK_LEFTSTICK_DPADNORTH = k_EInputActionOrigin_SteamDeck_LeftStick_DPadNorth,
-	INPUT_ACTION_ORIGIN_STEAMDECK_LEFTSTICK_DPADSOUTH = k_EInputActionOrigin_SteamDeck_LeftStick_DPadSouth,
-	INPUT_ACTION_ORIGIN_STEAMDECK_LEFTSTICK_DPADWEST = k_EInputActionOrigin_SteamDeck_LeftStick_DPadWest,
-	INPUT_ACTION_ORIGIN_STEAMDECK_LEFTSTICK_DPADEAST = k_EInputActionOrigin_SteamDeck_LeftStick_DPadEast,
-	INPUT_ACTION_ORIGIN_STEAMDECK_LEFTSTICK_TOUCH = k_EInputActionOrigin_SteamDeck_LeftStick_Touch,
-	INPUT_ACTION_ORIGIN_STEAMDECK_RIGHTSTICK_MOVE = k_EInputActionOrigin_SteamDeck_RightStick_Move,
+	INPUT_ACTION_ORIGIN_STEAMDECK_LEFT_STICK_DPAD_NORTH = k_EInputActionOrigin_SteamDeck_LeftStick_DPadNorth,
+	INPUT_ACTION_ORIGIN_STEAMDECK_LEFT_STICK_DPAD_SOUTH = k_EInputActionOrigin_SteamDeck_LeftStick_DPadSouth,
+	INPUT_ACTION_ORIGIN_STEAMDECK_LEFT_STICK_DPAD_WEST = k_EInputActionOrigin_SteamDeck_LeftStick_DPadWest,
+	INPUT_ACTION_ORIGIN_STEAMDECK_LEFT_STICK_DPAD_EAST = k_EInputActionOrigin_SteamDeck_LeftStick_DPadEast,
+	INPUT_ACTION_ORIGIN_STEAMDECK_LEFT_STICK_TOUCH = k_EInputActionOrigin_SteamDeck_LeftStick_Touch,
+	INPUT_ACTION_ORIGIN_STEAMDECK_RIGHT_STICK_MOVE = k_EInputActionOrigin_SteamDeck_RightStick_Move,
 	INPUT_ACTION_ORIGIN_STEAMDECK_R3 = k_EInputActionOrigin_SteamDeck_R3,
-	INPUT_ACTION_ORIGIN_STEAMDECK_RIGHTSTICK_DPADNORTH = k_EInputActionOrigin_SteamDeck_RightStick_DPadNorth,
-	INPUT_ACTION_ORIGIN_STEAMDECK_RIGHTSTICK_DPADSOUTH = k_EInputActionOrigin_SteamDeck_RightStick_DPadSouth,
-	INPUT_ACTION_ORIGIN_STEAMDECK_RIGHTSTICK_DPADWEST = k_EInputActionOrigin_SteamDeck_RightStick_DPadWest,
-	INPUT_ACTION_ORIGIN_STEAMDECK_RIGHTSTICK_DPADEAST = k_EInputActionOrigin_SteamDeck_RightStick_DPadEast,
-	INPUT_ACTION_ORIGIN_STEAMDECK_RIGHTSTICK_TOUCH = k_EInputActionOrigin_SteamDeck_RightStick_Touch,
+	INPUT_ACTION_ORIGIN_STEAMDECK_RIGHT_STICK_DPAD_NORTH = k_EInputActionOrigin_SteamDeck_RightStick_DPadNorth,
+	INPUT_ACTION_ORIGIN_STEAMDECK_RIGHT_STICK_DPAD_SOUTH = k_EInputActionOrigin_SteamDeck_RightStick_DPadSouth,
+	INPUT_ACTION_ORIGIN_STEAMDECK_RIGHT_STICK_DPAD_WEST = k_EInputActionOrigin_SteamDeck_RightStick_DPadWest,
+	INPUT_ACTION_ORIGIN_STEAMDECK_RIGHT_STICK_DPAD_EAST = k_EInputActionOrigin_SteamDeck_RightStick_DPadEast,
+	INPUT_ACTION_ORIGIN_STEAMDECK_RIGHT_STICK_TOUCH = k_EInputActionOrigin_SteamDeck_RightStick_Touch,
 	INPUT_ACTION_ORIGIN_STEAMDECK_L4 = k_EInputActionOrigin_SteamDeck_L4,
 	INPUT_ACTION_ORIGIN_STEAMDECK_R4 = k_EInputActionOrigin_SteamDeck_R4,
 	INPUT_ACTION_ORIGIN_STEAMDECK_L5 = k_EInputActionOrigin_SteamDeck_L5,
@@ -1082,36 +1084,36 @@ enum InputActionOrigin {
 	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RB = k_EInputActionOrigin_LenovoLegionGo_RB,
 	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_MENU = k_EInputActionOrigin_LenovoLegionGo_Menu,
 	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_VIEW = k_EInputActionOrigin_LenovoLegionGo_View,
-	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_LEFTPAD_TOUCH = k_EInputActionOrigin_LenovoLegionGo_LeftPad_Touch,
-	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_LEFTPAD_SWIPE = k_EInputActionOrigin_LenovoLegionGo_LeftPad_Swipe,
-	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_LEFTPAD_CLICK = k_EInputActionOrigin_LenovoLegionGo_LeftPad_Click,
-	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_LEFTPAD_DPAD_NORTH = k_EInputActionOrigin_LenovoLegionGo_LeftPad_DPadNorth,
-	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_LEFTPAD_DPAD_SOUTH = k_EInputActionOrigin_LenovoLegionGo_LeftPad_DPadSouth,
-	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_LEFTPAD_DPAD_WEST = k_EInputActionOrigin_LenovoLegionGo_LeftPad_DPadWest,
-	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_LEFTPAD_DPAD_EAST = k_EInputActionOrigin_LenovoLegionGo_LeftPad_DPadEast,
-	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RIGHTPAD_TOUCH = k_EInputActionOrigin_LenovoLegionGo_RightPad_Touch,
-	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RIGHTPAD_SWIPE = k_EInputActionOrigin_LenovoLegionGo_RightPad_Swipe,
-	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RIGHTPAD_CLICK = k_EInputActionOrigin_LenovoLegionGo_RightPad_Click,
-	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RIGHTPAD_DPAD_NORTH = k_EInputActionOrigin_LenovoLegionGo_RightPad_DPadNorth,
-	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RIGHTPAD_DPAD_SOUTH = k_EInputActionOrigin_LenovoLegionGo_RightPad_DPadSouth,
-	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RIGHTPAD_DPAD_WEST = k_EInputActionOrigin_LenovoLegionGo_RightPad_DPadWest,
-	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RIGHTPAD_DPAD_EAST = k_EInputActionOrigin_LenovoLegionGo_RightPad_DPadEast,
+	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_LEFT_PAD_TOUCH = k_EInputActionOrigin_LenovoLegionGo_LeftPad_Touch,
+	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_LEFT_PAD_SWIPE = k_EInputActionOrigin_LenovoLegionGo_LeftPad_Swipe,
+	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_LEFT_PAD_CLICK = k_EInputActionOrigin_LenovoLegionGo_LeftPad_Click,
+	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_LEFT_PAD_DPAD_NORTH = k_EInputActionOrigin_LenovoLegionGo_LeftPad_DPadNorth,
+	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_LEFT_PAD_DPAD_SOUTH = k_EInputActionOrigin_LenovoLegionGo_LeftPad_DPadSouth,
+	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_LEFT_PAD_DPAD_WEST = k_EInputActionOrigin_LenovoLegionGo_LeftPad_DPadWest,
+	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_LEFT_PAD_DPAD_EAST = k_EInputActionOrigin_LenovoLegionGo_LeftPad_DPadEast,
+	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RIGHT_PAD_TOUCH = k_EInputActionOrigin_LenovoLegionGo_RightPad_Touch,
+	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RIGHT_PAD_SWIPE = k_EInputActionOrigin_LenovoLegionGo_RightPad_Swipe,
+	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RIGHT_PAD_CLICK = k_EInputActionOrigin_LenovoLegionGo_RightPad_Click,
+	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RIGHT_PAD_DPAD_NORTH = k_EInputActionOrigin_LenovoLegionGo_RightPad_DPadNorth,
+	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RIGHT_PAD_DPAD_SOUTH = k_EInputActionOrigin_LenovoLegionGo_RightPad_DPadSouth,
+	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RIGHT_PAD_DPAD_WEST = k_EInputActionOrigin_LenovoLegionGo_RightPad_DPadWest,
+	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RIGHT_PAD_DPAD_EAST = k_EInputActionOrigin_LenovoLegionGo_RightPad_DPadEast,
 	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_LT_SOFTPULL = k_EInputActionOrigin_LenovoLegionGo_LT_SoftPull,
 	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_LT = k_EInputActionOrigin_LenovoLegionGo_LT,
 	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RT_SOFTPULL = k_EInputActionOrigin_LenovoLegionGo_RT_SoftPull,
 	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RT = k_EInputActionOrigin_LenovoLegionGo_RT,
-	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_LEFTSTICK_MOVE = k_EInputActionOrigin_LenovoLegionGo_LeftStick_Move,
+	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_LEFT_STICK_MOVE = k_EInputActionOrigin_LenovoLegionGo_LeftStick_Move,
 	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_LS = k_EInputActionOrigin_LenovoLegionGo_LS,
-	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_LEFTSTICK_DPAD_NORTH = k_EInputActionOrigin_LenovoLegionGo_LeftStick_DPadNorth,
-	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_LEFTSTICK_DPAD_SOUTH = k_EInputActionOrigin_LenovoLegionGo_LeftStick_DPadSouth,
-	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_LEFTSTICK_DPAD_WEST = k_EInputActionOrigin_LenovoLegionGo_LeftStick_DPadWest,
-	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_LEFTSTICK_DPAD_EAST = k_EInputActionOrigin_LenovoLegionGo_LeftStick_DPadEast,
-	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RIGHTSTICK_MOVE = k_EInputActionOrigin_LenovoLegionGo_RightStick_Move,
+	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_LEFT_STICK_DPAD_NORTH = k_EInputActionOrigin_LenovoLegionGo_LeftStick_DPadNorth,
+	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_LEFT_STICK_DPAD_SOUTH = k_EInputActionOrigin_LenovoLegionGo_LeftStick_DPadSouth,
+	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_LEFT_STICK_DPAD_WEST = k_EInputActionOrigin_LenovoLegionGo_LeftStick_DPadWest,
+	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_LEFT_STICK_DPAD_EAST = k_EInputActionOrigin_LenovoLegionGo_LeftStick_DPadEast,
+	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RIGHT_STICK_MOVE = k_EInputActionOrigin_LenovoLegionGo_RightStick_Move,
 	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RS = k_EInputActionOrigin_LenovoLegionGo_RS,
-	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RIGHTSTICK_DPAD_NORTH = k_EInputActionOrigin_LenovoLegionGo_RightStick_DPadNorth,
-	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RIGHTSTICK_DPAD_SOUTH = k_EInputActionOrigin_LenovoLegionGo_RightStick_DPadSouth,
-	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RIGHTSTICK_DPAD_WEST = k_EInputActionOrigin_LenovoLegionGo_RightStick_DPadWest,
-	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RIGHTSTICK_DPAD_EAST = k_EInputActionOrigin_LenovoLegionGo_RightStick_DPadEast,
+	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RIGHT_STICK_DPAD_NORTH = k_EInputActionOrigin_LenovoLegionGo_RightStick_DPadNorth,
+	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RIGHT_STICK_DPAD_SOUTH = k_EInputActionOrigin_LenovoLegionGo_RightStick_DPadSouth,
+	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RIGHT_STICK_DPAD_WEST = k_EInputActionOrigin_LenovoLegionGo_RightStick_DPadWest,
+	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_RIGHT_STICK_DPAD_EAST = k_EInputActionOrigin_LenovoLegionGo_RightStick_DPadEast,
 	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_Y1 = k_EInputActionOrigin_LenovoLegionGo_Y1,
 	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_Y2 = k_EInputActionOrigin_LenovoLegionGo_Y2,
 	INPUT_ACTION_ORIGIN_LENOVO_LEGION_GO_DPAD_MOVE = k_EInputActionOrigin_LenovoLegionGo_DPad_Move,
@@ -1159,6 +1161,206 @@ enum InputActionOrigin {
 	INPUT_ACTION_ORIGIN_GENERIC_MISC6 = k_EInputActionOrigin_Generic_MISC6,
 	INPUT_ACTION_ORIGIN_GENERIC_MISC7 = k_EInputActionOrigin_Generic_MISC7,
 	INPUT_ACTION_ORIGIN_GENERIC_MISC8 = k_EInputActionOrigin_Generic_MISC8,
+	INPUT_ACTION_ORIGIN_SWITCH2_A = k_EInputActionOrigin_Switch2_A,
+	INPUT_ACTION_ORIGIN_SWITCH2_B = k_EInputActionOrigin_Switch2_B,
+	INPUT_ACTION_ORIGIN_SWITCH2_X = k_EInputActionOrigin_Switch2_X,
+	INPUT_ACTION_ORIGIN_SWITCH2_Y = k_EInputActionOrigin_Switch2_Y,
+	INPUT_ACTION_ORIGIN_SWITCH2_LEFT_BUMPER = k_EInputActionOrigin_Switch2_LeftBumper,
+	INPUT_ACTION_ORIGIN_SWITCH2_RIGHT_BUMPER = k_EInputActionOrigin_Switch2_RightBumper,
+	INPUT_ACTION_ORIGIN_SWITCH2_PLUS = k_EInputActionOrigin_Switch2_Plus, //Start
+	INPUT_ACTION_ORIGIN_SWITCH2_MINUS = k_EInputActionOrigin_Switch2_Minus, //Back
+	INPUT_ACTION_ORIGIN_SWITCH2_CAPTURE = k_EInputActionOrigin_Switch2_Capture,
+	INPUT_ACTION_ORIGIN_SWITCH2_LEFT_TRIGGER_PULL = k_EInputActionOrigin_Switch2_LeftTrigger_Pull,
+	INPUT_ACTION_ORIGIN_SWITCH2_LEFT_TRIGGER_CLICK = k_EInputActionOrigin_Switch2_LeftTrigger_Click,
+	INPUT_ACTION_ORIGIN_SWITCH2_RIGHT_TRIGGER_PULL = k_EInputActionOrigin_Switch2_RightTrigger_Pull,
+	INPUT_ACTION_ORIGIN_SWITCH2_RIGHT_TRIGGER_CLICK = k_EInputActionOrigin_Switch2_RightTrigger_Click,
+	INPUT_ACTION_ORIGIN_SWITCH2_LEFT_STICK_MOVE = k_EInputActionOrigin_Switch2_LeftStick_Move,
+	INPUT_ACTION_ORIGIN_SWITCH2_LEFT_STICK_CLICK = k_EInputActionOrigin_Switch2_LeftStick_Click,
+	INPUT_ACTION_ORIGIN_SWITCH2_LEFT_STICK_DPAD_NORTH = k_EInputActionOrigin_Switch2_LeftStick_DPadNorth,
+	INPUT_ACTION_ORIGIN_SWITCH2_LEFT_STICK_DPAD_SOUTH = k_EInputActionOrigin_Switch2_LeftStick_DPadSouth,
+	INPUT_ACTION_ORIGIN_SWITCH2_LEFT_STICK_DPAD_WEST = k_EInputActionOrigin_Switch2_LeftStick_DPadWest,
+	INPUT_ACTION_ORIGIN_SWITCH2_LEFT_STICK_DPAD_EAST = k_EInputActionOrigin_Switch2_LeftStick_DPadEast,
+	INPUT_ACTION_ORIGIN_SWITCH2_RIGHT_STICK_MOVE = k_EInputActionOrigin_Switch2_RightStick_Move,
+	INPUT_ACTION_ORIGIN_SWITCH2_RIGHT_STICK_CLICK = k_EInputActionOrigin_Switch2_RightStick_Click,
+	INPUT_ACTION_ORIGIN_SWITCH2_RIGHT_STICK_DPAD_NORTH = k_EInputActionOrigin_Switch2_RightStick_DPadNorth,
+	INPUT_ACTION_ORIGIN_SWITCH2_RIGHT_STICK_DPAD_SOUTH = k_EInputActionOrigin_Switch2_RightStick_DPadSouth,
+	INPUT_ACTION_ORIGIN_SWITCH2_RIGHT_STICK_DPAD_WEST = k_EInputActionOrigin_Switch2_RightStick_DPadWest,
+	INPUT_ACTION_ORIGIN_SWITCH2_RIGHT_STICK_DPAD_EAST = k_EInputActionOrigin_Switch2_RightStick_DPadEast,
+	INPUT_ACTION_ORIGIN_SWITCH2_DPAD_MOVE = k_EInputActionOrigin_Switch2_DPad_Move,
+	INPUT_ACTION_ORIGIN_SWITCH2_DPAD_NORTH = k_EInputActionOrigin_Switch2_DPad_North,
+	INPUT_ACTION_ORIGIN_SWITCH2_DPAD_SOUTH = k_EInputActionOrigin_Switch2_DPad_South,
+	INPUT_ACTION_ORIGIN_SWITCH2_DPAD_WEST = k_EInputActionOrigin_Switch2_DPad_West,
+	INPUT_ACTION_ORIGIN_SWITCH2_DPAD_EAST = k_EInputActionOrigin_Switch2_DPad_East,
+	INPUT_ACTION_ORIGIN_SWITCH2_PRO_GYRO_MOVE = k_EInputActionOrigin_Switch2_ProGyro_Move,
+	INPUT_ACTION_ORIGIN_SWITCH2_PRO_GYRO_PITCH = k_EInputActionOrigin_Switch2_ProGyro_Pitch,
+	INPUT_ACTION_ORIGIN_SWITCH2_PRO_GYRO_YAW = k_EInputActionOrigin_Switch2_ProGyro_Yaw,
+	INPUT_ACTION_ORIGIN_SWITCH2_PRO_GYRO_ROLL = k_EInputActionOrigin_Switch2_ProGyro_Roll,
+	INPUT_ACTION_ORIGIN_SWITCH2_GL = k_EInputActionOrigin_Switch2_GL,
+	INPUT_ACTION_ORIGIN_SWITCH2_GR = k_EInputActionOrigin_Switch2_GR,
+	INPUT_ACTION_ORIGIN_SWITCH2_C = k_EInputActionOrigin_Switch2_C,
+	INPUT_ACTION_ORIGIN_SWITCH2_RESERVED1 = k_EInputActionOrigin_Switch2_Reserved1,
+	INPUT_ACTION_ORIGIN_SWITCH2_RESERVED2 = k_EInputActionOrigin_Switch2_Reserved2,
+	INPUT_ACTION_ORIGIN_SWITCH2_RESERVED3 = k_EInputActionOrigin_Switch2_Reserved3,
+	INPUT_ACTION_ORIGIN_SWITCH2_RESERVED4 = k_EInputActionOrigin_Switch2_Reserved4,
+	INPUT_ACTION_ORIGIN_SWITCH2_RESERVED5 = k_EInputActionOrigin_Switch2_Reserved5,
+	INPUT_ACTION_ORIGIN_SWITCH2_RESERVED6 = k_EInputActionOrigin_Switch2_Reserved6,
+	INPUT_ACTION_ORIGIN_SWITCH2_RESERVED7 = k_EInputActionOrigin_Switch2_Reserved7,
+	INPUT_ACTION_ORIGIN_SWITCH2_RESERVED8 = k_EInputActionOrigin_Switch2_Reserved8,
+	INPUT_ACTION_ORIGIN_SWITCH2_RESERVED9 = k_EInputActionOrigin_Switch2_Reserved9,
+	INPUT_ACTION_ORIGIN_SWITCH2_RESERVED10 = k_EInputActionOrigin_Switch2_Reserved10,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_A = k_EInputActionOrigin_SteamController2026_A,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_B = k_EInputActionOrigin_SteamController2026_B,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_X = k_EInputActionOrigin_SteamController2026_X,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_Y = k_EInputActionOrigin_SteamController2026_Y,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_L1 = k_EInputActionOrigin_SteamController2026_L1,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_R1 = k_EInputActionOrigin_SteamController2026_R1,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_MENU = k_EInputActionOrigin_SteamController2026_Menu,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_VIEW = k_EInputActionOrigin_SteamController2026_View,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_LEFT_PAD_TOUCH = k_EInputActionOrigin_SteamController2026_LeftPad_Touch,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_LEFT_PAD_SWIPE = k_EInputActionOrigin_SteamController2026_LeftPad_Swipe,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_LEFT_PAD_CLICK = k_EInputActionOrigin_SteamController2026_LeftPad_Click,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_LEFT_PAD_DPAD_NORTH = k_EInputActionOrigin_SteamController2026_LeftPad_DPadNorth,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_LEFT_PAD_DPAD_SOUTH = k_EInputActionOrigin_SteamController2026_LeftPad_DPadSouth,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_LEFT_PAD_DPAD_WEST = k_EInputActionOrigin_SteamController2026_LeftPad_DPadWest,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_LEFT_PAD_DPAD_EAST = k_EInputActionOrigin_SteamController2026_LeftPad_DPadEast,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RIGHT_PAD_TOUCH = k_EInputActionOrigin_SteamController2026_RightPad_Touch,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RIGHT_PAD_SWIPE = k_EInputActionOrigin_SteamController2026_RightPad_Swipe,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RIGHT_PAD_CLICK = k_EInputActionOrigin_SteamController2026_RightPad_Click,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RIGHT_PAD_DPAD_NORTH = k_EInputActionOrigin_SteamController2026_RightPad_DPadNorth,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RIGHT_PAD_DPAD_SOUTH = k_EInputActionOrigin_SteamController2026_RightPad_DPadSouth,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RIGHT_PAD_DPAD_WEST = k_EInputActionOrigin_SteamController2026_RightPad_DPadWest,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RIGHT_PAD_DPAD_EAST = k_EInputActionOrigin_SteamController2026_RightPad_DPadEast,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_L2_SOFTPULL = k_EInputActionOrigin_SteamController2026_L2_SoftPull,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_L2 = k_EInputActionOrigin_SteamController2026_L2,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_R2_SOFTPULL = k_EInputActionOrigin_SteamController2026_R2_SoftPull,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_R2 = k_EInputActionOrigin_SteamController2026_R2,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_LEFT_STICK_MOVE = k_EInputActionOrigin_SteamController2026_LeftStick_Move,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_L3 = k_EInputActionOrigin_SteamController2026_L3,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_LEFT_STICK_DPAD_NORTH = k_EInputActionOrigin_SteamController2026_LeftStick_DPadNorth,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_LEFT_STICK_DPAD_SOUTH = k_EInputActionOrigin_SteamController2026_LeftStick_DPadSouth,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_LEFT_STICK_DPAD_WEST = k_EInputActionOrigin_SteamController2026_LeftStick_DPadWest,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_LEFT_STICK_DPAD_EAST = k_EInputActionOrigin_SteamController2026_LeftStick_DPadEast,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_LEFT_STICK_TOUCH = k_EInputActionOrigin_SteamController2026_LeftStick_Touch,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RIGHT_STICK_MOVE = k_EInputActionOrigin_SteamController2026_RightStick_Move,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_R3 = k_EInputActionOrigin_SteamController2026_R3,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RIGHT_STICK_DPAD_NORTH = k_EInputActionOrigin_SteamController2026_RightStick_DPadNorth,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RIGHT_STICK_DPAD_SOUTH = k_EInputActionOrigin_SteamController2026_RightStick_DPadSouth,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RIGHT_STICK_DPAD_WEST = k_EInputActionOrigin_SteamController2026_RightStick_DPadWest,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RIGHT_STICK_DPAD_EAST = k_EInputActionOrigin_SteamController2026_RightStick_DPadEast,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RIGHT_STICK_TOUCH = k_EInputActionOrigin_SteamController2026_RightStick_Touch,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_L4 = k_EInputActionOrigin_SteamController2026_L4,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_R4 = k_EInputActionOrigin_SteamController2026_R4,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_L5 = k_EInputActionOrigin_SteamController2026_L5,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_R5 = k_EInputActionOrigin_SteamController2026_R5,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_DPAD_MOVE = k_EInputActionOrigin_SteamController2026_DPad_Move,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_DPAD_NORTH = k_EInputActionOrigin_SteamController2026_DPad_North,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_DPAD_SOUTH = k_EInputActionOrigin_SteamController2026_DPad_South,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_DPAD_WEST = k_EInputActionOrigin_SteamController2026_DPad_West,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_DPAD_EAST = k_EInputActionOrigin_SteamController2026_DPad_East,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_GYRO_MOVE = k_EInputActionOrigin_SteamController2026_Gyro_Move,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_GYRO_PITCH = k_EInputActionOrigin_SteamController2026_Gyro_Pitch,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_GYRO_YAW = k_EInputActionOrigin_SteamController2026_Gyro_Yaw,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_GYRO_ROLL = k_EInputActionOrigin_SteamController2026_Gyro_Roll,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_LGRIP = k_EInputActionOrigin_SteamController2026_LGrip,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RGRIP = k_EInputActionOrigin_SteamController2026_RGrip,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RESERVED1 = k_EInputActionOrigin_SteamController2026_Reserved1,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RESERVED2 = k_EInputActionOrigin_SteamController2026_Reserved2,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RESERVED3 = k_EInputActionOrigin_SteamController2026_Reserved3,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RESERVED4 = k_EInputActionOrigin_SteamController2026_Reserved4,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RESERVED5 = k_EInputActionOrigin_SteamController2026_Reserved5,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RESERVED6 = k_EInputActionOrigin_SteamController2026_Reserved6,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RESERVED7 = k_EInputActionOrigin_SteamController2026_Reserved7,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RESERVED8 = k_EInputActionOrigin_SteamController2026_Reserved8,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RESERVED9 = k_EInputActionOrigin_SteamController2026_Reserved9,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RESERVED10 = k_EInputActionOrigin_SteamController2026_Reserved10,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RESERVED11 = k_EInputActionOrigin_SteamController2026_Reserved11,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RESERVED12 = k_EInputActionOrigin_SteamController2026_Reserved12,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RESERVED13 = k_EInputActionOrigin_SteamController2026_Reserved13,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RESERVED14 = k_EInputActionOrigin_SteamController2026_Reserved14,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RESERVED15 = k_EInputActionOrigin_SteamController2026_Reserved15,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RESERVED16 = k_EInputActionOrigin_SteamController2026_Reserved16,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RESERVED17 = k_EInputActionOrigin_SteamController2026_Reserved17,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RESERVED18 = k_EInputActionOrigin_SteamController2026_Reserved18,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RESERVED19 = k_EInputActionOrigin_SteamController2026_Reserved19,
+	INPUT_ACTION_ORIGIN_STEAMCONTROLLER2026_RESERVED20 = k_EInputActionOrigin_SteamController2026_Reserved20,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_A_CLICK = k_EInputActionOrigin_SteamFrameController_A_Click,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_A_TOUCH = k_EInputActionOrigin_SteamFrameController_A_Touch,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_B_CLICK = k_EInputActionOrigin_SteamFrameController_B_Click,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_B_TOUCH = k_EInputActionOrigin_SteamFrameController_B_Touch,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_X_CLICK = k_EInputActionOrigin_SteamFrameController_X_Click,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_X_TOUCH = k_EInputActionOrigin_SteamFrameController_X_Touch,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_Y_CLICK = k_EInputActionOrigin_SteamFrameController_Y_Click,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_Y_TOUCH = k_EInputActionOrigin_SteamFrameController_Y_Touch,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_LEFT_TRIGGER_PULL = k_EInputActionOrigin_SteamFrameController_LeftTrigger_Pull,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_LEFT_TRIGGER_CLICK = k_EInputActionOrigin_SteamFrameController_LeftTrigger_Click,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_LEFT_TRIGGER_TOUCH = k_EInputActionOrigin_SteamFrameController_LeftTrigger_Touch,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RIGHT_TRIGGER_PULL = k_EInputActionOrigin_SteamFrameController_RightTrigger_Pull,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RIGHT_TRIGGER_CLICK = k_EInputActionOrigin_SteamFrameController_RightTrigger_Click,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RIGHT_TRIGGER_TOUCH = k_EInputActionOrigin_SteamFrameController_RightTrigger_Touch,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_MENU_CLICK = k_EInputActionOrigin_SteamFrameController_Menu_Click,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_MENU_TOUCH = k_EInputActionOrigin_SteamFrameController_Menu_Touch,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_VIEW_CLICK = k_EInputActionOrigin_SteamFrameController_View_Click,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_VIEW_TOUCH = k_EInputActionOrigin_SteamFrameController_View_Touch,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_LEFT_BUMPER_CLICK = k_EInputActionOrigin_SteamFrameController_LeftBumper_Click,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_LEFT_BUMPER_TOUCH = k_EInputActionOrigin_SteamFrameController_LeftBumper_Touch,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RIGHT_BUMPER_CLICK = k_EInputActionOrigin_SteamFrameController_RightBumper_Click,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RIGHT_BUMPER_TOUCH = k_EInputActionOrigin_SteamFrameController_RightBumper_Touch,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_LEFT_STICK_MOVE = k_EInputActionOrigin_SteamFrameController_LeftStick_Move,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_LEFT_STICK_CLICK = k_EInputActionOrigin_SteamFrameController_LeftStick_Click,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_LEFT_STICK_DPAD_NORTH = k_EInputActionOrigin_SteamFrameController_LeftStick_DPadNorth,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_LEFT_STICK_DPAD_SOUTH = k_EInputActionOrigin_SteamFrameController_LeftStick_DPadSouth,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_LEFT_STICK_DPAD_WEST = k_EInputActionOrigin_SteamFrameController_LeftStick_DPadWest,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_LEFT_STICK_DPAD_EAST = k_EInputActionOrigin_SteamFrameController_LeftStick_DPadEast,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_LEFT_STICK_TOUCH = k_EInputActionOrigin_SteamFrameController_LeftStick_Touch,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RIGHT_STICK_MOVE = k_EInputActionOrigin_SteamFrameController_RightStick_Move,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RIGHT_STICK_CLICK = k_EInputActionOrigin_SteamFrameController_RightStick_Click,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RIGHT_STICK_DPAD_NORTH = k_EInputActionOrigin_SteamFrameController_RightStick_DPadNorth,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RIGHT_STICK_DPAD_SOUTH = k_EInputActionOrigin_SteamFrameController_RightStick_DPadSouth,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RIGHT_STICK_DPAD_WEST = k_EInputActionOrigin_SteamFrameController_RightStick_DPadWest,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RIGHT_STICK_DPAD_EAST = k_EInputActionOrigin_SteamFrameController_RightStick_DPadEast,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RIGHT_STICK_TOUCH = k_EInputActionOrigin_SteamFrameController_RightStick_Touch,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_DPAD_MOVE = k_EInputActionOrigin_SteamFrameController_DPad_Move,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_DPAD_NORTH = k_EInputActionOrigin_SteamFrameController_DPad_North,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_DPAD_SOUTH = k_EInputActionOrigin_SteamFrameController_DPad_South,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_DPAD_WEST = k_EInputActionOrigin_SteamFrameController_DPad_West,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_DPAD_EAST = k_EInputActionOrigin_SteamFrameController_DPad_East,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_DPAD_TOUCH = k_EInputActionOrigin_SteamFrameController_DPad_Touch,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_LEFT_GYRO_MOVE = k_EInputActionOrigin_SteamFrameController_LeftGyro_Move,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_LEFT_GYRO_PITCH = k_EInputActionOrigin_SteamFrameController_LeftGyro_Pitch,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_LEFT_GYRO_YAW = k_EInputActionOrigin_SteamFrameController_LeftGyro_Yaw,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_LEFT_GYRO_ROLL = k_EInputActionOrigin_SteamFrameController_LeftGyro_Roll,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RIGHT_GYRO_MOVE = k_EInputActionOrigin_SteamFrameController_RightGyro_Move,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RIGHT_GYRO_PITCH = k_EInputActionOrigin_SteamFrameController_RightGyro_Pitch,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RIGHT_GYRO_YAW = k_EInputActionOrigin_SteamFrameController_RightGyro_Yaw,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RIGHT_GYRO_ROLL = k_EInputActionOrigin_SteamFrameController_RightGyro_Roll,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_LEFT_GRIP_PULL = k_EInputActionOrigin_SteamFrameController_LeftGrip_Pull,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_LEFT_GRIP_CLICK = k_EInputActionOrigin_SteamFrameController_LeftGrip_Click,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_LEFT_GRIP_TOUCH = k_EInputActionOrigin_SteamFrameController_LeftGrip_Touch,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RIGHT_GRIP_PULL = k_EInputActionOrigin_SteamFrameController_RightGrip_Pull,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RIGHT_GRIP_CLICK = k_EInputActionOrigin_SteamFrameController_RightGrip_Click,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RIGHT_GRIP_TOUCH = k_EInputActionOrigin_SteamFrameController_RightGrip_Touch,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_LEFT_THUMBREST_TOUCH = k_EInputActionOrigin_SteamFrameController_LeftThumbrest_Touch,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RIGHT_THUMBREST_TOUCH = k_EInputActionOrigin_SteamFrameController_RightThumbrest_Touch,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RESERVED1 = k_EInputActionOrigin_SteamFrameController_Reserved1,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RESERVED2 = k_EInputActionOrigin_SteamFrameController_Reserved2,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RESERVED3 = k_EInputActionOrigin_SteamFrameController_Reserved3,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RESERVED4 = k_EInputActionOrigin_SteamFrameController_Reserved4,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RESERVED5 = k_EInputActionOrigin_SteamFrameController_Reserved5,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RESERVED6 = k_EInputActionOrigin_SteamFrameController_Reserved6,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RESERVED7 = k_EInputActionOrigin_SteamFrameController_Reserved7,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RESERVED8 = k_EInputActionOrigin_SteamFrameController_Reserved8,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RESERVED9 = k_EInputActionOrigin_SteamFrameController_Reserved9,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RESERVED10 = k_EInputActionOrigin_SteamFrameController_Reserved10,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RESERVED11 = k_EInputActionOrigin_SteamFrameController_Reserved11,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RESERVED12 = k_EInputActionOrigin_SteamFrameController_Reserved12,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RESERVED13 = k_EInputActionOrigin_SteamFrameController_Reserved13,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RESERVED14 = k_EInputActionOrigin_SteamFrameController_Reserved14,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RESERVED15 = k_EInputActionOrigin_SteamFrameController_Reserved15,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RESERVED16 = k_EInputActionOrigin_SteamFrameController_Reserved16,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RESERVED17 = k_EInputActionOrigin_SteamFrameController_Reserved17,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RESERVED18 = k_EInputActionOrigin_SteamFrameController_Reserved18,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RESERVED19 = k_EInputActionOrigin_SteamFrameController_Reserved19,
+	INPUT_ACTION_ORIGIN_STEAMFRAMECONTROLLER_RESERVED20 = k_EInputActionOrigin_SteamFrameController_Reserved20,
 	INPUT_ACTION_ORIGIN_COUNT = k_EInputActionOrigin_Count,
 	INPUT_ACTION_ORIGIN_MAXIMUM_POSSIBLE_VALUE = k_EInputActionOrigin_MaximumPossibleValue
 };
@@ -1227,6 +1429,10 @@ enum InputType {
 	INPUT_TYPE_PS3_CONTROLLER = k_ESteamInputType_PS3Controller,
 	INPUT_TYPE_PS5_CONTROLLER = k_ESteamInputType_PS5Controller,
 	INPUT_TYPE_STEAM_DECK_CONTROLLER = k_ESteamInputType_SteamDeckController,
+	INPUT_TYPE_STEAM_OS_HANDHELD = k_ESteamInputType_SteamOSHandheld,
+	INPUT_TYPE_SWITCH2_PRO_CONTROLLER = k_ESteamInputType_Switch2ProController,
+	INPUT_TYPE_STEAM_CONTROLLER2 = k_ESteamInputType_SteamController2026,
+	INPUT_TYPE_STEAM_FRAME_CONTROLLER_PAIR = k_ESteamInputType_SteamFrameControllerPair,
 	INPUT_TYPE_COUNT = k_ESteamInputType_Count,
 	INPUT_TYPE_MAXIMUM_POSSIBLE_VALUE = k_ESteamInputType_MaximumPossibleValue
 };
@@ -1240,6 +1446,15 @@ enum SCEPadTriggerEffectMode {
 	PAD_TRIGGER_EFFECT_MODE_MULTIPLE_POSITION_FEEDBACK = SCE_PAD_TRIGGER_EFFECT_MODE_MULTIPLE_POSITION_FEEDBACK,
 	PAD_TRIGGER_EFFECT_MODE_SLOPE_FEEDBACK = SCE_PAD_TRIGGER_EFFECT_MODE_SLOPE_FEEDBACK,
 	PAD_TRIGGER_EFFECT_MODE_MULTIPLE_POSITION_VIBRATION = SCE_PAD_TRIGGER_EFFECT_MODE_MULTIPLE_POSITION_VIBRATION
+};
+
+enum SteamControllerPad {
+	STEAM_CONTROLLER_PAD_LEFT = k_ESteamControllerPad_Left,
+	STEAM_CONTROLLER_PAD_RIGHT = k_ESteamControllerPad_Right,
+	STEAM_CONTROLLER_PAD_BOTH = k_ESteamControllerPad_Both,
+	STEAM_CONTROLLER_GRIP_LEFT = k_ESteamControllerGrip_Left,
+	STEAM_CONTROLLER_GRIP_RIGHT = k_ESteamControllerGrip_Right,
+	STEAM_CONTROLLER_GRIP_BOTH = k_ESteamControllerGrip_Both
 };
 
 enum XboxOrigin {
@@ -1260,7 +1475,7 @@ enum XboxOrigin {
 	XBOX_ORIGIN_LEFT_STICK_DPAD_NORTH = k_EXboxOrigin_LeftStick_DPadNorth,
 	XBOX_ORIGIN_LEFT_STICK_DPAD_SOUTH = k_EXboxOrigin_LeftStick_DPadSouth,
 	XBOX_ORIGIN_LEFT_STICK_DPAD_WEST = k_EXboxOrigin_LeftStick_DPadWest,
-	XBOX_ORIGIN_LEFT_STICK_DPAD_EAT = k_EXboxOrigin_LeftStick_DPadEast,
+	XBOX_ORIGIN_LEFT_STICK_DPAD_EAST = k_EXboxOrigin_LeftStick_DPadEast,
 	XBOX_ORIGIN_RIGHT_STICK_MOVE = k_EXboxOrigin_RightStick_Move,
 	XBOX_ORIGIN_RIGHT_STICK_CLICK = k_EXboxOrigin_RightStick_Click,
 	XBOX_ORIGIN_RIGHT_STICK_DPAD_NORTH = k_EXboxOrigin_RightStick_DPadNorth,
@@ -1274,14 +1489,12 @@ enum XboxOrigin {
 	XBOX_ORIGIN_COUNT = k_EXboxOrigin_Count
 };
 
-
 // Inventory enums
 enum ItemFlags {
 	STEAM_ITEM_NO_TRADE = k_ESteamItemNoTrade,
 	STEAM_ITEM_REMOVED = k_ESteamItemRemoved,
 	STEAM_ITEM_CONSUMED = k_ESteamItemConsumed
 };
-
 
 // Matchmaking enums
 enum ChatMemberStateChange {
@@ -1317,7 +1530,6 @@ enum LobbyType {
 
 };
 
-
 // Matchmaking Servers enums
 enum MatchMakingServerResponse {
 	// Found in matchmakingtypes.h
@@ -1326,7 +1538,6 @@ enum MatchMakingServerResponse {
 	NO_SERVERS_LISTED_ON_MASTER_SERVER = eNoServersListedOnMasterServer
 };
 
-
 // Music enums
 enum AudioPlaybackStatus {
 	AUDIO_PLAYBACK_UNDEFINED = AudioPlayback_Undefined,
@@ -1334,7 +1545,6 @@ enum AudioPlaybackStatus {
 	AUDIO_PLAYBACK_PAUSED = AudioPlayback_Paused,
 	AUDIO_PLAYBACK_IDLE = AudioPlayback_Idle
 };
-
 
 // Networking enums
 enum P2PSend {
@@ -1372,7 +1582,6 @@ enum SocketState {
 	NET_SOCKET_STATE_REMOTE_END_DISCONNECTED = k_ESNetSocketStateRemoteEndDisconnected,
 	NET_SOCKET_STATE_BROKEN = k_ESNetSocketStateConnectionBroken
 };
-
 
 // Networking Utils enums
 enum NetworkingAvailability {
@@ -1585,7 +1794,6 @@ enum NetworkingSocketsDebugOutputType {
 	NETWORKING_SOCKET_DEBUG_OUTPUT_TYPE_FORCE_32BIT = k_ESteamNetworkingSocketsDebugOutputType__Force32Bit
 };
 
-
 // Parental Settings enums
 enum ParentalFeature {
 	// Found in isteamparentalsettings.h
@@ -1605,9 +1813,9 @@ enum ParentalFeature {
 	FEATURE_SITE_LICENSE = k_EFeatureSiteLicense,
 	FEATURE_KIOSK_MODE = k_EFeatureKioskMode_Deprecated,
 	FEATURE_BLOCK_ALWAYS = k_EFeatureBlockAlways,
+	FEATURE_DESKTOP = k_EFeatureDesktop,
 	FEATURE_MAX = k_EFeatureMax
 };
-
 
 // Steam Parties enums
 enum PartyBeaconLocationData {
@@ -1624,7 +1832,6 @@ enum PartyBeaconLocationType {
 	STEAM_PARTY_BEACON_LOCATION_TYPE_CHAT_GROUP = k_ESteamPartyBeaconLocationType_ChatGroup,
 	STEAM_PARTY_BEACON_LOCATION_TYPE_MAX = k_ESteamPartyBeaconLocationType_Max
 };
-
 
 // Remote Play enums
 enum DeviceFormFactor {
@@ -1785,7 +1992,6 @@ enum RemotePlayScancode {
 	REMOTE_PLAYER_SCANCODE_RIGHT_GUI = k_ERemotePlayScancodeRightGUI
 };
 
-
 // Remote Storage enums
 enum FilePathType {
 	// Found in isteamremotestorage.h
@@ -1883,7 +2089,6 @@ enum WorkshopVote {
 	WORKSHOP_VOTE_LATER = k_EWorkshopVoteLater
 };
 
-
 // Screenshot enums
 enum VRScreenshotType {
 	// Found in isteamscreenshots.h
@@ -1894,7 +2099,6 @@ enum VRScreenshotType {
 	VR_SCREENSHOT_TYPE_MONO_PANORAMA = k_EVRScreenshotType_MonoPanorama,
 	VR_SCREENSHOT_TYPE_STEREO_PANORAMA = k_EVRScreenshotType_StereoPanorama
 };
-
 
 // Timeline enums
 enum TimelineGameMode {
@@ -1914,7 +2118,6 @@ enum TimelineEventClipPriority {
 	TIMELINE_EVENT_CLIP_PRIORITY_STANDARD = k_ETimelineEventClipPriority_Standard,
 	TIMELINE_EVENT_CLIP_PRIORITY_FEATURED = k_ETimelineEventClipPriority_Featured
 };
-
 
 // UGC enums
 enum ItemPreviewType {
@@ -2015,7 +2218,9 @@ enum UGCQuery {
 	UGC_QUERY_RANKED_BY_LIFETIME_AVERAGE_PLAYTIME = k_EUGCQuery_RankedByLifetimeAveragePlaytime,
 	UGC_QUERY_RANKED_BY_PLAYTIME_SESSIONS_TREND = k_EUGCQuery_RankedByPlaytimeSessionsTrend,
 	UGC_QUERY_RANKED_BY_LIFETIME_PLAYTIME_SESSIONS = k_EUGCQuery_RankedByLifetimePlaytimeSessions,
-	UGC_QUERY_RANKED_BY_LAST_UPDATED_DATE = k_EUGCQuery_RankedByLastUpdatedDate
+	UGC_QUERY_RANKED_BY_LAST_UPDATED_DATE = k_EUGCQuery_RankedByLastUpdatedDate,
+	UGC_QUERY_RANKED_BY_NUM_PARENT_ITEMS = k_EUGCQuery_RankedByNumParentItems,
+	UGC_QUERY_RANKED_BY_NUM_PARENT_COLLECTIONS = k_EUGCQuery_RankedByNumParentCollections
 };
 
 enum UserUGCList {
@@ -2041,7 +2246,6 @@ enum UserUGCListSortOrder {
 	USER_UGC_LIST_SORT_ORDER_VOTE_SCORE_DESC = k_EUserUGCListSortOrder_VoteScoreDesc,
 	USER_UGC_LIST_SORT_ORDER_FOR_MODERATION = k_EUserUGCListSortOrder_ForModeration
 };
-
 
 // User enums
 enum FailureType {
@@ -2080,7 +2284,6 @@ enum DurationControlProgress {
 	DURATION_CONTROL_EXIT_SOON_NIGHT = k_EDurationControl_ExitSoon_Night
 };
 
-
 // User Stats enums
 enum LeaderboardDataRequest {
 	// Found in isteamuserstats.h
@@ -2112,8 +2315,16 @@ enum LeaderboardUploadScoreMethod {
 	LEADERBOARD_UPLOAD_SCORE_METHOD_FORCE_UPDATE = k_ELeaderboardUploadScoreMethodForceUpdate
 };
 
-
 // Utils enums
+enum APICallFailure {
+	// Found in isteamutils.h
+	STEAM_API_CALL_FAILURE_NONE = k_ESteamAPICallFailureNone,
+	STEAM_API_CALL_FAILURE_STEAM_GONE = k_ESteamAPICallFailureSteamGone,
+	STEAM_API_CALL_FAILURE_NETWORK_FAILURE = k_ESteamAPICallFailureNetworkFailure,
+	STEAM_API_CALL_FAILURE_INVALID_HANDLE = k_ESteamAPICallFailureInvalidHandle,
+	STEAM_API_CALL_FAILURE_MISMATCHED_CALLBACK = k_ESteamAPICallFailureMismatchedCallback
+};
+
 enum CheckFileSignature {
 	// Found in isteamutils.h
 	CHECK_FILE_SIGNATURE_INVALID_SIGNATURE = k_ECheckFileSignatureInvalidSignature,
@@ -2121,6 +2332,14 @@ enum CheckFileSignature {
 	CHECK_FILE_SIGNATURE_FILE_NOT_FOUND = k_ECheckFileSignatureFileNotFound,
 	CHECK_FILE_SIGNATURE_NO_SIGNATURES_FOUND_FOR_THIS_APP = k_ECheckFileSignatureNoSignaturesFoundForThisApp,
 	CHECK_FILE_SIGNATURE_NO_SIGNATURES_FOUND_FOR_THIS_FILE = k_ECheckFileSignatureNoSignaturesFoundForThisFile
+};
+
+enum FloatingGamepadTextInputMode {
+	// Found in isteamutils.h
+	FLOATING_GAMEPAD_TEXT_INPUT_MODE_SINGLE_LINE = k_EFloatingGamepadTextInputModeModeSingleLine,
+	FLOATING_GAMEPAD_TEXT_INPUT_MODE_MULTIPLE_LINES = k_EFloatingGamepadTextInputModeModeMultipleLines,
+	FLOATING_GAMEPAD_TEXT_INPUT_MODE_EMAIL = k_EFloatingGamepadTextInputModeModeEmail,
+	FLOATING_GAMEPAD_TEXT_INPUT_MODE_NUMERIC = k_EFloatingGamepadTextInputModeModeNumeric
 };
 
 enum GamepadTextInputLineMode {
@@ -2135,21 +2354,22 @@ enum GamepadTextInputMode {
 	GAMEPAD_TEXT_INPUT_MODE_PASSWORD = k_EGamepadTextInputModePassword
 };
 
-enum FloatingGamepadTextInputMode {
-	// Found in isteamutils.h
-	FLOATING_GAMEPAD_TEXT_INPUT_MODE_SINGLE_LINE = k_EFloatingGamepadTextInputModeModeSingleLine,
-	FLOATING_GAMEPAD_TEXT_INPUT_MODE_MULTIPLE_LINES = k_EFloatingGamepadTextInputModeModeMultipleLines,
-	FLOATING_GAMEPAD_TEXT_INPUT_MODE_EMAIL = k_EFloatingGamepadTextInputModeModeEmail,
-	FLOATING_GAMEPAD_TEXT_INPUT_MODE_NUMERIC = k_EFloatingGamepadTextInputModeModeNumeric
+enum SteamHardwareType {
+	STEAM_HARDWARE_TYPE_NONE = k_ESteamHardwareTypeNone,
+	STEAM_HARDWARE_TYPE_STEAM_DECK = k_ESteamHardwareTypeSteamDeck,
+	STEAM_HARDWARE_TYPE_STEAM_MACHINE = k_ESteamHardwareTypeSteamMachine,
+	STEAM_HARDWARE_TYPE_STEAM_FRAME = k_ESteamHardwareTypeSteamFrame,
 };
 
-enum APICallFailure {
-	// Found in isteamutils.h
-	STEAM_API_CALL_FAILURE_NONE = k_ESteamAPICallFailureNone,
-	STEAM_API_CALL_FAILURE_STEAM_GONE = k_ESteamAPICallFailureSteamGone,
-	STEAM_API_CALL_FAILURE_NETWORK_FAILURE = k_ESteamAPICallFailureNetworkFailure,
-	STEAM_API_CALL_FAILURE_INVALID_HANDLE = k_ESteamAPICallFailureInvalidHandle,
-	STEAM_API_CALL_FAILURE_MISMATCHED_CALLBACK = k_ESteamAPICallFailureMismatchedCallback
+enum SteamHardwareDefaultConfig {
+	STEAM_HARDWARE_DEFAULT_CONFIG_NONE = k_ESteamHardwareDefaultConfigNone,
+	STEAM_HARDWARE_DEFAULT_CONFIG_LOW = k_ESteamHardwareDefaultConfigLow,
+	STEAM_HARDWARE_DEFAULT_CONFIG_MEDIUM = k_ESteamHardwareDefaultConfigMedium,
+	STEAM_HARDWARE_DEFAULT_CONFIG_HIGH = k_ESteamHardwareDefaultConfigHigh,
+	STEAM_HARDWARE_DEFAULT_CONFIG_MAX = k_ESteamHardwareDefaultConfigMax,
+	STEAM_HARDWARE_DEFAULT_CONFIG_STEAM_DECK = k_ESteamHardwareDefaultConfigSteamDeck,
+	STEAM_HARDWARE_DEFAULT_CONFIG_STEAM_MACHINE = k_ESteamHardwareDefaultConfigSteamMachine,
+	STEAM_HARDWARE_DEFAULT_CONFIG_STEAM_FRAME = k_ESteamHardwareDefaultConfigSteamFrame,
 };
 
 enum TextFilteringContext {
@@ -2159,6 +2379,3 @@ enum TextFilteringContext {
 	TEXT_FILTERING_CONTEXT_CHAT = k_ETextFilteringContextChat,
 	TEXT_FILTERING_CONTEXT_NAME = k_ETextFilteringContextName
 };
-
-
-#endif // GODOTSTEAM_ENUMS_H

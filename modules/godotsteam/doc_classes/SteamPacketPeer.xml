@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<class name="SteamPacketPeer" inherits="PacketPeer" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
+<class name="SteamPacketPeer" inherits="PacketPeer" api_type="core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
 	<brief_description>
 		A wrapper class for a Steamworks peer.
 	</brief_description>
@@ -20,10 +20,22 @@
 				If force is [code]false[/code], it will set the state to [constant SteamPacketPeer.STATE_LINGER].
 			</description>
 		</method>
+		<method name="get_connection_handle" qualifiers="const">
+			<return type="int" />
+			<description>
+				Gets the internally-stored connection handle.
+			</description>
+		</method>
 		<method name="get_peer_id" qualifiers="const">
 			<return type="int" />
 			<description>
 				Gets the internally-stored peer ID.
+			</description>
+		</method>
+		<method name="get_state" qualifiers="const">
+			<return type="int" enum="SteamPacketPeer.PeerState" />
+			<description>
+				Gets the current connection state.
 			</description>
 		</method>
 		<method name="get_steam_id" qualifiers="const">

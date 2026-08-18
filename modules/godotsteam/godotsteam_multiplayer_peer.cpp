@@ -1,83 +1,103 @@
-//================================================================================================//
-// GodotSteam - godotsteam_multiplayer_peer.cpp
-//================================================================================================//
-//
-// Copyright (c) 2017-Current | Chris Ridenour, Ryan Leverenz, GP Garcia, and Contributors
-//
-// View all contributors at https://godotsteam.com/contribute/contributors/
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-//
-//================================================================================================//
-
+/***************************************************************************/
+/*  godotsteam_multiplayer_peer.cpp                                        */
+/***************************************************************************/
+/*                         This file is part of:                           */
+/*                              GODOTSTEAM                                 */
+/*                         https://godotsteam.com                          */
+/***************************************************************************/
+/* Copyright (c) 2015-Current | GP Garcia and Contributors                 */
+/*                                                                         */
+/* View all contributors at https://godotsteam.com/contribute/contributors */
+/*                                                                         */
+/* Permission is hereby granted, free of charge, to any person obtaining   */
+/* a copy of this software and associated documentation files (the         */
+/* "Software"), to deal in the Software without restriction, including     */
+/* without limitation the rights to use, copy, modify, merge, publish,     */
+/* distribute, sublicense, and/or sell copies of the Software, and to      */
+/* permit persons to whom the Software is furnished to do so, subject to   */
+/* the following conditions:                                               */
+/*                                                                         */
+/* The above copyright notice and this permission notice shall be included */
+/* in all copies or substantial portions of the Software.                  */
+/*                                                                         */
+/* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,         */
+/* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF      */
+/* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  */
+/* IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY    */
+/* CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,    */
+/* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE       */
+/* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                  */
+/***************************************************************************/
 
 #include "godotsteam_multiplayer_peer.h"
-#include "core/math/math_funcs.h"
 
+#ifdef GDEXTENSION
+#include <godot_cpp/core/math.hpp>
+#else
+#include "core/math/math_funcs.h"
+#endif
 
 #define MAX_MESSAGE_COUNT 255
 
-
 SteamMultiplayerPeer::SteamMultiplayerPeer() :
-	callback_network_connection_status_changed(this,
-			&SteamMultiplayerPeer::network_connection_status_changed),
-	callback_lobby_chat_update(this,
-			&SteamMultiplayerPeer::lobby_chat_update) {
+		callback_network_connection_status_changed(this,
+				&SteamMultiplayerPeer::network_connection_status_changed),
+		callback_lobby_chat_update(this,
+				&SteamMultiplayerPeer::lobby_chat_update) {
 }
 
 SteamMultiplayerPeer::~SteamMultiplayerPeer() {
 	close();
 }
 
-void SteamMultiplayerPeer::set_target_peer(int p_peer_id) {
+int SteamMultiplayerPeer::_get_transfer_channel() const {
+	return transfer_channel;
+}
+
+void SteamMultiplayerPeer::_set_transfer_channel(int p_channel) {
+	transfer_channel = p_channel;
+}
+
+MultiplayerPeer::TransferMode SteamMultiplayerPeer::_get_transfer_mode() const {
+	return transfer_mode;
+}
+
+void SteamMultiplayerPeer::_set_transfer_mode(TransferMode p_mode) {
+	transfer_mode = p_mode;
+}
+
+void SteamMultiplayerPeer::_set_target_peer(int p_peer_id) {
 	target_peer = p_peer_id;
 }
 
-int SteamMultiplayerPeer::get_packet_peer() const {
+int SteamMultiplayerPeer::_get_packet_peer() const {
 	ERR_FAIL_COND_V(incoming_packets.is_empty(), 1);
 
 	return SteamAPI_ISteamNetworkingSockets_GetConnectionUserData(
 			SteamAPI_SteamNetworkingSockets_SteamAPI(),
-			incoming_packets.front()->get()->m_conn
-			);
+			incoming_packets.front()->get()->m_conn);
 }
 
-MultiplayerPeer::TransferMode SteamMultiplayerPeer::get_packet_mode() const {
+MultiplayerPeer::TransferMode SteamMultiplayerPeer::_get_packet_mode() const {
 	ERR_FAIL_COND_V(incoming_packets.is_empty(), TRANSFER_MODE_RELIABLE);
-	if (incoming_packets.front()->get()->m_nFlags && k_nSteamNetworkingSend_Reliable) {
+	if (incoming_packets.front()->get()->m_nFlags & k_nSteamNetworkingSend_Reliable) {
 		return TRANSFER_MODE_RELIABLE;
 	} else {
 		return TRANSFER_MODE_UNRELIABLE;
 	}
 }
 
-int SteamMultiplayerPeer::get_packet_channel() const {
+int SteamMultiplayerPeer::_get_packet_channel() const {
 	ERR_FAIL_COND_V(incoming_packets.is_empty(), 1);
 	return incoming_packets.front()->get()->m_idxLane;
 }
 
-void SteamMultiplayerPeer::disconnect_peer(int p_peer_id, bool p_force) {
+void SteamMultiplayerPeer::_disconnect_peer(int p_peer_id, bool p_force) {
 	// Let godot know our peer disconnected and erase from our maps
 	if (peers.has(p_peer_id)) {
 		steam_connections.erase(peers[p_peer_id]->get_connection_handle());
 		peers[p_peer_id]->disconnect_peer(p_force);
-		emit_signal(SNAME("peer_disconnected"), p_peer_id);
+		emit_signal("peer_disconnected", p_peer_id);
 	}
 
 	// Clean up our local state
@@ -89,20 +109,19 @@ void SteamMultiplayerPeer::disconnect_peer(int p_peer_id, bool p_force) {
 	}
 }
 
-bool SteamMultiplayerPeer::is_server() const {
+bool SteamMultiplayerPeer::_is_server() const {
 	return server;
 }
 
-bool SteamMultiplayerPeer::is_server_relay_supported() const {
+bool SteamMultiplayerPeer::_is_server_relay_supported() const {
 	return server_relay;
 }
 
-void SteamMultiplayerPeer::poll() {
+void SteamMultiplayerPeer::_poll() {
 	SteamNetworkingMessage_t *messages[MAX_MESSAGE_COUNT];
 	int number_messages = SteamAPI_ISteamNetworkingSockets_ReceiveMessagesOnPollGroup(
 			SteamAPI_SteamNetworkingSockets_SteamAPI(),
-			poll_group, messages, MAX_MESSAGE_COUNT
-			);
+			poll_group, messages, MAX_MESSAGE_COUNT);
 	if (number_messages == 0) {
 		return;
 	}
@@ -111,7 +130,7 @@ void SteamMultiplayerPeer::poll() {
 		SteamNetworkingMessage_t *message = messages[i];
 
 		if (SteamAPI_ISteamNetworkingSockets_GetConnectionUserData(
-				SteamAPI_SteamNetworkingSockets_SteamAPI(), message->m_conn) <= 0) {
+					SteamAPI_SteamNetworkingSockets_SteamAPI(), message->m_conn) <= 0) {
 			// Do we have any pending peers waiting for a peer_id
 			if (steam_connections.has(message->m_conn)) {
 				if (steam_connections[message->m_conn]->process_ping(message) == OK) {
@@ -140,8 +159,7 @@ void SteamMultiplayerPeer::network_connection_status_changed(
 				"Connection from %ud changed from %ud to %ud",
 				(uint64_t)SteamAPI_SteamNetworkingIdentity_GetSteamID64(
 						&p_status_change->m_info.m_identityRemote),
-				p_status_change->m_eOldState, p_status_change->m_info.m_eState)
-				);
+				p_status_change->m_eOldState, p_status_change->m_info.m_eState));
 	}
 
 	// Check the state of the connection
@@ -153,8 +171,7 @@ void SteamMultiplayerPeer::network_connection_status_changed(
 			if (unlikely(debug_level > DEBUG_LEVEL_NONE)) {
 				WARN_PRINT(vformat("Connection closed with reason %ud: %s",
 						p_status_change->m_info.m_eEndReason,
-						p_status_change->m_info.m_szEndDebug)
-						);
+						p_status_change->m_info.m_szEndDebug));
 			}
 			// Determine if we were previously connected
 			if (p_status_change->m_eOldState ==
@@ -169,8 +186,7 @@ void SteamMultiplayerPeer::network_connection_status_changed(
 			// closed on the other end
 			SteamAPI_ISteamNetworkingSockets_CloseConnection(
 					SteamAPI_SteamNetworkingSockets_SteamAPI(),
-					p_status_change->m_hConn, 0, nullptr, false
-					);
+					p_status_change->m_hConn, 0, nullptr, false);
 
 			// If we were the client, attempt to reconnect
 			if (p_status_change->m_eOldState == k_ESteamNetworkingConnectionState_Connecting && p_status_change->m_info.m_eEndReason == k_ESteamNetConnectionEnd_Remote_BadCert && connection_retries < 5) {
@@ -178,8 +194,7 @@ void SteamMultiplayerPeer::network_connection_status_changed(
 					WARN_PRINT("Attempting to reconnect after bad cert.");
 				}
 				add_peer(SteamAPI_SteamNetworkingIdentity_GetSteamID64(
-						&p_status_change->m_info.m_identityRemote)
-						);
+						&p_status_change->m_info.m_identityRemote));
 				connection_retries++;
 			}
 			break;
@@ -198,25 +213,21 @@ void SteamMultiplayerPeer::network_connection_status_changed(
 					WARN_PRINT(vformat(
 							"Connection attempt from %ud.",
 							(uint64_t)SteamAPI_SteamNetworkingIdentity_GetSteamID64(
-								&p_status_change->m_info.m_identityRemote
-								))
-							);
+									&p_status_change->m_info.m_identityRemote)));
 				}
 
 				uint32_t connection_peer_id = p_status_change->m_info.m_nUserData;
 				ERR_FAIL_COND_MSG(
 						peers.has(connection_peer_id),
 						vformat("Attempting to connect peer %d but it already exists.",
-								connection_peer_id)
-						);
+								connection_peer_id));
 
 				if (SteamAPI_ISteamNetworkingSockets_AcceptConnection(
-						SteamAPI_SteamNetworkingSockets_SteamAPI(),
-						p_status_change->m_hConn) != k_EResultOK) {
+							SteamAPI_SteamNetworkingSockets_SteamAPI(),
+							p_status_change->m_hConn) != k_EResultOK) {
 					SteamAPI_ISteamNetworkingSockets_CloseConnection(
-						SteamAPI_SteamNetworkingSockets_SteamAPI(),
-						p_status_change->m_hConn, 0,nullptr, false
-						);
+							SteamAPI_SteamNetworkingSockets_SteamAPI(),
+							p_status_change->m_hConn, 0, nullptr, false);
 					WARN_PRINT("A connection was started but couldn't be accepted.");
 					return;
 				} else {
@@ -229,31 +240,28 @@ void SteamMultiplayerPeer::network_connection_status_changed(
 			// Regardless of who created the connection, since we're symmetrical we
 			// want to keep track of everything Add it to our poll group
 			if (!SteamAPI_ISteamNetworkingSockets_SetConnectionPollGroup(
-					SteamAPI_SteamNetworkingSockets_SteamAPI(), p_status_change->m_hConn, poll_group)) {
+						SteamAPI_SteamNetworkingSockets_SteamAPI(), p_status_change->m_hConn, poll_group)) {
 				SteamAPI_ISteamNetworkingSockets_CloseConnection(
 						SteamAPI_SteamNetworkingSockets_SteamAPI(), p_status_change->m_hConn, 0,
-						nullptr, false
-						);
+						nullptr, false);
 				WARN_PRINT("A connection was abandoned because it could not be added to a poll group.");
 				return;
 			}
 
 			// Create our packet peer
 			_add_pending_peer(SteamAPI_SteamNetworkingIdentity_GetSteamID64(
-					&p_status_change->m_info.m_identityRemote),
+									  &p_status_change->m_info.m_identityRemote),
 					p_status_change->m_hConn,
-					SteamPacketPeer::PeerState::STATE_CONNECTING
-					);
+					SteamPacketPeer::PeerState::STATE_CONNECTING);
 			break;
 		}
 		case k_ESteamNetworkingConnectionState_Connected: {
 			// Someone has finished connecting to us
 			connection_retries = 0;
 			if (unlikely(debug_level > DEBUG_LEVEL_NONE)) {
-				WARN_PRINT(vformat( "Attempting to send peer ID to %ud",
+				WARN_PRINT(vformat("Attempting to send peer ID to %ud",
 						(uint64_t)SteamAPI_SteamNetworkingIdentity_GetSteamID64(
-								&p_status_change->m_info.m_identityRemote))
-						);
+								&p_status_change->m_info.m_identityRemote)));
 			}
 			if (steam_connections.has(p_status_change->m_hConn)) {
 				steam_connections[p_status_change->m_hConn]->set_state(
@@ -266,10 +274,9 @@ void SteamMultiplayerPeer::network_connection_status_changed(
 							"Ping sent to %ud: %d",
 							(uint64_t)SteamAPI_SteamNetworkingIdentity_GetSteamID64(
 									&p_status_change->m_info.m_identityRemote),
-							ping_result)
-							);
+							ping_result));
 				}
-				
+
 				// If we already have their peer ID, upgrade it
 				if (steam_connections[p_status_change->m_hConn]->get_peer_id() > 0) {
 					upgrade_peer(p_status_change->m_hConn);
@@ -285,8 +292,7 @@ void SteamMultiplayerPeer::network_connection_status_changed(
 		default: {
 			if (steam_connections.has(p_status_change->m_hConn)) {
 				steam_connections[p_status_change->m_hConn]->set_state(
-						(SteamPacketPeer::PeerState)p_status_change->m_info.m_eState
-						);
+						(SteamPacketPeer::PeerState)p_status_change->m_info.m_eState);
 			}
 			break;
 		}
@@ -297,8 +303,8 @@ void SteamMultiplayerPeer::lobby_chat_update(LobbyChatUpdate_t *p_chat_update) {
 	if (p_chat_update->m_ulSteamIDLobby != tracked_lobby) {
 		if (unlikely(debug_level > DEBUG_LEVEL_NONE)) {
 			WARN_PRINT(vformat("LobbyChatUpdate ignored due to lobby ID mismatch: "
-					"Expecting: %ud, Received: %d",
-				 	tracked_lobby, (uint64_t)p_chat_update->m_ulSteamIDLobby));
+							   "Expecting: %ud, Received: %d",
+					tracked_lobby, (uint64_t)p_chat_update->m_ulSteamIDLobby));
 		}
 		return;
 	}
@@ -319,23 +325,27 @@ void SteamMultiplayerPeer::lobby_chat_update(LobbyChatUpdate_t *p_chat_update) {
 		LocalVector<HSteamNetConnection> connections_to_remove;
 		for (KeyValue<HSteamNetConnection, Ref<SteamPacketPeer>> &E :
 				steam_connections) {
-			if (E.value.is_null()) {
+			// Guard on the underlying object pointer, not just the Ref wrapper.
+			// A dangling/half-torn-down entry can pass is_null() yet dereference
+			// to a null object, which crashed get_steam_id() (KERN_INVALID_ADDRESS).
+			SteamPacketPeer *peer = E.value.ptr();
+			if (peer == nullptr) {
 				connections_to_remove.push_back(E.key);
-			} else {
-				if (E.value->get_steam_id() == p_chat_update->m_ulSteamIDUserChanged) {
-					if (E.value->get_peer_id() > 0) {
-						peer_ids_to_disconnect.push_back(E.value->get_peer_id());
-					} else {
-						// We have an open connection but no peer
-						E.value->disconnect_peer(true);
-						connections_to_remove.push_back(E.value->get_connection_handle());
-					}
+				continue;
+			}
+			if (peer->get_steam_id() == p_chat_update->m_ulSteamIDUserChanged) {
+				if (peer->get_peer_id() > 0) {
+					peer_ids_to_disconnect.push_back(peer->get_peer_id());
+				} else {
+					// We have an open connection but no peer
+					peer->disconnect_peer(true);
+					connections_to_remove.push_back(peer->get_connection_handle());
 				}
 			}
 		}
 		// Disconnect peers outside the iteration
 		for (int peer_id : peer_ids_to_disconnect) {
-			disconnect_peer(peer_id);
+			disconnect_peer(peer_id, false);
 		}
 		// Remove collected connections outside the iteration
 		for (HSteamNetConnection conn : connections_to_remove) {
@@ -344,11 +354,11 @@ void SteamMultiplayerPeer::lobby_chat_update(LobbyChatUpdate_t *p_chat_update) {
 	}
 }
 
-void SteamMultiplayerPeer::close() {
+void SteamMultiplayerPeer::_close() {
 	connection_status = CONNECTION_DISCONNECTED;
 	server = false;
 
-	if (Engine::get_singleton()->get_singleton_object("Steam") == nullptr) {
+	if (Engine::get_singleton()->has_singleton("Steam")) {
 		return;
 	}
 
@@ -387,23 +397,22 @@ void SteamMultiplayerPeer::close() {
 	}
 }
 
-int SteamMultiplayerPeer::get_unique_id() const {
+int SteamMultiplayerPeer::_get_unique_id() const {
 	return unique_id;
 }
 
 MultiplayerPeer::ConnectionStatus
-SteamMultiplayerPeer::get_connection_status() const {
+SteamMultiplayerPeer::_get_connection_status() const {
 	return connection_status;
 }
 
-int SteamMultiplayerPeer::get_available_packet_count() const {
+int SteamMultiplayerPeer::_get_available_packet_count() const {
 	return incoming_packets.size();
 }
 
 Error SteamMultiplayerPeer::get_packet(const uint8_t **r_buffer, int &r_buffer_size) {
 	ERR_FAIL_COND_V_MSG(incoming_packets.is_empty(), ERR_UNAVAILABLE,
-			"No incoming packets available."
-			);
+			"No incoming packets available.");
 
 	if (current_packet != nullptr) {
 		SteamAPI_SteamNetworkingMessage_t_Release(current_packet);
@@ -421,12 +430,10 @@ Error SteamMultiplayerPeer::get_packet(const uint8_t **r_buffer, int &r_buffer_s
 
 Error SteamMultiplayerPeer::put_packet(const uint8_t *p_buffer, int p_buffer_size) {
 	ERR_FAIL_COND_V_MSG(connection_status != CONNECTION_CONNECTED, ERR_UNCONFIGURED,
-			"The multiplayer instance isn't currently connected to any server or client."
-			);
+			"The multiplayer instance isn't currently connected to any server or client.");
 	ERR_FAIL_COND_V_MSG(target_peer != 0 && !peers.has(Math::abs(target_peer)),
 			ERR_INVALID_PARAMETER,
-			vformat("Invalid target peer: %d", target_peer)
-			);
+			vformat("Invalid target peer: %d", target_peer));
 
 	if (target_peer == 0) {
 		// Send to all peers
@@ -452,7 +459,7 @@ Error SteamMultiplayerPeer::put_packet(const uint8_t *p_buffer, int p_buffer_siz
 	return OK;
 }
 
-int SteamMultiplayerPeer::get_max_packet_size() const {
+int SteamMultiplayerPeer::_get_max_packet_size() const {
 	// Steam networking sockets max message size
 	return k_cbMaxSteamNetworkingSocketsMessageSizeSend; // 512 KB
 }
@@ -461,8 +468,7 @@ Error SteamMultiplayerPeer::_create_listen_socket(int p_virtual_port) {
 	SteamNetworkingConfigValue_t opt[2];
 	opt[0].SetInt32(k_ESteamNetworkingConfig_SymmetricConnect, 1);
 	listen_socket = SteamAPI_ISteamNetworkingSockets_CreateListenSocketP2P(
-			SteamAPI_SteamNetworkingSockets_SteamAPI(), p_virtual_port, 1, opt
-			);
+			SteamAPI_SteamNetworkingSockets_SteamAPI(), p_virtual_port, 1, opt);
 
 	ERR_FAIL_COND_V(listen_socket == k_HSteamListenSocket_Invalid, ERR_CANT_CREATE);
 
@@ -471,8 +477,7 @@ Error SteamMultiplayerPeer::_create_listen_socket(int p_virtual_port) {
 
 Error SteamMultiplayerPeer::_create_poll_group() {
 	poll_group = SteamAPI_ISteamNetworkingSockets_CreatePollGroup(
-			SteamAPI_SteamNetworkingSockets_SteamAPI()
-			);
+			SteamAPI_SteamNetworkingSockets_SteamAPI());
 	ERR_FAIL_COND_V(poll_group == k_HSteamNetPollGroup_Invalid, ERR_CANT_CREATE);
 
 	return OK;
@@ -524,13 +529,11 @@ Error SteamMultiplayerPeer::add_peer(uint64_t p_steam_id, int p_virtual_port) {
 
 	SteamNetworkingConfigValue_t opt[2];
 	SteamAPI_SteamNetworkingConfigValue_t_SetInt32(&opt[0],
-			k_ESteamNetworkingConfig_SymmetricConnect, 1
-			);
+			k_ESteamNetworkingConfig_SymmetricConnect, 1);
 
 	HSteamNetConnection connection = SteamAPI_ISteamNetworkingSockets_ConnectP2P(
 			SteamAPI_SteamNetworkingSockets_SteamAPI(),
-			remote_identity, p_virtual_port, 1, opt
-			);
+			remote_identity, p_virtual_port, 1, opt);
 
 	ERR_FAIL_COND_V(connection == k_HSteamNetConnection_Invalid, ERR_CANT_CREATE);
 
@@ -558,7 +561,7 @@ void SteamMultiplayerPeer::upgrade_peer(
 		if (connection_status == CONNECTION_CONNECTING) {
 			connection_status = CONNECTION_CONNECTED;
 		}
-		emit_signal(SNAME("peer_connected"), steam_connections[p_connection_handle]->get_peer_id());
+		emit_signal("peer_connected", steam_connections[p_connection_handle]->get_peer_id());
 	}
 }
 
@@ -573,17 +576,16 @@ Error SteamMultiplayerPeer::host_with_lobby(uint64_t p_lobby_id) {
 	ERR_FAIL_COND_V(connection_status != CONNECTION_DISCONNECTED, ERR_ALREADY_IN_USE);
 	// k_steamIDNil is a CSteamID in the SDK but doesn't jive with the Flat API, should be 0?
 	ERR_FAIL_COND_V_MSG(SteamAPI_ISteamMatchmaking_GetLobbyOwner(
-			SteamAPI_SteamMatchmaking(), p_lobby_id) == 0, ERR_CANT_CREATE,
+								SteamAPI_SteamMatchmaking(), p_lobby_id) == 0,
+			ERR_CANT_CREATE,
 			"You must be a member of the lobby you are trying to connect with the "
-			"SteamMultiplayerPeer."
-			);
+			"SteamMultiplayerPeer.");
 	ERR_FAIL_COND_V_MSG(
 			SteamAPI_ISteamMatchmaking_GetLobbyOwner(SteamAPI_SteamMatchmaking(), p_lobby_id) !=
-			SteamAPI_ISteamUser_GetSteamID(SteamAPI_SteamUser()),
+					SteamAPI_ISteamUser_GetSteamID(SteamAPI_SteamUser()),
 			ERR_CANT_CREATE,
 			vformat("You must be the owner of the lobby you are trying to host with "
-			"SteamMultiplayerPeer.")
-			);
+					"SteamMultiplayerPeer."));
 
 	tracked_lobby = p_lobby_id;
 
@@ -592,12 +594,10 @@ Error SteamMultiplayerPeer::host_with_lobby(uint64_t p_lobby_id) {
 
 	// In case the lobby already has members, let's connect to them
 	int count = SteamAPI_ISteamMatchmaking_GetNumLobbyMembers(
-			SteamAPI_SteamMatchmaking(), p_lobby_id
-			);
+			SteamAPI_SteamMatchmaking(), p_lobby_id);
 	for (int i = 0; i < count; i++) {
 		uint64_t member = SteamAPI_ISteamMatchmaking_GetLobbyMemberByIndex(
-				SteamAPI_SteamMatchmaking(), p_lobby_id, i
-				);
+				SteamAPI_SteamMatchmaking(), p_lobby_id, i);
 		if (member != SteamAPI_ISteamUser_GetSteamID(SteamAPI_SteamUser())) {
 			add_peer(member);
 		}
@@ -610,30 +610,25 @@ Error SteamMultiplayerPeer::connect_to_lobby(uint64_t p_lobby_id) {
 	ERR_FAIL_COND_V(connection_status != CONNECTION_DISCONNECTED, ERR_ALREADY_IN_USE);
 	// k_steamIDNil is a CSteamID in the SDK but doesn't jive with the Flat API, should be 0?
 	ERR_FAIL_COND_V_MSG(SteamAPI_ISteamMatchmaking_GetLobbyOwner(
-			SteamAPI_SteamMatchmaking(), p_lobby_id) == 0,
+								SteamAPI_SteamMatchmaking(), p_lobby_id) == 0,
 			ERR_CANT_CREATE,
 			"You must be a member of the lobby you are trying to connect with the "
-			"SteamMultiplayerPeer."
-			);
+			"SteamMultiplayerPeer.");
 
 	tracked_lobby = p_lobby_id;
 
 	Error client_created = create_client(SteamAPI_ISteamMatchmaking_GetLobbyOwner(
-			SteamAPI_SteamMatchmaking(), p_lobby_id)
-			);
+			SteamAPI_SteamMatchmaking(), p_lobby_id));
 	ERR_FAIL_COND_V(client_created != OK, client_created);
 
 	// Connect to the rest of the members
 	int count = SteamAPI_ISteamMatchmaking_GetNumLobbyMembers(
-			SteamAPI_SteamMatchmaking(), p_lobby_id
-			);
+			SteamAPI_SteamMatchmaking(), p_lobby_id);
 	for (int i = 0; i < count; i++) {
 		uint64_t member = SteamAPI_ISteamMatchmaking_GetLobbyMemberByIndex(
-				SteamAPI_SteamMatchmaking(), p_lobby_id, i
-				);
+				SteamAPI_SteamMatchmaking(), p_lobby_id, i);
 		if (member != SteamAPI_ISteamUser_GetSteamID(SteamAPI_SteamUser()) &&
-				member != SteamAPI_ISteamMatchmaking_GetLobbyOwner(
-						SteamAPI_SteamMatchmaking(), p_lobby_id)) {
+				member != SteamAPI_ISteamMatchmaking_GetLobbyOwner(SteamAPI_SteamMatchmaking(), p_lobby_id)) {
 			add_peer(member);
 		}
 	}
@@ -683,7 +678,7 @@ SteamMultiplayerPeer::DebugLevel SteamMultiplayerPeer::get_debug_level() const {
 }
 
 const int SteamMultiplayerPeer::_get_steam_packet_flags() {
-	int32_t flags = (k_nSteamNetworkingSend_NoNagle * no_nagle) | 
+	int32_t flags = (k_nSteamNetworkingSend_NoNagle * no_nagle) |
 			(k_nSteamNetworkingSend_NoDelay * no_delay);
 
 	switch (get_transfer_mode()) {
@@ -727,7 +722,6 @@ int SteamMultiplayerPeer::get_peer_id_for_steam_id(uint64_t p_steam_id) {
 
 	return 0;
 }
-
 
 void SteamMultiplayerPeer::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("create_host", "virtual_port"),
@@ -779,4 +773,3 @@ void SteamMultiplayerPeer::_bind_methods() {
 	BIND_ENUM_CONSTANT(DEBUG_LEVEL_PEER);
 	BIND_ENUM_CONSTANT(DEBUG_LEVEL_STEAM);
 }
-

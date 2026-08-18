@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<class name="SteamMultiplayerPeer" inherits="MultiplayerPeer" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
+<class name="SteamMultiplayerPeer" inherits="MultiplayerPeer" api_type="core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
 	<brief_description>
 		Provides a bridge between Steam Networking Sockets and Godot's high level [MultiplayerAPI].
 	</brief_description>
@@ -92,6 +92,8 @@
 		</member>
 		<member name="no_nagle" type="bool" setter="set_no_nagle" getter="get_no_nagle" default="false">
 			Whether or not to use [constant Steam.NETWORKING_SEND_NO_DELAY] flag.
+		</member>
+		<member name="server_relay" type="bool" setter="set_server_relay" getter="get_server_relay" default="false">
 		</member>
 	</members>
 	<constants>

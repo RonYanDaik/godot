@@ -22,6 +22,14 @@ sdk/*
 # Doxygen
 doxygen/
 
+# Misc
+/bin/
+/gen/
+/custom.py
+.sconsign.dblite
+/tags
+/TAGS
+*.swp
 
 # Files built by Visual Studio
 *_i.c
@@ -52,4 +60,3 @@ doxygen/
 *.pidb
 *.svclog
 *.scc
-
