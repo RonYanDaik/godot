@@ -285,6 +285,9 @@ public:
 	virtual Key keyboard_get_keycode_from_physical(Key p_keycode) const;
 	virtual Key keyboard_get_label_from_physical(Key p_keycode) const;
 
+	//yuri
+	virtual void set_use_multikeyboards(bool p_use_multypeyboards);
+
 	/* TABLET */
 
 	virtual int tablet_get_driver_count() const { return 1; }

@@ -337,7 +337,7 @@ void DisplayServerWindows::_set_mouse_mode_impl(DisplayServerEnums::MouseMode p_
 		_register_raw_input_devices(DisplayServerEnums::INVALID_WINDOW_ID);
 		
 		#ifdef KBHOOKDLL_ENABLE
-		_register_raw_input_kb_devices(MAIN_WINDOW_ID);
+		_register_raw_input_kb_devices(DisplayServerEnums::MAIN_WINDOW_ID);
 		#endif
 		
 	}
@@ -375,7 +375,7 @@ void DisplayServerWindows::_register_raw_input_kb_devices(DisplayServerEnums::Wi
 	rid[0].usUsage = 0x06;
 	rid[0].dwFlags = 0;
 
-	if (p_target_window != INVALID_WINDOW_ID) {
+	if (p_target_window != DisplayServerEnums::INVALID_WINDOW_ID) {
 		// Follow the defined window
 		rid[0].hwndTarget = windows[p_target_window].hWnd;
 		rid[0].dwFlags = RIDEV_INPUTSINK;
@@ -5344,7 +5344,7 @@ void DisplayServerWindows::set_use_multikeyboards(bool p_use_multypeyboards) {
 #ifdef KBHOOKDLL_ENABLE
 	if (use_multypeyboards && !Engine::get_singleton()->is_editor_hint()) //todo: add custom enable/disable option
 	{
-		_register_raw_input_kb_devices(MAIN_WINDOW_ID);
+		_register_raw_input_kb_devices(DisplayServerEnums::MAIN_WINDOW_ID);
 	}
 #endif
 }
@@ -5915,25 +5915,7 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 		} break;
 		case WM_INPUT: {
 			
-			#ifdef KBHOOKDLL_ENABLE
-			UINT dwSize;
-			GetRawInputData((HRAWINPUT)lParam, RID_INPUT, nullptr, &dwSize, sizeof(RAWINPUTHEADER));
-			LPBYTE lpb = new BYTE[dwSize];
-			if (lpb == nullptr) {
-				return 0;
-			}
 
-			if (GetRawInputData((HRAWINPUT)lParam, RID_INPUT, lpb, &dwSize, sizeof(RAWINPUTHEADER)) != dwSize) {
-				OutputDebugString(TEXT("GetRawInputData does not return correct size !\n"));
-			}
-
-			RAWINPUT *raw = (RAWINPUT *)lpb;
-			if (use_multypeyboards && !Engine::get_singleton()->is_editor_hint() && raw->header.dwType == RIM_TYPEKEYBOARD)
-			{
-    			ERR_BREAK(key_event_pos >= KEY_EVENT_BUFFER_SIZE);
-				convert_input_to_keys_msg(raw,window_id);
-			}
-			#else
 			
 			if (!use_raw_input) {
 				break;
@@ -5949,11 +5931,19 @@ LRESULT DisplayServerWindows::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 			if (GetRawInputData((HRAWINPUT)lParam, RID_INPUT, nullptr, &dwSize, sizeof(RAWINPUTHEADER)) != 0 || dwSize == 0) {
 				break;
 			}
-
 			LPBYTE lpb = new BYTE[dwSize];
 			if (GetRawInputData((HRAWINPUT)lParam, RID_INPUT, lpb, &dwSize, sizeof(RAWINPUTHEADER)) == dwSize) {
 				_process_raw_input_event(*(RAWINPUT *)lpb, window_id);
 			}
+
+			#ifdef KBHOOKDLL_ENABLE
+			RAWINPUT *raw = (RAWINPUT *)lpb;
+			if (use_multypeyboards && !Engine::get_singleton()->is_editor_hint() && raw->header.dwType == RIM_TYPEKEYBOARD)
+			{
+    			ERR_BREAK(key_event_pos >= KEY_EVENT_BUFFER_SIZE);
+				convert_input_to_keys_msg(raw,window_id);
+			}
+			#endif
 			delete[] lpb;
 		} break;
 		case WT_CSRCHANGE:
@@ -7035,7 +7025,7 @@ void DisplayServerWindows::_process_activate_event(DisplayServerEnums::WindowID 
 }
 
 #ifdef KBHOOKDLL_ENABLE
-void DisplayServerWindows::convert_input_to_keys_msg(RAWINPUT *raw, const WindowID & window_id) {
+void DisplayServerWindows::convert_input_to_keys_msg(RAWINPUT *raw, const DisplayServerEnums::WindowID & window_id) {
 	KeyEvent ke;
 	USHORT tkey = raw->data.keyboard.VKey;
 	Key keycode = KeyMappingWindows::get_keysym(tkey);
@@ -8524,7 +8514,7 @@ DisplayServerWindows::DisplayServerWindows(const String &p_rendering_driver, Dis
 	#ifdef KBHOOKDLL_ENABLE
 	if (use_multypeyboards && !Engine::get_singleton()->is_editor_hint()) //todo: add custom enable/disable option
 	{
-		_register_raw_input_kb_devices(MAIN_WINDOW_ID);
+		_register_raw_input_kb_devices(DisplayServerEnums::MAIN_WINDOW_ID);
 	}
 	#endif
 }

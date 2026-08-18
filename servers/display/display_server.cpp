@@ -1227,6 +1227,9 @@ Key DisplayServer::keyboard_get_keycode_from_physical(Key p_keycode) const {
 Key DisplayServer::keyboard_get_label_from_physical(Key p_keycode) const {
 	ERR_FAIL_V_MSG(p_keycode, "Not supported by this display server.");
 }
+void DisplayServer::set_use_multikeyboards(bool p_use_multypeyboards){
+	WARN_PRINT("set_use_multikeyboards not supported by this display server.");
+}
 
 void DisplayServer::show_emoji_and_symbol_picker() const {
 }

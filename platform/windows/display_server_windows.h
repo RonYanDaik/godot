@@ -521,7 +521,7 @@ class DisplayServerWindows : public DisplayServer {
 	void _register_raw_input_devices(DisplayServerEnums::WindowID p_target_window);
 	bool _has_moving_window() const;
 	//yuri
-	void _register_raw_input_kb_devices(WindowID p_target_window);
+	void _register_raw_input_kb_devices(DisplayServerEnums::WindowID p_target_window);
 
 	void _process_activate_event(DisplayServerEnums::WindowID p_window_id);
 	void _process_key_events();
@@ -796,7 +796,7 @@ public:
 	//yuri
 	virtual void set_use_multikeyboards(bool p_use_multypeyboards);
 	#ifdef KBHOOKDLL_ENABLE
-	void convert_input_to_keys_msg(RAWINPUT *raw,const WindowID & window_id);
+	void convert_input_to_keys_msg(RAWINPUT *raw,const DisplayServerEnums::WindowID & window_id);
 	#endif
 	virtual bool is_window_transparency_available() const override;
 
