@@ -382,9 +382,9 @@ void AnimationNodeBlendSpace2D::_update_triangles() {
 	triangles.clear();
 	if (blend_points_used < 3) {
 		emit_signal(SNAME("triangles_updated"));
-		#ifdef TRACY_ENABLE
-			TracyCZoneEnd(ctx);
-		#endif // TRACY_ENABLE
+		//#ifdef TRACY_ENABLE
+		//	TracyCZoneEnd(ctx);
+		//#endif // TRACY_ENABLE
 		return;
 	}
 
@@ -403,7 +403,7 @@ void AnimationNodeBlendSpace2D::_update_triangles() {
 
 	//yuri
 #ifdef TRACY_ENABLE
-	TracyCZoneEnd(ctx);
+	//TracyCZoneEnd(ctx);
 #endif // TRACY_ENABLE
 }
 

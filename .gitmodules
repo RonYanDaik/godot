@@ -1,3 +1,6 @@
 [submodule "modules/godot_tracy"]
 	path = modules/godot_tracy
 	url = https://github.com/AndreaCatania/godot_tracy.git
+[submodule "modules/godot-rapier-physics-module-2d"]
+	path = modules/godot-rapier-physics-module-2d
+	url = https://github.com/appsinacup/godot-rapier-physics-module-2d.git
